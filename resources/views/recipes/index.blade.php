@@ -31,9 +31,9 @@
     </div>
 @endif
 
-<div class="row">
+<div class="row recipes-page">
     @foreach($recipes as $recipe)
-    <div class="col-md-4 mb-4">
+    <div class="col-md-6 col-lg-4 mb-4">
         <div class="card h-100 recipe-card" data-recipe-id="{{ $recipe->id }}">
             <!-- Contenedor flexible para la imagen -->
             <div class="image-wrapper" style="height: 200px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; border-top-left-radius: 12px; border-top-right-radius: 12px; position: relative; overflow: hidden;">
@@ -58,14 +58,14 @@
             </div>
             
             <div class="card-body">
-                <h5 class="card-title" style="color: #7a9cc6; font-weight: 600; font-size: 1.1rem;">{{ Str::limit($recipe->recipe_title, 40) }}</h5>
-                <p class="card-text text-muted" style="font-size: 0.98rem;">{{ Str::limit($recipe->recipe_description, 70) }}</p>
+                <h5 class="card-title">{{ Str::limit($recipe->recipe_title, 40) }}</h5>
+                <p class="card-text text-muted">{{ Str::limit($recipe->recipe_description, 70) }}</p>
             </div>
             
             <!-- Botones de acción simplificados -->
             <div class="card-footer bg-white border-top-0">
                 <div class="d-flex justify-content-center">
-                    <button class="btn btn-sm view-recipe-btn mr-2" style="background-color: #7a9cc6; color: white; font-size: 1.1rem;" data-toggle="modal" data-target="#recipeModal" data-recipe-id="{{ $recipe->id }}">
+                    <button class="btn btn-sm view-recipe-btn mr-2" data-toggle="modal" data-target="#recipeModal" data-recipe-id="{{ $recipe->id }}">
                         <i class="fas fa-eye mr-1"></i> Ver
                     </button>
                     <a href="{{ route('recipes.download', $recipe->id) }}" class="btn btn-sm btn-danger" style="font-size: 1.1rem;">
@@ -115,12 +115,13 @@
         border: 1px solid #eee;
         box-shadow: 0 12px 24px rgba(0,0,0,0.06);
         overflow: hidden;
-        background: #fff;
+        background: var(--bg-soft, #fff6e9); /* same tono claro que top recetas */
+        max-width: 100%;
     }
     .recipe-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(122, 156, 198, 0.15);
-        border-color: rgba(122, 156, 198, 0.3);
+        box-shadow: 0 10px 20px rgba(var(--primary-rgb, 65,89,29), 0.15);
+        border-color: rgba(var(--primary-rgb, 65,89,29), 0.3);
     }
     .recipe-video-preview {
         position: absolute;
@@ -139,6 +140,7 @@
     .card-title {
         font-size: 1.3rem;
         margin-bottom: 0.75rem;
+        color: var(--primary); /* verde destacado */
     }
     .image-wrapper {
         padding: 0;
@@ -156,6 +158,13 @@
         font-weight: 500;
         transition: all 0.2s;
         font-size: 1.1rem;
+    }
+    .view-recipe-btn {
+        background-color: var(--primary);
+        color: #fff;
+    }
+    .view-recipe-btn:hover {
+        background-color: color-mix(in srgb, var(--primary) 85%, black);
     }
     .btn:hover {
         transform: translateY(-2px);

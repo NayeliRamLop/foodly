@@ -44,7 +44,7 @@ class User extends Authenticatable
     public function getAvatarUrlAttribute()
     {
         return $this->avatar 
-            ? asset('storage/'.$this->avatar)
+            ? Storage::disk('public')->url($this->avatar)
             : asset('images/default-avatar.png');
     }
 

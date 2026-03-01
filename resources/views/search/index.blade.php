@@ -54,7 +54,7 @@
                             <div class="card-body d-flex align-items-center gap-2">
                                 <div class="list-avatar">
                                     @if($user->avatar)
-                                        <img src="{{ asset('storage/'.$user->avatar) }}" alt="{{ $user->name }}">
+                                        <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}">
                                     @else
                                         <i class="fas fa-user"></i>
                                     @endif

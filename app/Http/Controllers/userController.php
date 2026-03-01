@@ -178,7 +178,7 @@ class UserController extends Controller
 
             return back()->with([
                 'success' => 'Avatar actualizado correctamente',
-                'avatar_url' => asset('storage/'.$path)
+                'avatar_url' => Storage::disk('public')->url($path)
             ]);
 
         } catch (\Exception $e) {

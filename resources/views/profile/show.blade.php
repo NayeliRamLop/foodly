@@ -322,7 +322,7 @@ $(document).on('click', '#ratingsModal .comment-filter', function() {
                             <a class="list-item" href="{{ route('profile.public', $follower->id) }}">
                                 <div class="list-avatar">
                                     @if($follower->avatar)
-                                        <img src="{{ asset('storage/'.$follower->avatar) }}" alt="{{ $follower->name }}">
+                                        <img src="{{ $follower->avatar_url }}" alt="{{ $follower->name }}">
                                     @else
                                         <i class="fas fa-user"></i>
                                     @endif
@@ -355,7 +355,7 @@ $(document).on('click', '#ratingsModal .comment-filter', function() {
                             <a class="list-item" href="{{ route('profile.public', $followed->id) }}">
                                 <div class="list-avatar">
                                     @if($followed->avatar)
-                                        <img src="{{ asset('storage/'.$followed->avatar) }}" alt="{{ $followed->name }}">
+                                        <img src="{{ $followed->avatar_url }}" alt="{{ $followed->name }}">
                                     @else
                                         <i class="fas fa-user"></i>
                                     @endif

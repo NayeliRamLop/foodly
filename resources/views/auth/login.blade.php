@@ -34,12 +34,12 @@
     /*Titulo Maquina Escribir*/
     .typewriter-container {
       position: absolute;
-      top: 300px;
-      right: 350px;
+      top: 230px;
+      right: 160px;
       width: 900px;
       height: auto;
       max-height: 500px;
-      font-size: 2.3rem;
+      font-size: 2.0rem;
       white-space: normal;
       overflow: hidden;
       padding: 20px;
@@ -53,13 +53,13 @@
     /* Logo */
     .logo-container {
       position: absolute;
-      top: 300px;
-      left: 350px;
+      top: 250px;
+      left: 160px;
       z-index: 10;
     }
 
     .logo-container img {
-      height: 200px;
+      height: 150px;
       width: auto;
     }
 
@@ -67,14 +67,14 @@
     /* Cuadro login centrado */
     .login-box {
       background: rgba(255, 255, 255, 0.95);
-      padding: 6rem 6rem;
+      padding: 4rem 4rem;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
       width: 100%;
       max-width: 35%;
       color: #333;
       font-weight: normal;
-      font-size: 1.2rem;
+      font-size: 1.0rem;
       box-sizing: border-box;
     }
 
@@ -135,6 +135,101 @@
 
     .links a:hover {
       color: #F28241;
+    }
+
+    @media (max-width: 1600px) {
+      .typewriter-container {
+        right: 90px;
+        width: 760px;
+        font-size: 1.8rem;
+      }
+
+      .logo-container {
+        left: 90px;
+      }
+
+      .login-box {
+        max-width: 45%;
+      }
+    }
+
+    @media (max-width: 1200px) {
+      body {
+        padding-top: calc(42vh + 60px);
+      }
+
+      .typewriter-container {
+        top: 210px;
+        right: 40px;
+        width: 620px;
+        font-size: 1.5rem;
+      }
+
+      .logo-container {
+        top: 225px;
+        left: 40px;
+      }
+
+      .logo-container img {
+        height: 120px;
+      }
+
+      .login-box {
+        max-width: 60%;
+        padding: 3rem 2.5rem;
+      }
+    }
+
+    @media (max-width: 992px) {
+      body {
+        padding-top: 130px;
+        gap: 2rem;
+      }
+
+      .logo-container {
+        position: static;
+      }
+
+      .typewriter-container {
+        position: static;
+        width: min(92vw, 700px);
+        max-height: none;
+        font-size: 1.45rem;
+        text-align: center;
+        padding: 0.5rem 1rem;
+      }
+
+      .login-box {
+        max-width: 85%;
+        padding: 2.5rem 1.8rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .logo-container img {
+        height: 100px;
+      }
+
+      .typewriter-container {
+        font-size: 1.15rem;
+      }
+
+      .login-box {
+        max-width: 92%;
+        padding: 2rem 1.2rem;
+        font-size: 0.95rem;
+      }
+
+      .login-box h2 {
+        font-size: 1.6rem;
+      }
+
+      .login-box input[type="email"],
+      .login-box input[type="password"],
+      .login-box button {
+        width: 95%;
+        font-size: 1rem;
+      }
     }
   </style>
 </head>

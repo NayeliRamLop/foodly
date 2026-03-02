@@ -25,25 +25,26 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start; 
-      padding-top: calc(36vh + 70px);
-      gap: 2rem;
+      padding-top: calc(33vh + 70px);
+      padding-bottom: 50px;
+      gap: 2.5rem;
       min-height: 100vh;
     }
 
     .typewriter-container {
       position: absolute;
-      top: 250px;
-      right: 350px;
-      width: 900px;
+      top: 150px;
+      right: 200px;
+      width: 760px;
       height: auto;
-      max-height: 500px;
-      font-size: 2.3rem;
+      max-height: 420px;
+      font-size: 1.65rem;
       white-space: normal;
       overflow: hidden;
-      padding: 20px;
+      padding: 14px;
       color: rgb(75, 75, 75);
       font-weight: bold;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
       text-align: left;
       z-index: 10;
     }
@@ -51,29 +52,27 @@
     /* Logo */
     .logo-container {
       position: absolute;
-      top: 250px;
-      left: 350px;
+      top: 150px;
+      left: 200px;
       z-index: 10;
     }
 
     .logo-container img {
-      height: 200px;
+      height: 118px;
       width: auto;
     }
 
     .form-box {
-      top: 200px;
       background: rgba(255, 255, 255, 0.95);
-      padding: 3rem 3rem;
+      padding: 2.3rem 2.3rem;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      width: 100%;
-      max-width: 45%;
+      width: min(68vw, 680px);
       color: #333;
       font-weight: normal;
-      font-size: 1.2rem;
+      font-size: 0.92rem;
       box-sizing: border-box;
-      overflow: hidden;
+      overflow: visible;
     }
 
     .form-box form {
@@ -92,16 +91,16 @@
       margin-top: 0;
       color: #F28241;
       text-align: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
       font-weight: bold;
-      font-size: 2rem;
+      font-size: 1.5rem;
     }
 
     .form-group {
       margin-bottom: 0;
       display: flex;
       flex-direction: column;
-      min-height: 70px;
+      min-height: 58px;
       justify-content: space-between;
     }
 
@@ -109,9 +108,9 @@
       color: #333;
       font-weight: 600;
       display: block;
-      margin-bottom: 0.3rem;
-      font-size: 1.1rem;
-      height: 1.35em;
+      margin-bottom: 0.25rem;
+      font-size: 1rem;
+      height: 1.25em;
     }
 
     .form-box input[type="text"],
@@ -120,27 +119,27 @@
     .form-box input[type="date"],
     .form-box select {
       width: 100%;
-      padding: 0.5rem;
+      padding: 0.42rem;
       border-radius: 6px;
       border: 0.5px solid #d2d2d2;
-      font-size: 1rem;
+      font-size: 0.92rem;
       box-sizing: border-box;
     }
 
     .form-box button {
       width: auto;
-      padding: 0.8rem 2rem;
+      padding: 0.65rem 1.6rem;
       background-color: #F28241;
       border: none;
       color: #ffffff;
       font-weight: bold;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 1.1rem;
+      font-size: 1rem;
       transition: background-color 0.3s;
       grid-column: 1 / -1;
       justify-self: center;
-      margin-top: 1rem;
+      margin-top: 0.8rem;
     }
 
     .form-box button:hover {
@@ -172,13 +171,100 @@
       color: rgba(93, 93, 93, 0.6);
       font-weight: normal;
       text-decoration: none;
-      font-size: 1.1rem;
+      font-size: 0.98rem;
       transition: color 0.3s;
     }
 
     .login-link a:hover {
       color: #F28241;
       text-decoration: none;
+    }
+
+    @media (max-width: 1600px) {
+      .typewriter-container {
+        right: 90px;
+        width: 760px;
+        font-size: 1.8rem;
+      }
+
+      .logo-container {
+        left: 90px;
+      }
+    }
+
+    @media (max-width: 1200px) {
+      body {
+        padding-top: calc(34vh + 60px);
+        padding-bottom: 50px;
+      }
+
+      .typewriter-container {
+        top: 210px;
+        right: 40px;
+        width: 620px;
+        font-size: 1.5rem;
+      }
+
+      .logo-container {
+        top: 225px;
+        left: 40px;
+      }
+
+      .logo-container img {
+        height: 120px;
+      }
+
+      .form-box {
+        padding: 2.5rem 2rem;
+      }
+    }
+
+    @media (max-width: 992px) {
+      body {
+        padding-top: 130px;
+        padding-bottom: 50px;
+        gap: 1.5rem;
+      }
+
+      .logo-container {
+        position: static;
+      }
+
+      .typewriter-container {
+        position: static;
+        width: min(92vw, 700px);
+        max-height: none;
+        font-size: 1.45rem;
+        text-align: center;
+        padding: 0.5rem 1rem;
+      }
+
+      .form-box {
+        max-width: 92%;
+        padding: 2rem 1rem;
+      }
+
+      .form-box form {
+        grid-template-columns: 1fr;
+      }
+
+      .form-box .form-group-full {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .logo-container img {
+        height: 100px;
+      }
+
+      .typewriter-container {
+        font-size: 1.15rem;
+      }
+
+      .form-box h2 {
+        font-size: 1.5rem;
+      }
     }
   </style>
 </head>

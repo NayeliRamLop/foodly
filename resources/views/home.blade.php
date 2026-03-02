@@ -24,25 +24,25 @@
         /* Logo */
         .logo-container {
             position: absolute;
-            top: 300px;
-            left: 350px;
+          top: 200px;
+          left: 300px;
             z-index: 10;
         }
 
         .logo-container img {
-            height: 200px;
+          height: 130px;
             width: auto;
         }
 
         /* Typewriter Container */
         .typewriter-container {
             position: absolute;
-            top: 300px;
-            right: 350px;
+          top: 200px;
+          right: 160px;
             width: 900px;
             height: auto;
             max-height: 500px;
-            font-size: 2.3rem;
+            font-size: 2.0rem;
             white-space: normal;
             overflow: hidden;
             padding: 20px;
@@ -51,17 +51,17 @@
             letter-spacing: 0.05em;
             text-align: left;
             z-index: 10;
-            font-family: 'helvetica', monospace;
+            font-family: 'Anonymous Pro', monospace;
         }
 
         .hero-section {
             background: transparent;
             padding: 40px;
-            min-height: 600px;
+            min-height: 400px;
         }
 
         .carousel-fullwidth {
-            margin-top: 3rem;
+            margin-top: 2rem;
         }
 
         .top-recetas {
@@ -72,6 +72,110 @@
         .popular {
             background: rgba(255, 255, 255, 0.95);
             margin-top: 2rem;
+        }
+
+        @media (max-width: 1600px) {
+          .typewriter-container {
+            right: 90px;
+            width: 760px;
+            font-size: 1.8rem;
+          }
+
+          .logo-container {
+            left: 90px;
+          }
+        }
+
+        @media (max-width: 1200px) {
+          .typewriter-container {
+            top: 210px;
+            right: 40px;
+            width: 620px;
+            font-size: 1.5rem;
+          }
+
+          .logo-container {
+            top: 225px;
+            left: 40px;
+          }
+
+          .logo-container img {
+            height: 120px;
+          }
+        }
+
+        @media (max-width: 992px) {
+          .hero-section {
+            min-height: auto;
+            padding: 120px 20px 20px;
+            text-align: center;
+          }
+
+          .logo-container {
+            position: static;
+            margin-bottom: 1rem;
+          }
+
+          .typewriter-container {
+            position: static;
+            width: min(92vw, 700px);
+            max-height: none;
+            font-size: 1.45rem;
+            text-align: center;
+            padding: 0.5rem 1rem;
+            margin: 0 auto;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .hero-section {
+            min-height: auto;
+            padding: 100px 15px 20px;
+          }
+
+          .carousel-fullwidth {
+            margin-top: 1rem;
+          }
+
+          .top-recetas,
+          .popular {
+            margin-top: 1.5rem;
+          }
+        }
+
+        @media (max-width: 576px) {
+          main {
+            padding-top: 50px;
+          }
+
+          .hero-section {
+            padding: 80px 10px 15px;
+          }
+
+          .logo-container img {
+            height: 80px;
+          }
+
+          .typewriter-container {
+            font-size: 1rem;
+            padding: 0.5rem 0.5rem;
+            width: 90vw;
+          }
+
+          .carousel-fullwidth {
+            margin-top: 1rem;
+          }
+
+          .top-recetas .container,
+          .popular .container {
+            padding-left: 10px;
+            padding-right: 10px;
+          }
+
+          .top-recetas h5,
+          .popular h2 {
+            font-size: 1.25rem;
+          }
         }
     </style>
 @stop
@@ -99,19 +203,12 @@ Cocina con gusto con ingredientes simples, comparte experiencias culinarias úni
             <div class="carousel-inner">
                 <div class="carousel-item active">
                     <img src="{{ asset('images/carousel/slide1.jpg') }}" class="d-block w-100" alt="Nuevas Recetas">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h2 class="carousel-title">Descubre nuevas creaciones</h2>
-                    </div>
                 </div>
                 <div class="carousel-item">
                     <img src="{{ asset('images/carousel/slide2.jpg') }}" class="d-block w-100" alt="Cocina con Gusto">
                 </div>
                 <div class="carousel-item">
                     <img src="{{ asset('images/carousel/slide3.jpg') }}" class="d-block w-100" alt="Técnicas Profesionales">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h2 class="carousel-title">Técnicas Profesionales</h2>
-                        <p class="carousel-subtitle">Domina los secretos de los chefs más experimentados</p>
-                    </div>
                 </div>
             </div>
 

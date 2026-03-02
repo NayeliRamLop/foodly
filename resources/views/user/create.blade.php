@@ -13,51 +13,105 @@
       height: 100%;
       margin: 0;
       font-family: 'Anonymous Pro', monospace;
-      background-image: url('https://images.unsplash.com/photo-1551218808-94e220e084d2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
       background-size: cover;
+      background-image: url('/images/fondo-04.jpg');
       background-position: center;
       color: white;
       overflow-x: hidden;
     }
 
     body {
-      min-height: 100vh;
-      margin: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 6rem;
-      box-sizing: border-box;
+      justify-content: flex-start; 
+      padding-top: calc(36vh + 70px);
+      gap: 2rem;
+      min-height: 100vh;
     }
 
     .typewriter-container {
-      font-size: 3.5rem;
-      white-space: nowrap;
+      position: absolute;
+      top: 250px;
+      right: 350px;
+      width: 900px;
+      height: auto;
+      max-height: 500px;
+      font-size: 2.3rem;
+      white-space: normal;
       overflow: hidden;
-      border-right: 2px solid rgba(255,255,255,0.75);
-      width: 0;
+      padding: 20px;
+      color: rgb(75, 75, 75);
       font-weight: bold;
       letter-spacing: 0.05em;
-      max-width: 95vw;
-      text-align: center;
-      margin-bottom: 4rem;
-      color: white;
+      text-align: left;
+      z-index: 10;
+    }
+
+    /* Logo */
+    .logo-container {
+      position: absolute;
+      top: 250px;
+      left: 350px;
+      z-index: 10;
+    }
+
+    .logo-container img {
+      height: 200px;
+      width: auto;
     }
 
     .form-box {
+      top: 200px;
       background: rgba(255, 255, 255, 0.95);
-      padding: 2.5rem;
+      padding: 3rem 3rem;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
       width: 100%;
-      max-width: 420px;
+      max-width: 45%;
       color: #333;
+      font-weight: normal;
       font-size: 1.2rem;
-      margin: 2rem auto 3rem;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .form-box form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-box .form-group-full {
+      grid-column: 1 / -1;
+       width: 50%;
+       justify-self: center;
+    }
+
+    .form-box h2 {
+      margin-top: 0;
+      color: #F28241;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-weight: bold;
+      font-size: 2rem;
     }
 
     .form-group {
-      margin-bottom: 1rem;
+      margin-bottom: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 70px;
+      justify-content: space-between;
+    }
+
+    .form-group label {
+      color: #333;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.3rem;
+      font-size: 1.1rem;
+      height: 1.35em;
     }
 
     .form-box input[type="text"],
@@ -68,47 +122,30 @@
       width: 100%;
       padding: 0.5rem;
       border-radius: 6px;
-      border: 1px solid #ccc;
+      border: 0.5px solid #d2d2d2;
       font-size: 1rem;
-      margin-bottom: 0.5rem;
       box-sizing: border-box;
     }
 
-    .form-box .phone-input {
-      display: flex;
-      gap: 0.5rem;
-    }
-    .form-box .phone-input input.lada {
-      width: 70px;
-      padding: 0.5rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
-      text-align: center;
-    }
-    .form-box .phone-input input.phone-number {
-      flex-grow: 1;
-      padding: 0.5rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
-    }
-
     .form-box button {
-      width: 100%;
-      padding: 0.6rem;
-      background-color: #1565c0;
+      width: auto;
+      padding: 0.8rem 2rem;
+      background-color: #F28241;
       border: none;
-      color: white;
+      color: #ffffff;
       font-weight: bold;
       border-radius: 6px;
       cursor: pointer;
       font-size: 1.1rem;
+      transition: background-color 0.3s;
+      grid-column: 1 / -1;
+      justify-self: center;
       margin-top: 1rem;
     }
 
     .form-box button:hover {
-      background-color: #0d3c78;
+      background-color: #d97031;
+      color: #ffffff;
     }
 
     .invalid-feedback {
@@ -116,6 +153,7 @@
       font-size: 0.875em;
       margin-top: -0.5rem;
       margin-bottom: 0.5rem;
+      display: block;
     }
 
     .error-list {
@@ -131,12 +169,16 @@
     }
 
     .login-link a {
-      color: #1565c0;
-      font-weight: bold;
+      color: rgba(93, 93, 93, 0.6);
+      font-weight: normal;
       text-decoration: none;
+      font-size: 1.1rem;
+      transition: color 0.3s;
     }
+
     .login-link a:hover {
-      text-decoration: underline;
+      color: #F28241;
+      text-decoration: none;
     }
   </style>
 </head>
@@ -144,7 +186,6 @@
   <nav class="navbar navbar-expand-lg px-4 py-3 public-navbar fixed-top">
     <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="{{ url('/') }}">
       <img src="{{ asset('images/logo.png') }}" alt="Foodly" height="34">
-      <span>FOODLY</span>
     </a>
     <form class="search-form d-none d-lg-flex mx-auto position-relative" action="{{ route('recipes.search') }}" method="GET" autocomplete="off">
       <input type="text" name="q" class="form-control" placeholder="Buscar recetas..." value="{{ request('q') }}">
@@ -161,9 +202,18 @@
     </div>
   </nav>
 
-  <div class="typewriter-container" id="typewriter">Crear usuario   </div>
+  <div class="logo-container">
+    <img src="{{ asset('images/logo.png') }}" alt="Foodly">
+  </div>
+
+  <div class="typewriter-container" id="typewriter">
+    Crea tu cuenta y sé parte de nuestra comunidad.
+Comparte tus recetas favoritas.
+  </div>
 
   <div class="form-box">
+    <h2>Crear cuenta</h2>
+    
     @if ($errors->any())
       <div class="invalid-feedback" style="display:block;">
         <ul class="error-list">
@@ -202,41 +252,52 @@
         <input type="email" id="email" name="email" value="{{ old('email') }}" required />
       </div>
 
-      <div class="form-group phone-input">
-        <div>
-          <label for="lada">Lada</label>
-          <input type="text" id="lada" name="lada" maxlength="5" placeholder="Lada" value="{{ old('lada') }}" />
-        </div>
-        <div style="flex-grow:1;">
-          <label for="phone">Teléfono</label>
-          <input type="text" id="phone" name="phone" maxlength="10" placeholder="Número" value="{{ old('phone') }}" />
-        </div>
+      <div class="form-group">
+        <label for="lada">Lada</label>
+        <input type="text" id="lada" name="lada" maxlength="5" placeholder="Lada" value="{{ old('lada') }}" />
       </div>
 
       <div class="form-group">
-        <label for="country">País</label>
-        <select id="country" name="country" required>
-          <option value="" disabled {{ old('country') ? '' : 'selected' }}>Selecciona país</option>
-          <option value="Argentina" {{ old('country')=='Argentina' ? 'selected' : '' }}>Argentina</option>
-          <option value="Bolivia" {{ old('country')=='Bolivia' ? 'selected' : '' }}>Bolivia</option>
-          <option value="Brasil" {{ old('country')=='Brasil' ? 'selected' : '' }}>Brasil</option>
-          <option value="Chile" {{ old('country')=='Chile' ? 'selected' : '' }}>Chile</option>
-          <option value="Colombia" {{ old('country')=='Colombia' ? 'selected' : '' }}>Colombia</option>
-          <option value="Costa Rica" {{ old('country')=='Costa Rica' ? 'selected' : '' }}>Costa Rica</option>
-          <option value="Cuba" {{ old('country')=='Cuba' ? 'selected' : '' }}>Cuba</option>
-          <option value="Ecuador" {{ old('country')=='Ecuador' ? 'selected' : '' }}>Ecuador</option>
-          <option value="El Salvador" {{ old('country')=='El Salvador' ? 'selected' : '' }}>El Salvador</option>
-          <option value="Guatemala" {{ old('country')=='Guatemala' ? 'selected' : '' }}>Guatemala</option>
-          <option value="Honduras" {{ old('country')=='Honduras' ? 'selected' : '' }}>Honduras</option>
-          <option value="México" {{ old('country')=='México' ? 'selected' : '' }}>México</option>
-          <option value="Nicaragua" {{ old('country')=='Nicaragua' ? 'selected' : '' }}>Nicaragua</option>
-          <option value="Panamá" {{ old('country')=='Panamá' ? 'selected' : '' }}>Panamá</option>
-          <option value="Paraguay" {{ old('country')=='Paraguay' ? 'selected' : '' }}>Paraguay</option>
-          <option value="Perú" {{ old('country')=='Perú' ? 'selected' : '' }}>Perú</option>
-          <option value="Puerto Rico" {{ old('country')=='Puerto Rico' ? 'selected' : '' }}>Puerto Rico</option>
-          <option value="República Dominicana" {{ old('country')=='República Dominicana' ? 'selected' : '' }}>República Dominicana</option>
-          <option value="Uruguay" {{ old('country')=='Uruguay' ? 'selected' : '' }}>Uruguay</option>
-          <option value="Venezuela" {{ old('country')=='Venezuela' ? 'selected' : '' }}>Venezuela</option>
+        <label for="phone">Teléfono</label>
+        <input type="text" id="phone" name="phone" maxlength="10" placeholder="Número" value="{{ old('phone') }}" />
+      </div>
+
+      <div class="form-group">
+        <label for="state">Estado</label>
+        <select id="state" name="state" required>
+          <option value="" disabled {{ old('state') ? '' : 'selected' }}>Selecciona estado</option>
+          <option value="Aguascalientes" {{ old('state')=='Aguascalientes' ? 'selected' : '' }}>Aguascalientes</option>
+          <option value="Baja California" {{ old('state')=='Baja California' ? 'selected' : '' }}>Baja California</option>
+          <option value="Baja California Sur" {{ old('state')=='Baja California Sur' ? 'selected' : '' }}>Baja California Sur</option>
+          <option value="Campeche" {{ old('state')=='Campeche' ? 'selected' : '' }}>Campeche</option>
+          <option value="Chiapas" {{ old('state')=='Chiapas' ? 'selected' : '' }}>Chiapas</option>
+          <option value="Chihuahua" {{ old('state')=='Chihuahua' ? 'selected' : '' }}>Chihuahua</option>
+          <option value="Ciudad de México" {{ old('state')=='Ciudad de México' ? 'selected' : '' }}>Ciudad de México</option>
+          <option value="Coahuila" {{ old('state')=='Coahuila' ? 'selected' : '' }}>Coahuila</option>
+          <option value="Colima" {{ old('state')=='Colima' ? 'selected' : '' }}>Colima</option>
+          <option value="Durango" {{ old('state')=='Durango' ? 'selected' : '' }}>Durango</option>
+          <option value="Estado de México" {{ old('state')=='Estado de México' ? 'selected' : '' }}>Estado de México</option>
+          <option value="Guanajuato" {{ old('state')=='Guanajuato' ? 'selected' : '' }}>Guanajuato</option>
+          <option value="Guerrero" {{ old('state')=='Guerrero' ? 'selected' : '' }}>Guerrero</option>
+          <option value="Hidalgo" {{ old('state')=='Hidalgo' ? 'selected' : '' }}>Hidalgo</option>
+          <option value="Jalisco" {{ old('state')=='Jalisco' ? 'selected' : '' }}>Jalisco</option>
+          <option value="Michoacán" {{ old('state')=='Michoacán' ? 'selected' : '' }}>Michoacán</option>
+          <option value="Morelos" {{ old('state')=='Morelos' ? 'selected' : '' }}>Morelos</option>
+          <option value="Nayarit" {{ old('state')=='Nayarit' ? 'selected' : '' }}>Nayarit</option>
+          <option value="Nuevo León" {{ old('state')=='Nuevo León' ? 'selected' : '' }}>Nuevo León</option>
+          <option value="Oaxaca" {{ old('state')=='Oaxaca' ? 'selected' : '' }}>Oaxaca</option>
+          <option value="Puebla" {{ old('state')=='Puebla' ? 'selected' : '' }}>Puebla</option>
+          <option value="Querétaro" {{ old('state')=='Querétaro' ? 'selected' : '' }}>Querétaro</option>
+          <option value="Quintana Roo" {{ old('state')=='Quintana Roo' ? 'selected' : '' }}>Quintana Roo</option>
+          <option value="San Luis Potosí" {{ old('state')=='San Luis Potosí' ? 'selected' : '' }}>San Luis Potosí</option>
+          <option value="Sinaloa" {{ old('state')=='Sinaloa' ? 'selected' : '' }}>Sinaloa</option>
+          <option value="Sonora" {{ old('state')=='Sonora' ? 'selected' : '' }}>Sonora</option>
+          <option value="Tabasco" {{ old('state')=='Tabasco' ? 'selected' : '' }}>Tabasco</option>
+          <option value="Tamaulipas" {{ old('state')=='Tamaulipas' ? 'selected' : '' }}>Tamaulipas</option>
+          <option value="Tlaxcala" {{ old('state')=='Tlaxcala' ? 'selected' : '' }}>Tlaxcala</option>
+          <option value="Veracruz" {{ old('state')=='Veracruz' ? 'selected' : '' }}>Veracruz</option>
+          <option value="Yucatán" {{ old('state')=='Yucatán' ? 'selected' : '' }}>Yucatán</option>
+          <option value="Zacatecas" {{ old('state')=='Zacatecas' ? 'selected' : '' }}>Zacatecas</option>
         </select>
       </div>
 
@@ -245,12 +306,12 @@
         <input type="date" id="registration_date" name="registration_date" value="{{ old('registration_date') }}" required />
       </div>
 
-      <div class="form-group">
+      <div class="form-group form-group-full">
         <label for="password">Contraseña</label>
         <input type="password" id="password" name="password" required />
       </div>
 
-      <div class="form-group">
+      <div class="form-group form-group-full">
         <label for="password_confirmation">Confirmar Contraseña</label>
         <input type="password" id="password_confirmation" name="password_confirmation" required />
       </div>
@@ -264,63 +325,19 @@
   </div>
 
   <script>
-    const tw = document.getElementById('typewriter');
-    const text = "Crear usuario   ";
-    const extraSpaces = 3;
-    let i = 0;
-    let isDeleting = false;
-    let isPaused = false;
-
+    const typewriterEl = document.getElementById('typewriter');
+    const fullText = typewriterEl.textContent.trim();
+    typewriterEl.textContent = '';
+    
+    let index = 0;
     function typeWriter() {
-      let displayText = "";
-
-      if (!isDeleting) {
-        if (i <= text.length) {
-          displayText = text.substring(0, i);
-        } else if (i <= text.length + extraSpaces) {
-          displayText = text + " ".repeat(i - text.length);
-        }
-
-        tw.textContent = displayText;
-        tw.style.width = displayText.length + 'ch';
-        tw.style.borderRight = '2px solid rgba(255,255,255,0.75)';
-        i++;
-
-        if (i > text.length + extraSpaces) {
-          isPaused = true;
-          setTimeout(() => {
-            isPaused = false;
-            isDeleting = true;
-            typeWriter();
-          }, 1500);
-          return;
-        }
-
-      } else {
-        i--;
-        if (i >= 0) {
-          if (i <= text.length) {
-            displayText = text.substring(0, i);
-          } else {
-            displayText = text + " ".repeat(i - text.length);
-          }
-
-          tw.textContent = displayText;
-          tw.style.width = displayText.length + 'ch';
-          tw.style.borderRight = '2px solid rgba(255,255,255,0.75)';
-        } else {
-          isDeleting = false;
-          setTimeout(typeWriter, 700);
-          return;
-        }
-      }
-
-      const speed = isDeleting ? 80 : 150;
-      if (!isPaused) {
-        setTimeout(typeWriter, speed);
+      if (index < fullText.length) {
+        typewriterEl.textContent += fullText[index];
+        index++;
+        setTimeout(typeWriter, 50); // 50ms entre cada letra
       }
     }
-
+    
     typeWriter();
   </script>
   <script>

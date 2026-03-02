@@ -63,8 +63,8 @@ return [
         'enabled' => true,
         'mode' => 'fullscreen',
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/logo.png',
-            'alt' => 'AdminLTE Preloader Image',
+            'path' => 'images/logoxs.png',
+            'alt' => 'Foodly Preloader Image',
             'effect' => 'animation__shake',
             'width' => 100,
             'height' => 100,

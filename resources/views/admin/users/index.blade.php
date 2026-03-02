@@ -4,7 +4,7 @@
 
 @section('content_header')
     <h1 class="m-0 text-dark" style="font-size: 2.5rem;">
-        <i class="fas fa-users mr-2" style="color: #7a9cc6;"></i>LISTADO DE USUARIOS
+        <i class="fas fa-users mr-2" style="color: #F28241;"></i>LISTADO DE USUARIOS
     </h1>
 @stop
 
@@ -24,16 +24,16 @@
                     <table id="users-table" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th><i class="fas fa-cog mr-1" style="color: #7a9cc6;"></i>ACCIONES</th>
-                                <th><i class="fas fa-id-card mr-1" style="color: #7a9cc6;"></i>ID</th>
-                                <th><i class="fas fa-user mr-1" style="color: #7a9cc6;"></i>NOMBRE</th>
-                                <th><i class="fas fa-user mr-1" style="color: #7a9cc6;"></i>APELLIDOS</th>
-                                <th><i class="fas fa-venus-mars mr-1" style="color: #7a9cc6;"></i>GENERO</th>
-                                <th><i class="fas fa-envelope mr-1" style="color: #7a9cc6;"></i>EMAIL</th>
-                                <th><i class="fas fa-phone mr-1" style="color: #7a9cc6;"></i>TELEFONO</th>
-                                <th><i class="fas fa-globe-americas mr-1" style="color: #7a9cc6;"></i>PAIS</th>
-                                <th><i class="fas fa-calendar-alt mr-1" style="color: #7a9cc6;"></i>FFECHA DE REGISTRO</th>
-                                <th><i class="fas fa-info-circle mr-1" style="color: #7a9cc6;"></i>ESTADO</th>
+                                <th><i class="fas fa-cog mr-1" style="color: #F28241;"></i>ACCIONES</th>
+                                <th><i class="fas fa-id-card mr-1" style="color: #F28241;"></i>ID</th>
+                                <th><i class="fas fa-user mr-1" style="color: #F28241;"></i>NOMBRE</th>
+                                <th><i class="fas fa-user mr-1" style="color: #F28241;"></i>APELLIDOS</th>
+                                <th><i class="fas fa-venus-mars mr-1" style="color: #F28241;"></i>GENERO</th>
+                                <th><i class="fas fa-envelope mr-1" style="color: #F28241;"></i>EMAIL</th>
+                                <th><i class="fas fa-phone mr-1" style="color: #F28241;"></i>TELEFONO</th>
+                                <th><i class="fas fa-globe-americas mr-1" style="color: #F28241;"></i>PAIS</th>
+                                <th><i class="fas fa-calendar-alt mr-1" style="color: #F28241;"></i>FFECHA DE REGISTRO</th>
+                                <th><i class="fas fa-info-circle mr-1" style="color: #F28241;"></i>ESTADO</th>
                             </tr>
                         </thead>
                     </table>
@@ -106,11 +106,11 @@ $(document).ready(function() {
         background-color: rgba(122, 156, 198, 0.05);
     }
     .btn-outline-secondary {
-        border-color: #7a9cc6;
-        color: #7a9cc6;
+        border-color: #F28241;
+        color: #F28241;
     }
     .btn-outline-secondary:hover {
-        background-color: #7a9cc6;
+        background-color: #F28241;
         color: white;
     }
     /* Animación para cerrar las alertas */

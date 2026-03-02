@@ -14,15 +14,20 @@
     <!-- CSS global -->
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 
+    <style>
+        main {
+            padding-top: 60px;
+        }
+    </style>
+
     @yield('css')
 </head>
 <body>
 
 <!-- ================= NAVBAR PÚBLICO ================= -->
-<nav class="navbar navbar-expand-lg px-4 py-3 public-navbar">
+<nav class="navbar navbar-expand-lg px-4 py-3 public-navbar fixed-top">
     <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="/">
         <img src="{{ asset('images/logo.png') }}" alt="Foodly" height="34">
-        <span>FOODLY</span>
     </a>
 
     <form class="search-form d-none d-lg-flex mx-auto position-relative" action="{{ route('recipes.search') }}" method="GET" autocomplete="off">

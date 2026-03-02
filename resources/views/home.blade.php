@@ -8,23 +8,82 @@
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+    <style>
+        body {
+            background-size: cover;
+            background-image: url('/images/fondo-04.jpg');
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        main {
+            padding-top: 60px;
+            background: transparent;
+        }
+
+        /* Logo */
+        .logo-container {
+            position: absolute;
+            top: 300px;
+            left: 350px;
+            z-index: 10;
+        }
+
+        .logo-container img {
+            height: 200px;
+            width: auto;
+        }
+
+        /* Typewriter Container */
+        .typewriter-container {
+            position: absolute;
+            top: 300px;
+            right: 350px;
+            width: 900px;
+            height: auto;
+            max-height: 500px;
+            font-size: 2.3rem;
+            white-space: normal;
+            overflow: hidden;
+            padding: 20px;
+            color: rgb(75, 75, 75);
+            font-weight: bold;
+            letter-spacing: 0.05em;
+            text-align: left;
+            z-index: 10;
+            font-family: 'helvetica', monospace;
+        }
+
+        .hero-section {
+            background: transparent;
+            padding: 40px;
+            min-height: 600px;
+        }
+
+        .carousel-fullwidth {
+            margin-top: 3rem;
+        }
+
+        .top-recetas {
+            background: rgba(255, 255, 255, 0.95);
+            margin-top: 3rem;
+        }
+
+        .popular {
+            background: rgba(255, 255, 255, 0.95);
+            margin-top: 2rem;
+        }
+    </style>
 @stop
 
 @section('content')
 <div class="hero-section">
-    <div class="hero-content">
+    <div class="logo-container">
+        <img src="{{ asset('images/logo.png') }}" alt="Foodly">
+    </div>
 
-        <div class="hero-logo">
-            <img src="{{ asset('images/logo.png') }}" alt="Foodly Logo">
-        </div>
-
-        <div class="hero-text">
-            <h2>Cocina con gusto</h2>
-            <p>
-                 Con ingredientes simples y un poco de creatividad, puedes crear recetas que sorprenden y se comparten.
-            </p>
-        </div>
-
+    <div class="typewriter-container" id="typewriter">
+Cocina con gusto con ingredientes simples, comparte experiencias culinarias únicas y descubre nuevas recetas cada día.
     </div>
 </div>
 
@@ -184,6 +243,24 @@
                 interval: 5000,
                 wrap: true
             });
+
+            // Máquina de escribir
+            const typewriterEl = document.getElementById('typewriter');
+            if (typewriterEl) {
+                const fullText = typewriterEl.textContent.trim();
+                typewriterEl.textContent = '';
+                
+                let index = 0;
+                function typeWriter() {
+                    if (index < fullText.length) {
+                        typewriterEl.textContent += fullText[index];
+                        index++;
+                        setTimeout(typeWriter, 50); // 50ms entre cada letra
+                    }
+                }
+                
+                typeWriter();
+            }
         });
     </script>
 @stop

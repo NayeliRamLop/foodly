@@ -31,45 +31,43 @@
       min-height: 100vh;
     }
 
-    /* Título con efecto máquina de escribir 
+    /*Titulo Maquina Escribir*/
     .typewriter-container {
-      font-size: 3rem;
-      white-space: nowrap;
+      position: absolute;
+      top: 300px;
+      right: 350px;
+      width: 900px;
+      height: auto;
+      max-height: 500px;
+      font-size: 2.3rem;
+      white-space: normal;
       overflow: hidden;
-      border-right: 2px solid rgba(255,255,255,0.75);
-      width: 45ch;
-      animation: typing 4s steps(45, end) forwards, blink-caret 0.75s step-end infinite;
-      color: white;
+      padding: 20px;
+      color: rgb(75, 75, 75);
       font-weight: bold;
       letter-spacing: 0.05em;
-      max-width: 95vw;
-      text-align: center;
+      text-align: left;
+      z-index: 10;
     }
 
-    @keyframes typing {
-      from { width: 0; }
-      to { width: 45ch; }
+    /* Logo */
+    .logo-container {
+      position: absolute;
+      top: 300px;
+      left: 350px;
+      z-index: 10;
     }
 
-    @keyframes blink-caret {
-      50% { border-color: transparent; }
-      100% { border-color: rgba(255,255,255,0.75); }
+    .logo-container img {
+      height: 200px;
+      width: auto;
     }
 
-    .typewriter-container.rewind {
-      animation: rewind 3s steps(45, end) forwards;
-      border-right-color: transparent;
-    }
 
-    @keyframes rewind {
-      from { width: 45ch; }
-      to { width: 0; }
-    }
-*/
     /* Cuadro login centrado */
     .login-box {
       background: rgba(255, 255, 255, 0.95);
-      padding: 1.3rem 1.3rem;
+      padding: 6rem 6rem;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
       width: 100%;
@@ -82,7 +80,7 @@
 
     .login-box h2 {
       margin-top: 0;
-      color: #196338;
+      color: #F28241;
       text-align: center;
       margin-bottom: 1.5rem;
       font-weight: bold;
@@ -91,29 +89,33 @@
 
     .login-box input[type="email"],
     .login-box input[type="password"] {
-      width: 100%;
-      padding: 0.3rem;
+      width: 80%;
+      padding: 0.6rem;
       border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
+      border: 0.5px solid #d2d2d2;
+      font-size: 1.3rem;
+      display: block;
+      margin: 0 auto 1rem;
     }
 
     .login-box button {
-      width: 100%;
+      width: 80%;
       padding: 0.6rem;
-      background-color: #f5c174;
+      background-color: #F28241;
       border: none;
-      color: rgb(6, 71, 10);
+      color: #ffffff;
       font-weight: bold;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 1.1rem;
+      font-size: 1.3rem;
       transition: background-color 0.3s;
+      display: block;
+      margin: 0 auto;
     }
 
     .login-box button:hover {
-      background-color: #307325;
-         color: rgb(255, 255, 255);
+      background-color: #d97031;
+      color: #ffffff;
     }
 
     .links {
@@ -123,15 +125,16 @@
     }
 
     .links a {
-      color: #026e2f;
+      color: rgba(93, 93, 93, 0.6);
       text-decoration: none;
       display: block;
       margin: 0.3rem 0;
       transition: color 0.3s;
+      font-size: 1.1rem;
     }
 
     .links a:hover {
-      color: #0d3c78;
+      color: #F28241;
     }
   </style>
 </head>
@@ -139,7 +142,7 @@
   <nav class="navbar navbar-expand-lg px-4 py-3 public-navbar fixed-top">
     <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="{{ url('/') }}">
       <img src="{{ asset('images/logo.png') }}" alt="Foodly" height="34">
-      <span>FOODLY</span>
+   
     </a>
     <form class="search-form d-none d-lg-flex mx-auto position-relative" action="{{ route('recipes.search') }}" method="GET" autocomplete="off">
       <input type="text" name="q" class="form-control" placeholder="Buscar recetas..." value="{{ request('q') }}">
@@ -156,11 +159,15 @@
     </div>
   </nav>
 
-  <!--
- <div class="typewriter-container" id="typewriter">
-    Bienvenido a cocina con gusto
+  <div class="logo-container">
+    <img src="{{ asset('images/logo.png') }}" alt="Foodly">
+  </div>
+
+  <div class="typewriter-container" id="typewriter">
+   Bienvenido a Foodly, la red social donde las recetas se convierten en experiencias.
+Descubre, comparte y cocina con gusto.
   </div> 
- -->
+
 
   <div class="login-box">
     <!-- Mensaje de éxito después del registro -->
@@ -221,20 +228,20 @@
   </div>
 
   <script>
-    const tw = document.getElementById('typewriter');
-
-    function loopAnimation() {
-      tw.classList.remove('rewind');
-      void tw.offsetWidth;
-      setTimeout(() => {
-        tw.classList.add('rewind');
-      }, 5000);
-      setTimeout(() => {
-        loopAnimation();
-      }, 8000);
+    const typewriterEl = document.getElementById('typewriter');
+    const fullText = typewriterEl.textContent.trim();
+    typewriterEl.textContent = '';
+    
+    let index = 0;
+    function typeWriter() {
+      if (index < fullText.length) {
+        typewriterEl.textContent += fullText[index];
+        index++;
+        setTimeout(typeWriter, 50); // 50ms entre cada letra
+      }
     }
-
-    loopAnimation();
+    
+    typeWriter();
   </script>
   <script>
     (function () {

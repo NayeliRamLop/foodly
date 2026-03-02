@@ -4,7 +4,7 @@
 
 @section('content_header')
     <h1 class="m-0 text-dark" style="font-size: 2.5rem;">
-        <i class="fas fa-utensils mr-2" style="color: #7a9cc6;"></i>ADMINISTRACIÓN DE RECETAS
+        <i class="fas fa-utensils mr-2" style="color: #F28241;"></i>ADMINISTRACIÓN DE RECETAS
     </h1>
 @stop
 
@@ -35,28 +35,28 @@
                         <thead class="thead-light">
                             <tr>
                                 <th style="width: 120px; color: #4a5568;">
-                                    <i class="fas fa-cog mr-2" style="color: #7a9cc6;"></i>ACCIONES
+                                    <i class="fas fa-cog mr-2" style="color: #F28241;"></i>ACCIONES
                                 </th>
                                 <th style="color: #4a5568;">
-                                    <i class="fas fa-hashtag mr-2" style="color: #7a9cc6;"></i>ID
+                                    <i class="fas fa-hashtag mr-2" style="color: #F28241;"></i>ID
                                 </th>
                                 <th style="color: #4a5568;">
-                                    <i class="fas fa-heading mr-2" style="color: #7a9cc6;"></i>TÍTULO
+                                    <i class="fas fa-heading mr-2" style="color: #F28241;"></i>TÍTULO
                                 </th>
                                 <th style="color: #4a5568;">
-                                    <i class="fas fa-user mr-2" style="color: #7a9cc6;"></i>USUARIO
+                                    <i class="fas fa-user mr-2" style="color: #F28241;"></i>USUARIO
                                 </th>
                                 <th style="color: #4a5568;">
-                                    <i class="fas fa-tag mr-2" style="color: #7a9cc6;"></i>CATEGORÍA
+                                    <i class="fas fa-tag mr-2" style="color: #F28241;"></i>CATEGORÍA
                                 </th>
                                 <th style="color: #4a5568;">
-                                    <i class="fas fa-tags mr-2" style="color: #7a9cc6;"></i>SUBCATEGORÍA
+                                    <i class="fas fa-tags mr-2" style="color: #F28241;"></i>SUBCATEGORÍA
                                 </th>
                                 <th style="color: #4a5568;">
-                                    <i class="fas fa-calendar-alt mr-2" style="color: #7a9cc6;"></i>FECHA CREACIÓN
+                                    <i class="fas fa-calendar-alt mr-2" style="color: #F28241;"></i>FECHA CREACIÓN
                                 </th>
                                 <th style="color: #4a5568;">
-                                    <i class="fas fa-check-circle mr-2" style="color: #7a9cc6;"></i>ESTADO
+                                    <i class="fas fa-check-circle mr-2" style="color: #F28241;"></i>ESTADO
                                 </th>
                             </tr>
                         </thead>

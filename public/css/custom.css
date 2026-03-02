@@ -1,148 +1,35 @@
 /* ===============================
-   NAVBAR GENERAL
+   VARIABLES Y COLORES GLOBALES
 ================================ */
+:root {
+    --primary: #F28241;
+    --secondary: #D9D9D9;
+    --danger: #d64545;
+    --text-dark: #2f2f2f;
+    --text-soft: #7a7a7a;
+    --bg-light: #fff9f4;
+    --bg-soft: #f7f9fc;
+}
 
+/* ===============================
+   ESTILOS GENERALES
+================================ */
 body {
     margin: 0;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
-    font-size: medium;
     background: #ffffff;
 }
-
-.main-sidebar .brand-link,
-.main-sidebar .brand-link:hover,
-.main-sidebar .brand-link:focus {
-    background-color: #ffffff !important;
-    display: flex;
-    align-items: center;
-    height: 60px;
-    padding: 0 15px !important;
-}
-
-.main-header.navbar {
-    background-color: #D2691E !important; /* Naranja */
-    min-height: 60px !important;
-    display: flex;
-    align-items: center;
-}
-
-
-/* ===============================
-   LOGO
-================================ */
-
-.brand-image {
-    height: 45px !important;
-    width: auto !important;
-    border-radius: 0 !important;
-}
-
-/* ===============================
-   ALINEAR NAV ITEMS
-================================ */
-
-.main-header .navbar-nav {
-    align-items: center !important;
-}
-
-/* ===============================
-   LINKS DEL NAVBAR
-================================ */
-
-.main-header.navbar .nav-link,
-.main-header.navbar .navbar-nav .nav-link {
-    color: #ffffff !important;
-    font-size: 1.1rem;
-}
-
-/* ===============================
-   BUSCADOR
-================================ */
-
-.navbar-search-always .form-control-navbar {
-    width: 560px;
-    border-radius: 999px;
-    background: #ffffff;
-}
-
-.navbar-search-always .btn-navbar {
-    background: #D2691E;
-    color: #ffffff;
-    border-radius: 999px;
-    padding: 0.35rem 1rem;
-}
-
-.navbar-search-always .btn-navbar:hover {
-    background: #b85b1a;
-    color: #ffffff;
-}
-
-.main-header .dropdown-toggle::after {
-    display: none !important;
-}
-
-
-
-/* FORZAR fondo blanco detrás del logo */
-.sidebar-dark-primary .brand-link,
-.sidebar-dark-primary .brand-link:hover,
-.sidebar-dark-primary .brand-link:focus {
-    background-color: #ffffff !important;
-}
-
-
-:root {
-    /* colores principales */
-    --primary: #41591D;   /* verde foodly */
-    --warning: #F2994B;   /* amarillo suave */
-    --danger:  #d64545;   /* rojo elegante */
-    --success: #4D7332;   /* verde éxito */
-    --info:    #C2F2F2;
-
-    /* tipografías y fondos */
-    --text-dark: #2f2f2f;
-    --text-soft: #7a7a7a;
-    --bg-soft: #f7f9fc;
-
-    /* botones */
-    --btn-padding-y: 5px;
-    --btn-padding-x: 26px;
-    --btn-font-size: 15px;
-    --btn-radius: 50px;
-} 
 
 .btn {
-    padding: var(--btn-padding-y) var(--btn-padding-x);
-    font-size: var(--btn-font-size);
-    border-radius: var(--btn-radius);
+    border-radius: 50px;
+    font-size: 15px;
+    padding: 5px 26px;
 }
 
-
-/* botones */
 .btn-primary {
     background-color: var(--primary);
     border-color: var(--primary);
-}
-
-.btn-warning {
-    background-color: var(--warning);
-    border-color: var(--warning);
-    color: #2f2f2f;
-}
-
-.btn-danger {
-    background-color: var(--danger);
-    border-color: var(--danger);
-}
-
-.btn-success {
-    background-color: var(--success);
-    border-color: var(--success);
-}
-
-.btn-info {
-    background-color: var(--info);
-    border-color: var(--info);
+    color: #ffffff;
 }
 
 .btn-primary:hover {
@@ -150,476 +37,71 @@ body {
     border-color: color-mix(in srgb, var(--primary) 85%, black);
 }
 
-.btn-warning:hover {
-    background-color: color-mix(in srgb, var(--warning) 85%, black);
-}
-
-.btn-danger:hover {
-    background-color: color-mix(in srgb, var(--danger) 85%, black);
-}
-
-
-
-.text-primary { color: var(--primary) !important; }
-.text-warning { color: var(--warning) !important; }
-.text-danger  { color: var(--danger) !important; }
-.text-success { color: var(--success) !important; }
-
-.bg-primary { background-color: var(--primary) !important; }
-.bg-warning { background-color: var(--warning) !important; }
-.bg-danger  { background-color: var(--danger) !important; }
-
-
-/* ===============================
-   SIDEBAR (AdminLTE)
-================================ */
-
-.main-sidebar {
-    background-color: #ffd4b1 !important;
-     color: #2f2f2f !important;
-}
-
-.main-sidebar .brand-link .brand-text {
-    color: #ffffff !important;
- font-size: 20px;
-}
-
-.main-sidebar .nav-header {
-    color: #2f2f2f;
-    font-weight: 600;
-    font-size: 13px;
-    padding: 12px 16px;
-}
-
-
-.nav-sidebar .nav-link {
-    color: #2f2f2f !important;
-    font-size: 1.05rem;
-    border-radius: 8px;
-}
-
-.nav-sidebar .nav-link:hover {
-    background-color: #f5c09a !important;
-     color: #2f2f2f !important;
-}
-
-.nav-sidebar .nav-link.active {
-    background-color: #f1b98e !important;
-    color: #2f2f2f !important;
-}
-
-/* Sidebar search - fondo blanco */
-.form-control-sidebar {
-    background-color: #ffffff !important;
-    color: #2d1b01 !important;
-    border: 1px solid #e7b28a;
-}
-
-.form-control-sidebar::placeholder {
-    color: #41591D;
-}
-
-
-
-.content {
-    padding: 40px;
-}
-
-/* HERO SECTION (logo central tipo mockup) */
-.hero-section {
-    background-color: #ffffff;
-    padding: 40px 40px;
-}
-
-.hero-content {
-    max-width: 900px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start; /* items pegados a la izquierda */
-    gap: 40px;                    /* espacio entre logo y texto */
-}
-
-.hero-logo img {
-    max-width: 600px; /* tamaño razonable para el logo */
-    height: auto;
-}
-
-.hero-text {
-    max-width: 500px;
-    color: #6c757d;
-}
-
-.hero-text h2 {
-    font-size: 36px;
-    font-weight: 600;
-    color: #212529;
-    margin-bottom: 15px;
-}
-
-.hero-text p {
-    font-size: 15px;
-    line-height: 1.6;
-}
-
-@media (max-width: 768px) {
-    .hero-content {
-        flex-direction: column;
-        text-align: center;
-        gap: 40px;
-    }
-
-    .hero-logo img {
-        max-width: 240px;
-    }
-}
-
-
-/* ===============================
-   CARRUSEL
-================================ */
-
-.carousel-inner {
-    max-height: 400px;
-}
-
-.carousel-item img {
-    height: 500px;
-    object-fit: cover;
-}
-
-.carousel-caption {
-    background: rgba(0, 0, 0, 0.3);
-    padding: 30px;
-    border-radius: 10px;
-    bottom: 40%;
-}
-
-.carousel-title {
-    font-size: 3rem;
-    font-weight: 700;
-}
-
-.carousel-subtitle {
-    font-size: 1.5rem;
-    font-weight: 300;
-}
-
-
-
-
-/* ===== layout general ===== */
-.profile-page {
-    margin-top: 1.5rem;
-}
-
-.card {
-    border-radius: 14px;
-    border: none;
-    box-shadow: 0 10px 30px rgba(0,0,0,.05);
-}
-
-/* ===== título ===== */
-.profile-title {
-    display: flex;
-    align-items: center;
-    font-size: 2.2rem;
-    font-weight: 600;
-    color: #075e38;
-}
-
-.profile-title i {
-    color: var(--primary);
-    margin-right: .75rem;
-}
-
-/* ===== tarjeta izquierda (avatar) ===== */
-.profile-card {
-    padding-top: 1rem;
-}
-
-.profile-avatar {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.profile-avatar img,
-.avatar-placeholder {
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.avatar-placeholder {
-    background: var(--bg-soft);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.avatar-placeholder i {
-    font-size: 70px;
-    color: var(--primary);
-}
-
-/* botón cambiar foto */
-.profile-avatar .btn {
-    margin-top: 1rem;
-    border-radius: 20px;
-}
-
-/* fecha */
-.member-date {
-    margin-top: 1.5rem;
-    font-size: .95rem;
-    color: var(--text-soft);
-}
-
-/* ===== tarjeta derecha ===== */
-.profile-info {
-    padding: .5rem;
-}
-
-/* tabs */
-.profile-tabs {
-    padding: 0 1.5rem;
-    border-bottom: 1px solid #eaeaea;
-}
-
-.profile-tabs .nav-link {
-    font-size: .95rem;
-    color: var(--text-soft);
-    padding: 1rem;
-}
-
-.profile-tabs .nav-link.active {
-    color: var(--primary);
-    font-weight: 600;
-    border-bottom: 3px solid var(--primary);
-}
-
-/* ===== contenido ===== */
-.profile-info .card-body {
-    padding: 2rem;
-}
-
-/* bloques tipo mockup */
-.profile-info h4 {
-    font-size: .9rem;
-    letter-spacing: .08em;
-    color: var(--primary);
-    margin-bottom: 1.2rem;
-    text-transform: lowercase;
-}
-
-.profile-info p {
-
-    justify-content: space-between;
-    padding: .6rem 0;
-    border-bottom: 1px solid #f0f0f0;
-    font-size: .95rem;
+.btn-secondary, .btn-warning {
+    background-color: var(--secondary);
+    border-color: var(--secondary);
     color: var(--text-dark);
 }
 
-.profile-info p:last-child {
-    border-bottom: none;
+.btn-secondary:hover, .btn-warning:hover {
+    background-color: color-mix(in srgb, var(--secondary) 85%, black);
+    color: var(--text-dark);
 }
 
-.profile-info p span {
-    color: var(--text-soft);
-    font-weight: 500;
-}
-
-/* badges */
-.badge-success {
-    background-color: #e6f4ea;
-    color: #2f7d4a;
-    font-weight: 600;
-}
-
-/* ===== acciones ===== */
-.profile-actions {
-    margin: 3rem 0 1rem;
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.profile-actions .btn {
-    border-radius: 30px;
-    padding: .8rem 1.8rem;
-    font-size: .95rem;
-}
-
-/* ===== modal ===== */
-.modal-content {
-    border-radius: 16px;
-}
-
-/* =====TOP RECETAS ===== */
-
-.top-recetas {
-  background-color: #fff6e9;
-}
-
-.top-recetas .recipe-card {
-  width: 180px;
-  background: #ffd4b1;
-  border-radius: 12px;
-  padding: 1rem;
-  position: relative;
-  flex-shrink: 0;
-  margin-right: 1.5rem; /* espacio entre tarjetas */
-}
-
-/* allow cards on recipes page to grow full width of their column */
-.recipes-page .recipe-card {
-  width: 100%;
-  max-width: none;
-}
-
-.recipe-card h6 {
-  margin-top: 0.75rem;
-  font-weight: 600;
-}
-
-.img-placeholder {
-  height: 120px;
-  background: #fff5f1;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.card-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 0.75rem;
-}
-
-.fav {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  cursor: pointer;
-}
-
-/* =====popular ===== */
-.popular h2 {
-  font-weight: 600;
-  color: #555;
-}
-
-.nav-tabs .nav-link {
-  color: #888;
-}
-
-.nav-tabs .nav-link.active {
-  font-weight: 600;
-  border-color: transparent transparent #0a4f36;
-  color: #0a4f36;
-}
-
-/* ===== NAVBAR PUBLICO ===== */
+/* ===============================
+   NAVBAR PÚBLICO
+================================ */
 .public-navbar {
-    background-color: #ffd4b1;
-    border-bottom: 1px solid #f1c29c;
-    font-family: 'Helvetica Neue', sans-serif;
-    display: flex;
-    align-items: center;
-}
-
-.public-navbar .navbar-brand span {
-    font-size: 1.35rem;
-    letter-spacing: 1px;
+    background-color: var(--bg-light) !important;
+    border-bottom: 1px solid #f1c29c !important;
+    display: flex !important;
+    align-items: center !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
 }
 
 .public-navbar .navbar-brand img {
-    height: 44px;
-}
-
-.public-navbar .btn-primary {
-    background-color: #D2691E;
-    border: none;
-    border-radius: 6px;
-    color: #ffffff;
-    font-size: 1.15rem;
-    padding: 0.75rem 1.6rem;
-}
-
-.public-navbar .btn-primary:hover {
-    background-color: #b85b1a;
-}
-
-.public-navbar .register-link {
-    background-color: #D2691E;
-    border-radius: 6px;
-    color: #ffffff;
-    padding: 0.75rem 1.4rem;
-    font-size: 1.15rem;
-}
-
-.public-navbar .register-link:hover {
-    background-color: #b85b1a;
-    color: #ffffff;
+    height: 34px;
 }
 
 .public-navbar .search-form {
     max-width: 700px;
-    width: 100%;
-    gap: 0.5rem;
-    justify-content: center;
     flex: 1;
-}
-
-.public-navbar .nav-actions {
-    margin-left: auto;
+    gap: 0.5rem;
 }
 
 .public-navbar .search-form .form-control {
     border-radius: 999px;
-    padding-left: 1rem;
     border: 1px solid #e7b28a;
     height: 52px;
-    flex: 1;
-    font-size: 1.1rem;
+    padding-left: 1rem;
 }
 
 .public-navbar .btn-search {
-    background-color: #D2691E;
-    color: #ffffff;
+    background-color: var(--secondary);
+    color: var(--text-dark);
     border-radius: 999px;
     padding: 0.75rem 1.6rem;
     border: none;
+}
+
+.public-navbar .btn-primary {
+    border-radius: 6px;
+    padding: 0.75rem 1.6rem;
     font-size: 1.15rem;
 }
 
-.public-navbar .btn-search:hover {
-    background-color: #b85b1a;
-    color: #ffffff;
+.public-navbar .register-link {
+    background-color: var(--secondary);
+    color: var(--text-dark);
+    border-radius: 6px;
+    padding: 0.75rem 1.4rem;
+    font-size: 1.15rem;
+    text-decoration: none;
 }
 
-.list-avatar {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    background: #fde7c7;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-
-.list-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.public-navbar .register-link:hover {
+    background-color: color-mix(in srgb, var(--secondary) 85%, black);
+    color: var(--text-dark);
 }
 
 .public-navbar .search-suggest {
@@ -665,19 +147,296 @@ body {
     border: 1px solid #f1c29c;
 }
 
-.public-navbar .suggest-text {
-    color: #2f2f2f;
-    font-size: 0.98rem;
+/* ===============================
+   HERO SECTION
+================================ */
+.hero-section {
+    background-color: transparent;
+    padding: 60px 40px;
+}
+
+.hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 60px;
+    min-height: 400px;
+}
+
+.hero-logo {
+    flex: 0 0 30%;
+    text-align: center;
+}
+
+.hero-logo img {
+    max-width: 300px;
+    height: auto;
+}
+
+.hero-text {
+    flex: 0 0 50%;
+    color: var(--text-dark);
+}
+
+.hero-text h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+}
+
+.hero-text p {
+    font-size: 1.3rem;
+    line-height: 1.8;
+    color: var(--text-dark);
+}
+
+@media (max-width: 768px) {
+    .hero-content {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* ===============================
+   CARRUSEL
+================================ */
+.carousel-inner {
+    max-height: 400px;
+}
+
+.carousel-item img {
+    height: 500px;
+    object-fit: cover;
+}
+
+.carousel-caption {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 30px;
+    border-radius: 10px;
+}
+
+.carousel-title {
+    font-size: 3rem;
+    font-weight: 700;
+}
+
+/* ===============================
+   SECCIONES DE CONTENIDO
+================================ */
+.top-recetas, .popular {
+    background-color: rgba(255, 255, 255, 0.95);
+    margin-top: 3rem;
+    padding: 3rem 0;
+}
+
+.top-recetas .recipe-card {
+    width: 180px;
+    background: #ffd4b1;
+    border-radius: 12px;
+    padding: 1rem;
+    position: relative;
+    flex-shrink: 0;
+    margin-right: 1.5rem;
 }
 
 .recipe-card {
-    background: var(--bg-soft, #fff6e9);
-    max-width: 100%;
+    background: var(--bg-soft);
 }
-.card-title {
+
+.recipe-card h6 {
+    margin-top: 0.75rem;
+    font-weight: 600;
     color: var(--primary);
 }
-.view-recipe-btn {
-    background-color: var(--primary);
-    color: #fff;
+
+.img-placeholder {
+    height: 120px;
+    background: #fff5f1;
+    border-radius: 8px;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.75rem;
+}
+
+.fav {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+/* ===============================
+   TABS Y NAVEGACIÓN
+================================ */
+.nav-tabs .nav-link {
+    color: var(--text-soft);
+    font-size: 0.95rem;
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--primary);
+    font-weight: 600;
+    border-bottom: 3px solid var(--primary);
+}
+
+/* ===============================
+   PERFIL
+================================ */
+.profile-page {
+    margin-top: 1.5rem;
+}
+
+.card {
+    border-radius: 14px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,.05);
+}
+
+.profile-title {
+    display: flex;
+    align-items: center;
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.profile-avatar img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-tabs .nav-link.active {
+    color: var(--primary);
+    font-weight: 600;
+    border-bottom: 3px solid var(--primary);
+}
+
+/* ===============================
+   AdminLTE (Navbar + Sidebar)
+================================ */
+
+/* Main Header */
+.main-header.navbar {
+    background-color: #D2691E !important;
+    min-height: 60px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.main-header.navbar .nav-link {
+    color: #ffffff !important;
+    font-size: 1rem;
+}
+
+.main-header .dropdown-toggle::after {
+    display: none !important;
+}
+
+/* Sidebar Brand */
+.main-sidebar .brand-link {
+    background-color: #ffffff !important;
+    display: flex !important;
+    align-items: center !important;
+    height: 60px !important;
+    padding: 0 15px !important;
+}
+
+.main-sidebar .brand-link:hover {
+    background-color: #ffffff !important;
+}
+
+.brand-image {
+    height: 45px !important;
+    width: auto !important;
+    border-radius: 0 !important;
+}
+
+.main-sidebar .brand-text {
+    color: #ffffff !important;
+    font-size: 20px;
+}
+
+/* Sidebar */
+.main-sidebar {
+    background-color: #ffd4b1 !important;
+    color: var(--text-dark) !important;
+}
+
+.main-sidebar .nav-header {
+    color: var(--text-dark);
+    font-weight: 600;
+    font-size: 13px;
+    padding: 12px 16px;
+}
+
+/* Sidebar Nav Links */
+.nav-sidebar .nav-link {
+    color: var(--text-dark) !important;
+    font-size: 1rem;
+    border-radius: 8px;
+    margin: 4px 8px;
+}
+
+.nav-sidebar .nav-link:hover {
+    background-color: #f5c09a !important;
+    color: var(--text-dark) !important;
+}
+
+.nav-sidebar .nav-link.active {
+    background-color: #f1b98e !important;
+    color: var(--text-dark) !important;
+    font-weight: 600;
+}
+
+/* Sidebar Search */
+.form-control-sidebar {
+    background-color: #ffffff !important;
+    color: var(--text-dark) !important;
+    border: 1px solid #e7b28a;
+}
+
+.form-control-sidebar::placeholder {
+    color: #999;
+}
+
+/* Content Area */
+.content {
+    padding: 40px;
+}
+
+.content-header {
+    margin-bottom: 1.5rem;
+}
+
+/* Search Form - Navbar */
+.navbar-search-always .form-control-navbar {
+    width: 560px;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+}
+
+.navbar-search-always .btn-navbar {
+    background: #D2691E;
+    color: #ffffff;
+    border-radius: 999px;
+    padding: 0.35rem 1rem;
+    border: none;
+}
+
+.navbar-search-always .btn-navbar:hover {
+    background: #b85b1a;
+    color: #ffffff;
+}
+
+/* Navbar Items Alignment */
+.main-header .navbar-nav {
+    align-items: center !important;
 }

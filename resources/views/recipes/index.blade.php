@@ -3,8 +3,8 @@
 @section('title', 'RECETAS - COCINA CON GUSTO')
 
 @section('content_header')
-    <h1 class="m-0 text-dark" style="font-size: 2.8rem;">
-        <i class="fas fa-utensils mr-2" style="color: #7a9cc6;"></i>RECETAS
+    <h1 class="m-0" style="font-size: 4rem; font-weight: 700; color: #F28241; text-shadow: 2px 2px 4px rgba(200, 200, 200, 0.6); letter-spacing: 0.05em; margin-bottom: 1.5rem;">
+        RECETAS
         <a href="{{ route('favorites.index') }}" class="btn btn-outline-danger float-right" style="font-size: 1rem;">
             <i class="fas fa-heart mr-1"></i> Mis Favoritos
         </a>
@@ -41,7 +41,7 @@
                 <img src="{{ asset('storage/'.$recipe->image) }}" class="img-fluid" alt="{{ $recipe->recipe_title }}" style="max-height: 100%; max-width: 100%; object-fit: scale-down;">
                 @else
                 <div class="text-center">
-                    <i class="fas fa-image fa-3x" style="color: #7a9cc6;"></i>
+                    <i class="fas fa-image fa-3x" style="color: #F28241;"></i>
                     <p class="mt-2" style="font-size: 1.1rem;">Sin imagen</p>
                 </div>
                 @endif
@@ -65,12 +65,9 @@
             <!-- Botones de acción simplificados -->
             <div class="card-footer bg-white border-top-0">
                 <div class="d-flex justify-content-center">
-                    <button class="btn btn-sm view-recipe-btn mr-2" data-toggle="modal" data-target="#recipeModal" data-recipe-id="{{ $recipe->id }}">
+                    <button class="btn btn-sm view-recipe-btn" data-toggle="modal" data-target="#recipeModal" data-recipe-id="{{ $recipe->id }}">
                         <i class="fas fa-eye mr-1"></i> Ver
                     </button>
-                    <a href="{{ route('recipes.download', $recipe->id) }}" class="btn btn-sm btn-danger" style="font-size: 1.1rem;">
-                        <i class="fas fa-file-pdf mr-1"></i> PDF
-                    </a>
                 </div>
             </div>
         </div>
@@ -82,7 +79,7 @@
 <div class="modal fade" id="recipeModal" tabindex="-1" role="dialog" aria-labelledby="recipeModalLabel">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
-            <div class="modal-header" style="background-color: #7a9cc6; color: white;">
+            <div class="modal-header" style="background-color: #F28241; color: white;">
                 <h4 class="modal-title" id="recipeModalLabel" style="font-size: 1.5rem;">
                     <i class="fas fa-utensils mr-2"></i> Receta Completa
                 </h4>
@@ -188,7 +185,7 @@
         border-radius: 8px;
     }
     .recipe-modal-title {
-        color: #7a9cc6;
+        color: #F28241;
         font-weight: 600;
         margin-bottom: 20px;
     }
@@ -198,7 +195,7 @@
         border-bottom: 1px solid #eee;
     }
     .recipe-section-title {
-        color: #7a9cc6;
+        color: #F28241;
         font-weight: 600;
         margin-bottom: 15px;
     }
@@ -327,7 +324,7 @@
                             ${response.image ? 
                                 `<img src="/storage/${response.image}" class="recipe-modal-img img-fluid" alt="${response.recipe_title}">` : 
                                 `<div class="text-center py-4" style="background-color: #f8f9fa; border-radius: 8px;">
-                                    <i class="fas fa-image fa-5x" style="color: #7a9cc6;"></i>
+                                    <i class="fas fa-image fa-5x" style="color: #F28241;"></i>
                                     <p class="mt-2">Sin imagen</p>
                                 </div>`
                             }
@@ -357,7 +354,7 @@
                         </div>
                         
                         <div class="d-flex mb-4">
-                            <span class="badge badge-pill mr-2" style="background-color: #7a9cc6;">
+                            <span class="badge badge-pill mr-2" style="background-color: #F28241;">
                                 <i class="fas fa-tag"></i> ${response.category.name}
                             </span>
                             ${response.subcategory ? 

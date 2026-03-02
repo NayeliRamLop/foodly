@@ -151,7 +151,7 @@ private function getAdminActionButtons($recipe)
     <div class="modal fade" id="editRecipeModal'.$recipe->id.'" tabindex="-1" role="dialog" aria-labelledby="editRecipeModalLabel'.$recipe->id.'">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
-                <div class="modal-header" style="background-color: #7a9cc6; color: white;">
+                <div class="modal-header" style="background-color: #F28241; color: white;">
                     <h4 class="modal-title" id="editRecipeModalLabel'.$recipe->id.'" style="font-size: 1.5rem;">
                         <i class="fas fa-edit mr-2"></i>Editar Receta: '.$recipe->recipe_title.'
                     </h4>
@@ -298,7 +298,7 @@ private function getAdminActionButtons($recipe)
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" style="font-size: 1.1rem;">
                             <i class="fas fa-times mr-1"></i> Cancelar
                         </button>
-                        <button type="submit" class="btn btn-primary" style="background-color: #7a9cc6; border-color: #7a9cc6; font-size: 1.1rem;">
+                        <button type="submit" class="btn btn-primary" style="background-color: #F28241; border-color: #F28241; font-size: 1.1rem;">
                             <i class="fas fa-save mr-1"></i> Guardar Cambios
                         </button>
                     </div>

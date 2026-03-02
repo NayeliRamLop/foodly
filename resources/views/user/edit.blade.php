@@ -4,7 +4,7 @@
 
 @section('content_header')
     <h1 class="m-0 text-dark" style="font-size: 2.5rem;">
-        <i class="fas fa-user-edit mr-2" style="color: #7a9cc6;"></i>EDITAR USUARIO
+        <i class="fas fa-user-edit mr-2" style="color: #F28241;"></i>EDITAR USUARIO
     </h1>
 @stop
 
@@ -44,7 +44,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="name" style="color: #4a5568;">
-                                    <i class="fas fa-user mr-2" style="color: #7a9cc6;"></i>NOMBRE
+                                    <i class="fas fa-user mr-2" style="color: #F28241;"></i>NOMBRE
                                 </label>
                                 <input type="text" class="form-control" id="name" name="name" 
                                        value="{{ old('name', $user->name) }}" required />
@@ -53,7 +53,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="last_name" style="color: #4a5568;">
-                                    <i class="fas fa-user mr-2" style="color: #7a9cc6;"></i>APELLIDOS
+                                    <i class="fas fa-user mr-2" style="color: #F28241;"></i>APELLIDOS
                                 </label>
                                 <input type="text" class="form-control" id="last_name" name="last_name" 
                                        value="{{ old('last_name', $user->last_name) }}" required />
@@ -65,7 +65,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="gender" style="color: #4a5568;">
-                                    <i class="fas fa-venus-mars mr-2" style="color: #7a9cc6;"></i>GÉNERO
+                                    <i class="fas fa-venus-mars mr-2" style="color: #F28241;"></i>GÉNERO
                                 </label>
                                 <select id="gender" name="gender" class="form-control" required>
                                     <option value="Masculino" {{ old('gender', $user->gender) == 'Masculino' ? 'selected' : '' }}>Masculino</option>
@@ -77,7 +77,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="email" style="color: #4a5568;">
-                                    <i class="fas fa-envelope mr-2" style="color: #7a9cc6;"></i>CORREO ELECTRÓNICO
+                                    <i class="fas fa-envelope mr-2" style="color: #F28241;"></i>CORREO ELECTRÓNICO
                                 </label>
                                 <input type="email" class="form-control" id="email" name="email" 
                                        value="{{ old('email', $user->email) }}" required />
@@ -89,7 +89,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="lada" style="color: #4a5568;">
-                                    <i class="fas fa-phone mr-2" style="color: #7a9cc6;"></i>LADA
+                                    <i class="fas fa-phone mr-2" style="color: #F28241;"></i>LADA
                                 </label>
                                 <input type="text" class="form-control" id="lada" name="lada" maxlength="5" 
                                        value="{{ old('lada', $user->lada) }}" />
@@ -98,7 +98,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="phone" style="color: #4a5568;">
-                                    <i class="fas fa-mobile-alt mr-2" style="color: #7a9cc6;"></i>TELÉFONO
+                                    <i class="fas fa-mobile-alt mr-2" style="color: #F28241;"></i>TELÉFONO
                                 </label>
                                 <input type="text" class="form-control" id="phone" name="phone" maxlength="10" 
                                        value="{{ old('phone', $user->phone) }}" />
@@ -110,7 +110,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="country" style="color: #4a5568;">
-                                    <i class="fas fa-globe-americas mr-2" style="color: #7a9cc6;"></i>PAÍS
+                                    <i class="fas fa-globe-americas mr-2" style="color: #F28241;"></i>PAÍS
                                 </label>
                                 <select id="country" name="country" class="form-control" required>
                                     <option value="Argentina" {{ old('country', $user->country) == 'Argentina' ? 'selected' : '' }}>Argentina</option>
@@ -144,7 +144,7 @@
                     <div class="row mt-5">
                         <div class="col-md-6">
                             <button type="submit" class="btn btn-block" 
-                                    style="background-color: #7a9cc6; color: white;">
+                                    style="background-color: #F28241; color: white;">
                                 <i class="fas fa-save mr-2"></i> ACTUALIZAR
                             </button>
                         </div>
@@ -171,11 +171,11 @@
         border: none;
     }
     .btn-outline-secondary {
-        border-color: #7a9cc6;
-        color: #7a9cc6;
+        border-color: #F28241;
+        color: #F28241;
     }
     .btn-outline-secondary:hover {
-        background-color: #7a9cc6;
+        background-color: #F28241;
         color: white;
     }
     .form-control:focus {

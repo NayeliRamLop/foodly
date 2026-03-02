@@ -3,11 +3,11 @@
 @section('title', 'MIS RECETAS')
 
 @section('content_header')
-    <h1 class="m-0 text-dark" style="font-size: 2.8rem; font-weight: 700;">
-        <i class="fas fa-utensils mr-2" style="color: #7a9cc6;"></i>MIS RECETAS
+    <h1 class="m-0" style="font-size: 4rem; font-weight: 700; color: #F28241; text-shadow: 2px 2px 4px rgba(200, 200, 200, 0.6); letter-spacing: 0.05em; margin-bottom: 1.5rem;">
+        MIS RECETAS
     </h1>
     <div class="mt-3">
-        <button class="btn btn-primary" style="background-color: #7a9cc6; border-color: #7a9cc6; font-size: 1.1rem;" data-toggle="modal" data-target="#addRecipeModal">
+        <button class="btn btn-primary" style="background-color: #F28241; border-color: #F28241; font-size: 1.1rem;" data-toggle="modal" data-target="#addRecipeModal">
             <i class="fas fa-plus mr-1"></i> Agregar Receta
         </button>
     </div>
@@ -43,19 +43,19 @@
                      style="max-height: 100%; max-width: 100%; width: auto; height: auto; object-fit: contain; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                 @else
                 <div class="text-center">
-                    <i class="fas fa-image fa-3x" style="color: #7a9cc6;"></i>
+                    <i class="fas fa-image fa-3x" style="color: #F28241;"></i>
                 </div>
                 @endif
             </div>
             
             <div class="card-body text-center">
-                <h3 class="card-title" style="color: #7a9cc6; font-weight: 700; font-size: 1.4rem; margin-bottom: 0.5rem;">{{ $recipe->recipe_title }}</h3>
+                <h3 class="card-title" style="color: #F28241; font-weight: 700; font-size: 1.4rem; margin-bottom: 0.5rem;">{{ $recipe->recipe_title }}</h3>
                 <p class="card-text text-muted" style="font-size: 1.1rem;">{{ Str::limit($recipe->recipe_description, 100) }}</p>
             </div>
             
             <div class="card-footer bg-white border-top-0 pb-3">
                 <div class="d-flex justify-content-center">
-                    <button class="btn btn-sm view-recipe-btn" style="background-color: #7a9cc6; color: white; font-size: 1.1rem; border-radius: 20px; padding: 0.25rem 1.5rem;" data-toggle="modal" data-target="#recipeModal{{ $recipe->id }}">
+                    <button class="btn btn-sm view-recipe-btn" style="background-color: #F28241; color: white; font-size: 1.1rem; border-radius: 20px; padding: 0.25rem 1.5rem;" data-toggle="modal" data-target="#recipeModal{{ $recipe->id }}">
                         <i class="fas fa-eye mr-1"></i> VER
                     </button>
                 </div>
@@ -67,7 +67,7 @@
     <div class="modal fade" id="recipeModal{{ $recipe->id }}" tabindex="-1" role="dialog" aria-labelledby="recipeModalLabel{{ $recipe->id }}" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content" style="border-radius: 15px; border: none; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-                <div class="modal-header" style="background: linear-gradient(135deg, #7a9cc6 0%, #5b7eb6 100%); color: white; border-top-left-radius: 15px; border-top-right-radius: 15px; padding: 1.5rem; border-bottom: none;">
+                <div class="modal-header" style="background: linear-gradient(135deg, #F28241 0%, #ff9933 100%); color: white; border-top-left-radius: 15px; border-top-right-radius: 15px; padding: 1.5rem; border-bottom: none;">
                     <h3 class="modal-title" id="recipeModalLabel{{ $recipe->id }}" style="font-size: 1.8rem; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                         <i class="fas fa-utensils mr-2"></i> {{ strtoupper($recipe->recipe_title) }}
                     </h3>
@@ -86,7 +86,7 @@
                                     </div>
                                 @else
                                     <div class="text-center py-5" style="background-color: #f8f9fa; height: 250px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                                        <i class="fas fa-image fa-4x mb-3" style="color: #7a9cc6;"></i>
+                                        <i class="fas fa-image fa-4x mb-3" style="color: #F28241;"></i>
                                     </div>
                                 @endif
                                 
@@ -104,7 +104,7 @@
                             <div class="info-section p-4" style="background-color: #f8fafc; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
                                 <div class="info-item mb-3">
                                     <div class="d-flex align-items-center">
-                                        <i class="fas fa-tag mr-2" style="color: #7a9cc6; font-size: 1.2rem;"></i>
+                                        <i class="fas fa-tag mr-2" style="color: #F28241; font-size: 1.2rem;"></i>
                                         <div>
                                             <p class="mb-0" style="font-weight: 600; color: #4a5568;">CATEGORÍA</p>
                                             <p class="mb-0">{{ $recipe->category->name ?? 'Sin categoría' }}</p>
@@ -114,7 +114,7 @@
                                 
                                 <div class="info-item mb-3">
                                     <div class="d-flex align-items-center">
-                                        <i class="fas fa-clock mr-2" style="color: #7a9cc6; font-size: 1.2rem;"></i>
+                                        <i class="fas fa-clock mr-2" style="color: #F28241; font-size: 1.2rem;"></i>
                                         <div>
                                             <p class="mb-0" style="font-weight: 600; color: #4a5568;">TIEMPO DE PREPARACIÓN</p>
                                             <p class="mb-0">{{ $recipe->preparation_time }} minutos</p>
@@ -124,7 +124,7 @@
                                 
                                 <div class="info-item">
                                     <div class="d-flex align-items-center">
-                                        <i class="fas fa-tachometer-alt mr-2" style="color: #7a9cc6; font-size: 1.2rem;"></i>
+                                        <i class="fas fa-tachometer-alt mr-2" style="color: #F28241; font-size: 1.2rem;"></i>
                                         <div>
                                             <p class="mb-0" style="font-weight: 600; color: #4a5568;">DIFICULTAD</p>
                                             <p class="mb-0">{{ $recipe->difficulty }}</p>
@@ -137,14 +137,14 @@
                         <div class="col-md-6">
                             <!-- Sección de Ingredientes -->
                             <div class="ingredients-section mb-5">
-                                <h5 style="color: #7a9cc6; font-weight: 700; font-size: 1.3rem; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; display: flex; align-items: center;">
+                                <h5 style="color: #F28241; font-weight: 700; font-size: 1.3rem; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; display: flex; align-items: center;">
                                     <i class="fas fa-list-ul mr-2"></i> INGREDIENTES
                                 </h5>
                                 <ul class="pl-5 mt-3" style="font-size: 1.15rem; list-style-type: none;">
                                     @foreach(explode("\n", $recipe->ingredients) as $ingredient)
                                         @if(trim($ingredient))
                                             <li class="text-slate-700 mb-2" style="position: relative; padding-left: 10px;">
-                                                <span style="position: absolute; left: 0; color: #7a9cc6;">•</span> 
+                                                <span style="position: absolute; left: 0; color: #F28241;">•</span> 
                                                 {{ ltrim($ingredient, '*.- ') }}
                                             </li>
                                         @endif
@@ -154,14 +154,14 @@
                             
                             <!-- Sección de Instrucciones -->
                             <div class="instructions-section">
-                                <h5 style="color: #7a9cc6; font-weight: 700; font-size: 1.3rem; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; display: flex; align-items: center;">
+                                <h5 style="color: #F28241; font-weight: 700; font-size: 1.3rem; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; display: flex; align-items: center;">
                                     <i class="fas fa-list-ol mr-2"></i> INSTRUCCIONES
                                 </h5>
                                 <ol class="pl-5 mt-3" style="font-size: 1.15rem; counter-reset: step-counter; list-style-type: none;">
                                     @foreach(explode("\n", $recipe->instructions) as $instruction)
                                         @if(trim($instruction))
                                             <li class="text-slate-700 mb-3" style="position: relative; padding-left: 25px; counter-increment: step-counter;">
-                                                <span style="position: absolute; left: 0; color: #7a9cc6; font-weight: bold;">
+                                                <span style="position: absolute; left: 0; color: #F28241; font-weight: bold;">
                                                     {{ $loop->iteration }}.
                                                 </span> 
                                                 {{ preg_replace('/^\d+\.\s*/', '', $instruction) }}
@@ -199,7 +199,7 @@
     <div class="modal fade" id="editRecipeModal{{ $recipe->id }}" tabindex="-1" role="dialog" aria-labelledby="editRecipeModalLabel{{ $recipe->id }}">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
-                <div class="modal-header" style="background-color: #7a9cc6; color: white;">
+                <div class="modal-header" style="background-color: #F28241; color: white;">
                     <h4 class="modal-title" id="editRecipeModalLabel{{ $recipe->id }}" style="font-size: 1.5rem;">
                         <i class="fas fa-edit mr-2"></i>Editar Receta: {{ $recipe->recipe_title }}
                     </h4>
@@ -333,7 +333,7 @@
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" style="font-size: 1.1rem;">
                             <i class="fas fa-times mr-1"></i> Cancelar
                         </button>
-                        <button type="submit" class="btn btn-primary" style="background-color: #7a9cc6; border-color: #7a9cc6; font-size: 1.1rem;">
+                        <button type="submit" class="btn btn-primary" style="background-color: #F28241; border-color: #F28241; font-size: 1.1rem;">
                             <i class="fas fa-save mr-1"></i> Guardar Cambios
                         </button>
                     </div>
@@ -353,7 +353,7 @@
 <div class="modal fade" id="addRecipeModal" tabindex="-1" role="dialog" aria-labelledby="addRecipeModalLabel">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header" style="background-color: #7a9cc6; color: white;">
+            <div class="modal-header" style="background-color: #F28241; color: white;">
                 <h4 class="modal-title" id="addRecipeModalLabel" style="font-size: 1.5rem;">
                     <i class="fas fa-plus-circle mr-2"></i>Agregar Nueva Receta
                 </h4>
@@ -466,7 +466,7 @@
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" style="font-size: 1.1rem;">
                         <i class="fas fa-times mr-1"></i> Cancelar
                     </button>
-                    <button type="submit" class="btn btn-primary" style="background-color: #7a9cc6; border-color: #7a9cc6; font-size: 1.1rem;">
+                    <button type="submit" class="btn btn-primary" style="background-color: #F28241; border-color: #F28241; font-size: 1.1rem;">
                         <i class="fas fa-save mr-1"></i> Guardar Receta
                     </button>
                 </div>

@@ -66,6 +66,38 @@
       margin-bottom: 1.5rem;
     }
 
+    .confirm-password-group {
+      position: relative;
+    }
+
+    .confirm-password-group .confirm-check {
+      position: absolute;
+      right: 12px;
+      top: 39px;
+      color: #2f9e44;
+      font-size: 1rem;
+      font-weight: bold;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+    }
+
+    .confirm-password-group.is-match input[type="password"] {
+      border-color: #72bf82 !important;
+      box-shadow: 0 0 0 3px rgba(56, 161, 105, 0.2) !important;
+      background-color: #f7fff9;
+      padding-right: 2rem;
+    }
+
+    .confirm-password-group.is-match .confirm-check {
+      opacity: 1;
+    }
+
+    .confirm-password-group.is-mismatch input[type="password"] {
+      border-color: #d6a0a0 !important;
+      box-shadow: 0 0 0 3px rgba(185, 90, 90, 0.16) !important;
+    }
+
     input[type="password"] {
       width: 100%;
       padding: 0.75rem;
@@ -205,10 +237,11 @@
         <div class="invalid-feedback" id="passwordError"></div>
       </div>
 
-      <div class="form-group">
+      <div class="form-group confirm-password-group" id="confirmPasswordGroup">
         <label for="password_confirmation">Confirmar contraseña</label>
         <input type="password" name="password_confirmation" id="confirmPassword" 
                placeholder="Confirma tu nueva contraseña" class="form-control" required>
+        <span class="confirm-check" aria-hidden="true">✓</span>
         <div class="invalid-feedback" id="confirmError"></div>
       </div>
 
@@ -362,6 +395,7 @@
     function validatePassword() {
       const password = this.value;
       const confirm = document.getElementById('confirmPassword').value;
+      const confirmGroup = document.getElementById('confirmPasswordGroup');
       const errorElement = document.getElementById('passwordError');
       
       // Validación de requisitos
@@ -382,20 +416,44 @@
       if (confirm && password !== confirm) {
         document.getElementById('confirmError').textContent = "Las contraseñas no coinciden";
         document.getElementById('confirmPassword').classList.add('is-invalid');
+        if (confirmGroup) {
+          confirmGroup.classList.remove('is-match');
+          confirmGroup.classList.add('is-mismatch');
+        }
+      } else if (confirm && password === confirm) {
+        if (confirmGroup) {
+          confirmGroup.classList.remove('is-mismatch');
+          confirmGroup.classList.add('is-match');
+        }
+      } else if (confirmGroup) {
+        confirmGroup.classList.remove('is-match', 'is-mismatch');
       }
     }
 
     function validatePasswordConfirmation() {
       const confirm = this.value;
       const password = document.getElementById('password').value;
+      const confirmGroup = document.getElementById('confirmPasswordGroup');
       const errorElement = document.getElementById('confirmError');
       
       if (password && confirm && password !== confirm) {
         errorElement.textContent = "Las contraseñas no coinciden";
         this.classList.add('is-invalid');
+        if (confirmGroup) {
+          confirmGroup.classList.remove('is-match');
+          confirmGroup.classList.add('is-mismatch');
+        }
       } else {
         errorElement.textContent = "";
         this.classList.remove('is-invalid');
+        if (confirmGroup) {
+          if (password && confirm && password === confirm) {
+            confirmGroup.classList.remove('is-mismatch');
+            confirmGroup.classList.add('is-match');
+          } else {
+            confirmGroup.classList.remove('is-match', 'is-mismatch');
+          }
+        }
       }
     }
 

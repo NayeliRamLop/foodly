@@ -15,6 +15,27 @@
     --navbar-x-pad: 1rem;
 }
 
+html {
+    font-size: 16px;
+}
+
+body {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6,
+p, a, span, small, li,
+label, input, textarea, button {
+    font-size: 1rem !important;
+}
+
+input, select, textarea, button,
+.btn, .form-control, .form-control-navbar, .form-control-sidebar {
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
+}
+
 /* ===============================
    ESTILOS GENERALES
 ================================ */
@@ -58,6 +79,8 @@ body {
 .public-navbar {
     background-color: var(--bg-light) !important;
     border-bottom: 1px solid #f1c29c !important;
+    padding-top: var(--navbar-y-pad) !important;
+    padding-bottom: var(--navbar-y-pad) !important;
     display: flex !important;
     align-items: center !important;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
@@ -88,22 +111,34 @@ body {
     border: none;
 }
 
+.public-navbar .register-link,
 .public-navbar .btn-primary {
     border-radius: var(--radius-md);
-    font-size: 1.15rem;
+    font-size: 1rem !important;
+    padding: var(--navbar-y-pad) 0.95rem !important;
+    line-height: 1.2;
 }
 
 .public-navbar .register-link {
     background-color: var(--secondary);
     color: var(--text-dark);
-    border-radius: var(--radius-md);
-    padding: 0.75rem 1.4rem;
     text-decoration: none;
 }
 
 .public-navbar .register-link:hover {
     background-color: color-mix(in srgb, var(--secondary) 85%, black);
     color: var(--text-dark);
+}
+
+.public-navbar .btn-primary:hover,
+.public-navbar .btn-primary:active,
+.public-navbar .btn-primary:focus,
+.public-navbar .btn-primary:focus-visible,
+.public-navbar .btn-primary:not(:disabled):not(.disabled):active {
+    background-color: color-mix(in srgb, var(--primary) 85%, black) !important;
+    border-color: color-mix(in srgb, var(--primary) 85%, black) !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
 }
 
 .public-navbar .search-suggest {
@@ -319,155 +354,3 @@ body {
     font-weight: 600;
     border-bottom: 3px solid var(--primary);
 }
-
-/* ===============================
-   AdminLTE (Navbar + Sidebar)
-================================ */
-
-/* Main Header */
-.main-header.navbar {
-    background-color: #D2691E !important;
-    min-height: auto !important;
-    height: auto !important;
-    padding-left: var(--navbar-x-pad) !important;
-    padding-right: var(--navbar-x-pad) !important;
-    padding-top: var(--navbar-y-pad) !important;
-    padding-bottom: var(--navbar-y-pad) !important;
-    display: flex !important;
-    align-items: center !important;
-}
-
-.main-header.navbar .nav-link {
-    color: #ffffff !important;
-    font-size: 1rem;
-    height: auto !important;
-    line-height: 1.1 !important;
-    padding-top: var(--navbar-y-pad) !important;
-    padding-bottom: var(--navbar-y-pad) !important;
-}
-
-.main-header.navbar .navbar-nav > .nav-item,
-.main-header.navbar .navbar-nav > .nav-item > .nav-link {
-    display: flex !important;
-    align-items: center !important;
-}
-
-.main-header .dropdown-toggle::after {
-    display: none !important;
-}
-
-/* Sidebar Brand */
-.main-sidebar .brand-link,
-.main-sidebar .brand-link:hover {
-    background-color: #ffffff !important;
-}
-
-.main-sidebar .brand-link {
-    display: flex !important;
-    align-items: center !important;
-    height: auto !important;
-    min-height: auto !important;
-    padding: 0 10px !important;
-}
-
-.brand-image {
-    height: 30px !important;
-    width: auto !important;
-    border-radius: 0 !important;
-}
-
-.main-sidebar .brand-text {
-    color: #ffffff !important;
-    font-size: 20px;
-}
-
-/* Sidebar */
-.main-sidebar {
-    background-color: #ffd4b1 !important;
-    color: var(--text-dark) !important;
-}
-
-.main-sidebar .nav-header {
-    color: var(--text-dark);
-    font-weight: 600;
-    font-size: 13px;
-    padding: 12px 16px;
-}
-
-/* Sidebar Nav Links */
-.nav-sidebar .nav-link {
-    color: var(--text-dark) !important;
-    font-size: 1rem;
-    border-radius: 8px;
-    margin: 4px 8px;
-}
-
-.nav-sidebar .nav-link:hover,
-.nav-sidebar .nav-link.active {
-    color: var(--text-dark) !important;
-}
-
-.nav-sidebar .nav-link:hover {
-    background-color: #f5c09a !important;
-}
-
-.nav-sidebar .nav-link.active {
-    background-color: #f1b98e !important;
-    font-weight: 600;
-}
-
-/* Sidebar Search */
-.form-control-sidebar {
-    background-color: #ffffff !important;
-    color: var(--text-dark) !important;
-    border: 1px solid #e7b28a;
-}
-
-.form-control-sidebar::placeholder {
-    color: #999;
-}
-
-/* Content Area */
-.content {
-    padding: 40px;
-}
-
-.content-header {
-    margin-bottom: 1.5rem;
-}
-
-/* Search Form - Navbar */
-.navbar-search-always .form-control-navbar {
-    width: 560px;
-    border-radius: var(--radius-pill);
-    background: #ffffff;
-    border: 1px solid #ddd;
-}
-
-.navbar-search-always .btn-navbar {
-    background: #D2691E;
-    color: #ffffff;
-    border-radius: var(--radius-pill);
-    padding: var(--navbar-y-pad) var(--navbar-x-pad);
-    border: none;
-}
-
-.navbar-search-always .btn-navbar,
-.navbar-search-always .btn-navbar:hover {
-    color: #ffffff;
-}
-
-.navbar-search-always .btn-navbar:hover {
-    background: #b85b1a;
-}
-
-/* Navbar Items Alignment */
-.main-header .navbar-nav {
-    align-items: center !important;
-}
-/*
- * Legacy compatibility file.
- * Estilos movidos a:
- * - /public/css/custom-public.css
- * - /public/css/custom-admin.css
- */

@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" />
-  <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/custom-public.css') }}">
 
   <style>
     html, body {
@@ -18,6 +18,7 @@
       background-position: center;
       color: white;
       overflow-x: hidden;
+      overflow-y: auto;
     }
 
     body {
@@ -25,40 +26,47 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start; 
-      padding-top: calc(33vh + 70px);
+      padding-top: 110px;
       padding-bottom: 50px;
       gap: 2.5rem;
       min-height: 100vh;
     }
 
+    .hero-row {
+      width: min(980px, 94vw);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-top: 0.4rem;
+    }
+
     .typewriter-container {
-      position: absolute;
-      top: 150px;
-      right: 200px;
-      width: 760px;
+      position: static;
+      width: min(600px, 92vw);
       height: auto;
-      max-height: 420px;
-      font-size: 1.65rem;
+      max-height: none;
+      font-size: clamp(1.1rem, 1.35vw, 1.5rem);
       white-space: normal;
       overflow: hidden;
       padding: 14px;
       color: rgb(75, 75, 75);
       font-weight: bold;
       letter-spacing: 0.04em;
-      text-align: left;
+      text-align: center;
       z-index: 10;
     }
 
     /* Logo */
     .logo-container {
-      position: absolute;
-      top: 150px;
-      left: 200px;
+      position: static;
+      flex: 0 0 auto;
       z-index: 10;
     }
 
     .logo-container img {
-      height: 118px;
+      height: clamp(90px, 7vw, 118px);
       width: auto;
     }
 
@@ -70,7 +78,7 @@
       width: min(68vw, 680px);
       color: #333;
       font-weight: normal;
-      font-size: 0.92rem;
+      font-size: 1rem;
       box-sizing: border-box;
       overflow: visible;
     }
@@ -93,7 +101,7 @@
       text-align: center;
       margin-bottom: 1rem;
       font-weight: bold;
-      font-size: 1.5rem;
+      font-size: clamp(1rem, 1.5vw, 1.6rem) !important;
     }
 
     .form-group {
@@ -102,10 +110,11 @@
       flex-direction: column;
       min-height: 58px;
       justify-content: space-between;
+      position: relative;
     }
 
     .form-group label {
-      color: #333;
+      color: #414141;
       font-weight: 600;
       display: block;
       margin-bottom: 0.25rem;
@@ -119,11 +128,58 @@
     .form-box input[type="date"],
     .form-box select {
       width: 100%;
-      padding: 0.42rem;
+      padding: 0.5rem;
       border-radius: 6px;
-      border: 0.5px solid #d2d2d2;
-      font-size: 0.92rem;
+      border: 1px solid #b9bec6;
+      font-size: 0.85rem;
       box-sizing: border-box;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      outline: none;
+    }
+
+    .form-box input[type="text"]:hover,
+    .form-box input[type="email"]:hover,
+    .form-box input[type="password"]:hover,
+    .form-box input[type="date"]:hover,
+    .form-box select:hover {
+      border-color: #a8afb9;
+    }
+
+    .form-box input[type="text"]:focus,
+    .form-box input[type="email"]:focus,
+    .form-box input[type="password"]:focus,
+    .form-box input[type="date"]:focus,
+    .form-box select:focus {
+      border-color: #949daa;
+      box-shadow: 0 0 0 0.12rem rgba(120, 130, 145, 0.18);
+    }
+
+    .password-confirm-group .confirm-check {
+      position: absolute;
+      right: 10px;
+      top: 34px;
+      color: #2f9e44;
+      font-size: 0.95rem;
+      font-weight: bold;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+    }
+
+    .password-confirm-group.is-match input {
+      border-color: #72bf82 !important;
+      box-shadow: 0 0 0 0.12rem rgba(56, 161, 105, 0.2) !important;
+      background-color: #f7fff9;
+      padding-right: 2rem;
+    }
+
+    .password-confirm-group.is-match .confirm-check {
+      opacity: 1;
+    }
+
+    .password-confirm-group.is-mismatch input {
+      border-color: #d6a0a0 !important;
+      box-shadow: 0 0 0 0.12rem rgba(185, 90, 90, 0.16) !important;
     }
 
     .form-box button {
@@ -171,7 +227,7 @@
       color: rgba(93, 93, 93, 0.6);
       font-weight: normal;
       text-decoration: none;
-      font-size: 0.98rem;
+      font-size: 1.1rem;
       transition: color 0.3s;
     }
 
@@ -181,37 +237,19 @@
     }
 
     @media (max-width: 1600px) {
-      .typewriter-container {
-        right: 90px;
-        width: 760px;
-        font-size: 1.8rem;
-      }
-
-      .logo-container {
-        left: 90px;
+      .hero-row {
+        width: min(980px, 94vw);
       }
     }
 
     @media (max-width: 1200px) {
-      body {
-        padding-top: calc(34vh + 60px);
-        padding-bottom: 50px;
-      }
-
       .typewriter-container {
-        top: 210px;
-        right: 40px;
-        width: 620px;
-        font-size: 1.5rem;
-      }
-
-      .logo-container {
-        top: 225px;
-        left: 40px;
+        width: min(760px, 92vw);
+        font-size: clamp(1rem, 1.25vw, 1.3rem);
       }
 
       .logo-container img {
-        height: 120px;
+        height: 95px;
       }
 
       .form-box {
@@ -224,6 +262,12 @@
         padding-top: 130px;
         padding-bottom: 50px;
         gap: 1.5rem;
+      }
+
+      .hero-row {
+        width: 94vw;
+        justify-content: center;
+        gap: 0.5rem;
       }
 
       .logo-container {
@@ -263,7 +307,7 @@
       }
 
       .form-box h2 {
-        font-size: 1.5rem;
+        font-size: 1.75rem !important;
       }
     }
   </style>
@@ -288,14 +332,15 @@
     </div>
   </nav>
 
-  <div class="logo-container">
-    <img src="{{ asset('images/logo.png') }}" alt="Foodly">
-  </div>
+  <section class="hero-row">
+    <div class="logo-container">
+      <img src="{{ asset('images/logo.png') }}" alt="Foodly">
+    </div>
 
-  <div class="typewriter-container" id="typewriter">
-    Crea tu cuenta y sé parte de nuestra comunidad.
-Comparte tus recetas favoritas.
-  </div>
+    <div class="typewriter-container" id="typewriter">
+      Crea tu cuenta y sé parte de nuestra comunidad. Comparte tus recetas favoritas.
+    </div>
+  </section>
 
   <div class="form-box">
     <h2>Crear cuenta</h2>
@@ -397,9 +442,10 @@ Comparte tus recetas favoritas.
         <input type="password" id="password" name="password" required />
       </div>
 
-      <div class="form-group form-group-full">
+      <div class="form-group form-group-full password-confirm-group" id="passwordConfirmGroup">
         <label for="password_confirmation">Confirmar Contraseña</label>
         <input type="password" id="password_confirmation" name="password_confirmation" required />
+        <span class="confirm-check" aria-hidden="true">✓</span>
       </div>
 
       <button type="submit">Crear cuenta</button>
@@ -410,6 +456,37 @@ Comparte tus recetas favoritas.
     </div>
   </div>
 
+  <script>
+    (function () {
+      const passwordInput = document.getElementById('password');
+      const confirmInput = document.getElementById('password_confirmation');
+      const confirmGroup = document.getElementById('passwordConfirmGroup');
+
+      if (!passwordInput || !confirmInput || !confirmGroup) return;
+
+      const syncPasswordState = () => {
+        const passwordValue = passwordInput.value;
+        const confirmValue = confirmInput.value;
+
+        confirmGroup.classList.remove('is-match', 'is-mismatch');
+        confirmInput.setCustomValidity('');
+
+        if (!confirmValue) return;
+
+        if (passwordValue === confirmValue) {
+          confirmGroup.classList.add('is-match');
+          return;
+        }
+
+        confirmGroup.classList.add('is-mismatch');
+        confirmInput.setCustomValidity('Las contraseñas no coinciden');
+      };
+
+      passwordInput.addEventListener('input', syncPasswordState);
+      confirmInput.addEventListener('input', syncPasswordState);
+      confirmInput.addEventListener('blur', syncPasswordState);
+    })();
+  </script>
   <script>
     const typewriterEl = document.getElementById('typewriter');
     const fullText = typewriterEl.textContent.trim();

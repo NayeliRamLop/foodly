@@ -35,7 +35,7 @@ class AuthenticatedSessionController extends Controller
         // Intentar autenticar al usuario
         if (!Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
             throw ValidationException::withMessages([
-                'email' => __('auth.failed'),
+                'email' => 'Estas credenciales no coinciden con nuestros registros.',
             ]);
         }
 

@@ -7,7 +7,7 @@
   <!-- Incluir Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" />
-  <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/custom-public.css') }}">
 
   <style>
     html, body {
@@ -26,40 +26,73 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start; 
-      padding-top: calc(45vh + 70px);
-      gap: 4rem;
+      padding-top: 110px;
+      gap: 2rem;
       min-height: 100vh;
+    }
+
+    .hero-row {
+      width: min(980px, 94vw);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-top: 0.4rem;
     }
 
     /*Titulo Maquina Escribir*/
     .typewriter-container {
-      position: absolute;
-      top: 230px;
-      right: 160px;
-      width: 900px;
+      position: static;
+      width: min(860px, 92vw);
       height: auto;
-      max-height: 500px;
-      font-size: 2.0rem;
+      max-height: none;
+      font-size: clamp(1.1rem, 1.35vw, 1.5rem);
       white-space: normal;
       overflow: hidden;
       padding: 20px;
       color: rgb(75, 75, 75);
       font-weight: bold;
       letter-spacing: 0.05em;
-      text-align: left;
+      text-align: center;
       z-index: 10;
+    }
+
+    .public-navbar {
+      padding-top: 0.35rem !important;
+      padding-bottom: 0.35rem !important;
+    }
+
+    .public-navbar .search-form {
+      max-width: 520px;
+    }
+
+    .public-navbar .register-link,
+    .public-navbar .btn-primary {
+      font-size: 0.95rem !important;
+      padding: 0.35rem 0.95rem !important;
+    }
+
+    .public-navbar .btn-primary,
+    .public-navbar .btn-primary:hover,
+    .public-navbar .btn-primary:active,
+    .public-navbar .btn-primary:focus,
+    .public-navbar .btn-primary:focus-visible {
+      background-color: color-mix(in srgb, #F28241 85%, black) !important;
+      border-color: color-mix(in srgb, #F28241 85%, black) !important;
+      color: #ffffff !important;
+      box-shadow: none !important;
     }
 
     /* Logo */
     .logo-container {
-      position: absolute;
-      top: 250px;
-      left: 160px;
+      position: static;
+      flex: 0 0 auto;
       z-index: 10;
     }
 
     .logo-container img {
-      height: 150px;
+      height: clamp(90px, 7vw, 125px);
       width: auto;
     }
 
@@ -67,11 +100,11 @@
     /* Cuadro login centrado */
     .login-box {
       background: rgba(255, 255, 255, 0.95);
-      padding: 4rem 4rem;
+      padding: 2rem 2rem;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      width: 100%;
-      max-width: 35%;
+      width: min(500px, 92vw);
+      max-width: none;
       color: #333;
       font-weight: normal;
       font-size: 1.0rem;
@@ -82,32 +115,32 @@
       margin-top: 0;
       color: #F28241;
       text-align: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.0rem;
       font-weight: bold;
-      font-size: 2rem;
+      font-size: clamp(1rem, 1.5vw, 1.6rem) !important;
     }
 
     .login-box input[type="email"],
     .login-box input[type="password"] {
-      width: 80%;
-      padding: 0.6rem;
+      width: 100%;
+      padding: 0.5rem;
       border-radius: 6px;
       border: 0.5px solid #d2d2d2;
-      font-size: 1.3rem;
+      font-size: 0.85rem;
       display: block;
       margin: 0 auto 1rem;
     }
 
     .login-box button {
-      width: 80%;
-      padding: 0.6rem;
+      width: 100%;
+      padding: 0.4rem;
       background-color: #F28241;
       border: none;
       color: #ffffff;
       font-weight: bold;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 1.3rem;
+      font-size: 1rem;
       transition: background-color 0.3s;
       display: block;
       margin: 0 auto;
@@ -138,45 +171,24 @@
     }
 
     @media (max-width: 1600px) {
-      .typewriter-container {
-        right: 90px;
-        width: 760px;
-        font-size: 1.8rem;
-      }
-
-      .logo-container {
-        left: 90px;
-      }
-
-      .login-box {
-        max-width: 45%;
+      .hero-row {
+        width: min(980px, 94vw);
       }
     }
 
     @media (max-width: 1200px) {
-      body {
-        padding-top: calc(42vh + 60px);
-      }
-
       .typewriter-container {
-        top: 210px;
-        right: 40px;
-        width: 620px;
-        font-size: 1.5rem;
-      }
-
-      .logo-container {
-        top: 225px;
-        left: 40px;
+        width: min(760px, 92vw);
+        font-size: clamp(1rem, 1.25vw, 1.3rem);
       }
 
       .logo-container img {
-        height: 120px;
+        height: 95px;
       }
 
       .login-box {
-        max-width: 60%;
-        padding: 3rem 2.5rem;
+        width: min(500px, 92vw);
+        padding: 2rem 1.6rem;
       }
     }
 
@@ -184,6 +196,12 @@
       body {
         padding-top: 130px;
         gap: 2rem;
+      }
+
+      .hero-row {
+        width: 94vw;
+        justify-content: center;
+        gap: 0.5rem;
       }
 
       .logo-container {
@@ -194,40 +212,46 @@
         position: static;
         width: min(92vw, 700px);
         max-height: none;
-        font-size: 1.45rem;
+        font-size: 1.1rem;
         text-align: center;
         padding: 0.5rem 1rem;
       }
 
+      .public-navbar .register-link,
+      .public-navbar .btn-primary {
+        font-size: 0.9rem !important;
+        padding: 0.4rem 0.8rem !important;
+      }
+
       .login-box {
-        max-width: 85%;
-        padding: 2.5rem 1.8rem;
+        width: min(500px, 92vw);
+        padding: 2rem 1.4rem;
       }
     }
 
     @media (max-width: 576px) {
       .logo-container img {
-        height: 100px;
+        height: 84px;
       }
 
       .typewriter-container {
-        font-size: 1.15rem;
+        font-size: 1rem;
       }
 
       .login-box {
-        max-width: 92%;
-        padding: 2rem 1.2rem;
+        width: min(500px, 92vw);
+        padding: 1.6rem 1rem;
         font-size: 0.95rem;
       }
 
       .login-box h2 {
-        font-size: 1.6rem;
+        font-size: 1.75rem !important;
       }
 
       .login-box input[type="email"],
       .login-box input[type="password"],
       .login-box button {
-        width: 95%;
+        width: 100%;
         font-size: 1rem;
       }
     }
@@ -254,14 +278,16 @@
     </div>
   </nav>
 
-  <div class="logo-container">
-    <img src="{{ asset('images/logo.png') }}" alt="Foodly">
-  </div>
+  <section class="hero-row">
+    <div class="logo-container">
+      <img src="{{ asset('images/logo.png') }}" alt="Foodly">
+    </div>
 
-  <div class="typewriter-container" id="typewriter">
-   Bienvenido a Foodly, la red social donde las recetas se convierten en experiencias.
+    <div class="typewriter-container" id="typewriter">
+     Bienvenido a Foodly, la red social donde las recetas se convierten en experiencias.
 Descubre, comparte y cocina con gusto.
-  </div> 
+    </div>
+  </section>
 
 
   <div class="login-box">

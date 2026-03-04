@@ -300,7 +300,7 @@ return [
                 [
                     'type' => 'css',
                     'asset' => true,
-                    'location' => 'css/custom.css',
+                    'location' => 'css/custom-admin.css',
                 ],
             ],
         ],

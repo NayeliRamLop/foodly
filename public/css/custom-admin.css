@@ -1,0 +1,365 @@
+:root {
+    --primary: #F28241;
+    --secondary: #D9D9D9;
+    --danger: #d64545;
+    --text-dark: #2f2f2f;
+    --text-soft: #7a7a7a;
+    --bg-light: #fff9f4;
+    --bg-soft: #f7f9fc;
+    --radius-pill: 999px;
+    --radius-md: 6px;
+    --navbar-y-pad: 0.35rem;
+    --navbar-x-pad: 1rem;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6,
+p, a, span, small, li,
+label, input, textarea, button {
+    font-size: 1rem !important;
+}
+
+input, select, textarea, button,
+.btn, .form-control, .form-control-navbar, .form-control-sidebar {
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
+}
+
+/* ===============================
+   AdminLTE (Navbar + Sidebar)
+================================ */
+
+/* Main Header */
+.main-header.navbar {
+    background-color: var(--bg-light) !important;
+    border-bottom: 1px solid #f1c29c !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
+    min-height: auto !important;
+    height: auto !important;
+    padding-left: var(--navbar-x-pad) !important;
+    padding-right: var(--navbar-x-pad) !important;
+    padding-top: var(--navbar-y-pad) !important;
+    padding-bottom: var(--navbar-y-pad) !important;
+    display: flex !important;
+    align-items: center !important;
+    position: relative;
+}
+
+.main-header.navbar .nav-link {
+    color: var(--text-dark) !important;
+    font-size: 1rem;
+    height: auto !important;
+    line-height: 1.1 !important;
+    padding-top: var(--navbar-y-pad) !important;
+    padding-bottom: var(--navbar-y-pad) !important;
+}
+
+.main-header.navbar .nav-link:hover,
+.main-header.navbar .nav-link:focus {
+    color: var(--primary) !important;
+}
+
+.main-header .nav-link[data-widget="pushmenu"] {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.45rem;
+}
+
+.main-header .nav-link[data-widget="pushmenu"] .navbar-toggle-menu-text {
+    display: none;
+    font-size: 1rem;
+    line-height: 1;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+body.sidebar-open .main-header .nav-link[data-widget="pushmenu"] .navbar-toggle-menu-text,
+body.sidebar-is-opening .main-header .nav-link[data-widget="pushmenu"] .navbar-toggle-menu-text,
+body.sidebar-collapse .main-header .nav-link[data-widget="pushmenu"] .navbar-toggle-menu-text {
+    display: inline;
+}
+
+.main-header.navbar .navbar-foodly-brand {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.45rem;
+    font-weight: 700;
+    color: var(--primary) !important;
+    margin-right: 0.35rem;
+}
+
+.main-header.navbar .navbar-foodly-logo {
+    height: 28px;
+    width: auto;
+    display: block;
+}
+
+.main-header.navbar .navbar-foodly-text {
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.main-header.navbar .navbar-nav > .nav-item,
+.main-header.navbar .navbar-nav > .nav-item > .nav-link {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.main-header .dropdown-toggle::after {
+    display: none !important;
+}
+
+/* Sidebar Brand */
+.main-sidebar .brand-link,
+.main-sidebar .brand-link:hover {
+    background-color: #ffffff !important;
+}
+
+.main-sidebar .brand-link {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 0.5rem;
+    line-height: 1;
+    height: auto !important;
+    min-height: 44px !important;
+    padding: 0.35rem 12px !important;
+}
+
+.brand-image {
+    height: 30px !important;
+    width: auto !important;
+    border-radius: 0 !important;
+    float: none !important;
+    margin: 0 !important;
+    max-height: none !important;
+    display: block !important;
+}
+
+.main-sidebar .brand-text {
+    color: #ffffff !important;
+    font-size: 20px;
+}
+
+/* Ocultar por completo la marca del sidebar (dejar solo navbar) */
+.main-sidebar .brand-link,
+.main-sidebar .brand-link:hover,
+body.sidebar-open .main-sidebar .brand-link,
+body.sidebar-collapse .main-sidebar .brand-link {
+    display: none !important;
+}
+
+.main-sidebar .brand-image,
+.main-sidebar .brand-text {
+    display: none !important;
+}
+
+/* Sidebar */
+.main-sidebar {
+    background-color: transparent !important;
+    color: var(--text-dark) !important;
+    top: 52px !important;
+    left: 10px !important;
+    width: 250px !important;
+    min-height: 0 !important;
+    height: auto !important;
+    box-shadow: none !important;
+    transform: translateY(-10px) !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transition: opacity .18s ease, transform .18s ease !important;
+    z-index: 1040 !important;
+}
+
+.main-sidebar .sidebar {
+    background-color: #ffd4b1 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    padding-bottom: 12px;
+    padding-left: 0;
+    padding-right: 0;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+/* Mostrar menú solo al activar el botón de 3 líneas */
+body.sidebar-collapse .main-sidebar,
+body.sidebar-open .main-sidebar {
+    transform: translateY(0) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+/* Sin columna lateral fija */
+.main-header,
+.content-wrapper,
+.main-footer,
+.control-sidebar,
+.main-sidebar,
+.main-sidebar::before {
+    margin-left: 0 !important;
+}
+
+/* Evitar desplazamiento del layout al abrir/cerrar menú */
+body:not(.layout-top-nav) .main-header,
+body:not(.layout-top-nav) .content-wrapper,
+body:not(.layout-top-nav) .main-footer,
+body.sidebar-open .main-header,
+body.sidebar-open .content-wrapper,
+body.sidebar-open .main-footer,
+body.sidebar-collapse .main-header,
+body.sidebar-collapse .content-wrapper,
+body.sidebar-collapse .main-footer,
+body.sidebar-is-opening .main-header,
+body.sidebar-is-opening .content-wrapper,
+body.sidebar-is-opening .main-footer {
+    margin-left: 0 !important;
+    transition: none !important;
+}
+
+body:not(.layout-top-nav) .main-header {
+    left: 0 !important;
+    width: 100% !important;
+}
+
+/* Anti-hueco: anular reglas desktop de AdminLTE (sidebar-mini) */
+@media (min-width: 768px) {
+    body:not(.layout-top-nav) .wrapper .main-header,
+    body:not(.layout-top-nav) .wrapper .content-wrapper,
+    body:not(.layout-top-nav) .wrapper .main-footer,
+    body.sidebar-open .wrapper .main-header,
+    body.sidebar-open .wrapper .content-wrapper,
+    body.sidebar-open .wrapper .main-footer,
+    body.sidebar-collapse .wrapper .main-header,
+    body.sidebar-collapse .wrapper .content-wrapper,
+    body.sidebar-collapse .wrapper .main-footer,
+    body.sidebar-is-opening .wrapper .main-header,
+    body.sidebar-is-opening .wrapper .content-wrapper,
+    body.sidebar-is-opening .wrapper .main-footer,
+    body.sidebar-mini-md .wrapper .main-header,
+    body.sidebar-mini-md .wrapper .content-wrapper,
+    body.sidebar-mini-md .wrapper .main-footer,
+    body.sidebar-mini-xs .wrapper .main-header,
+    body.sidebar-mini-xs .wrapper .content-wrapper,
+    body.sidebar-mini-xs .wrapper .main-footer {
+        margin-left: 0 !important;
+    }
+
+    body:not(.layout-top-nav) .wrapper .main-header {
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+    }
+}
+
+/* Logo completo en el menú desplegado */
+body.sidebar-collapse .main-sidebar .brand-link,
+body.sidebar-open .main-sidebar .brand-link {
+    white-space: nowrap !important;
+    overflow: visible !important;
+}
+
+body.sidebar-collapse .main-sidebar .brand-text,
+body.sidebar-open .main-sidebar .brand-text {
+    display: inline !important;
+    max-width: none !important;
+}
+
+.main-sidebar .nav-header {
+    color: var(--text-dark);
+    font-weight: 600;
+    font-size: 13px;
+    padding: 12px 16px;
+}
+
+/* Sidebar Nav Links */
+.nav-sidebar .nav-link {
+    color: var(--text-dark) !important;
+    font-size: 0.93rem !important;
+    line-height: 1.25 !important;
+    padding: 0.45rem 0.6rem !important;
+    border-radius: 8px;
+    margin: 3px 10px;
+}
+
+.nav-sidebar .nav-link .nav-icon {
+    font-size: 0.95rem !important;
+    margin-right: 0.45rem !important;
+}
+
+.nav-sidebar .nav-link:hover,
+.nav-sidebar .nav-link.active {
+    color: var(--text-dark) !important;
+}
+
+.nav-sidebar .nav-link:hover {
+    background-color: #f5c09a !important;
+}
+
+.nav-sidebar .nav-link.active {
+    background-color: #f1b98e !important;
+    font-weight: 600;
+}
+
+/* Sidebar Search */
+.form-control-sidebar {
+    background-color: #ffffff !important;
+    color: var(--text-dark) !important;
+    border: 1px solid #e7b28a;
+}
+
+.form-control-sidebar::placeholder {
+    color: #999;
+}
+
+/* Content Area */
+.content {
+    padding: 40px;
+}
+
+.content-header {
+    margin-bottom: 1.5rem;
+}
+
+/* Search Form - Navbar */
+.navbar-search-always .form-control-navbar {
+    width: 560px;
+    border-radius: var(--radius-pill);
+    background: #ffffff;
+    border: 1px solid #e7b28a;
+    height: 35px;
+    padding-left: 1rem;
+}
+
+.navbar-search-always .btn-navbar {
+    background-color: var(--secondary);
+    color: var(--text-dark);
+    border-radius: var(--radius-pill);
+    padding: var(--navbar-y-pad) 1.6rem;
+    border: none;
+}
+
+.navbar-search-always .btn-navbar,
+.navbar-search-always .btn-navbar:hover {
+    color: var(--text-dark);
+}
+
+.navbar-search-always .btn-navbar:hover {
+    background-color: color-mix(in srgb, var(--secondary) 85%, black);
+}
+
+/* Navbar Items Alignment */
+.main-header .navbar-nav {
+    align-items: center !important;
+}

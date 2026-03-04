@@ -10,6 +10,7 @@
             data-auto-collapse-size="{{ config('adminlte.sidebar_collapse_auto_size') }}"
         @endif>
         <i class="fas fa-bars"></i>
+        <span class="navbar-toggle-menu-text">Menú</span>
         <span class="sr-only">{{ __('adminlte::adminlte.toggle_navigation') }}</span>
     </a>
 </li>

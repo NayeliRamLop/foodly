@@ -7,13 +7,25 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/custom-public.css') }}">
     <style>
         body {
             background-size: cover;
             background-image: url('/images/fondo-04.jpg');
             background-position: center;
             background-attachment: fixed;
+        }
+
+        .wrapper,
+        .content-wrapper {
+          background: transparent !important;
+        }
+
+        .content-wrapper {
+          background-image: url('/images/fondo-04.jpg');
+          background-size: cover;
+          background-position: center;
+          background-attachment: fixed;
         }
 
         main {
@@ -23,28 +35,24 @@
 
         /* Logo */
         .logo-container {
-            position: absolute;
-          top: 200px;
-          left: 300px;
+            position: static;
             z-index: 10;
         }
 
         .logo-container img {
-          height: 130px;
+          height: 120px;
             width: auto;
         }
 
         /* Typewriter Container */
         .typewriter-container {
-            position: absolute;
-          top: 200px;
-          right: 160px;
-            width: 900px;
+            position: static;
+          width: min(1100px, 86vw);
             height: auto;
-            max-height: 500px;
+            max-height: none;
             font-size: 2.0rem;
             white-space: normal;
-            overflow: hidden;
+            overflow: visible;
             padding: 20px;
             color: rgb(75, 75, 75);
             font-weight: bold;
@@ -58,15 +66,131 @@
             background: transparent;
             padding: 40px;
             min-height: 400px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 3rem;
+          max-width: 1280px;
+          margin: 0 auto;
         }
 
         .carousel-fullwidth {
             margin-top: 2rem;
         }
 
+        #homeCarousel .carousel-inner {
+          max-height: 360px;
+        }
+
+        #homeCarousel .carousel-item {
+          height: 360px;
+        }
+
+        #homeCarousel .carousel-item img {
+          height: 360px;
+          object-fit: cover;
+          object-position: center;
+        }
+
         .top-recetas {
             background: rgba(255, 255, 255, 0.95);
             margin-top: 3rem;
+        }
+
+        .top-recetas .container {
+          max-width: 1240px;
+          margin: 0 auto;
+        }
+
+        .top-recetas h5 {
+          text-align: center;
+        }
+
+        .recipe-card {
+          position: relative;
+          min-width: 250px;
+          border-radius: 16px;
+          border: 1px solid #eee;
+          box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+          overflow: hidden;
+          background: var(--bg-soft, #fff6e9);
+          transition: all 0.25s ease;
+          max-width: 100%;
+        }
+
+        .recipe-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 10px 20px rgba(242, 130, 65, 0.15);
+          border-color: rgba(242, 130, 65, 0.3);
+        }
+
+        .recipe-card .fav {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          background: rgba(255,255,255,0.75);
+          border: none;
+          border-radius: 50%;
+          width: 36px;
+          height: 36px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #D2691E;
+          font-size: 1.2rem;
+          z-index: 3;
+        }
+
+        .recipe-card .img-placeholder {
+          height: 200px;
+          background-color: #f8f9fa;
+          border-top-left-radius: 12px;
+          border-top-right-radius: 12px;
+          border-bottom: 1px solid #f1c29c;
+        }
+
+        .top-recetas .card-title {
+          font-size: 1.3rem;
+          color: var(--primary);
+          margin-bottom: 0.75rem;
+          font-weight: 600;
+        }
+
+        .top-recetas .card-body {
+          min-height: 140px;
+        }
+
+        .top-recetas .card-text {
+          font-size: 1rem;
+          margin: 0 0 0.5rem;
+        }
+
+        .top-recetas .recipe-card .btn {
+          font-size: 0.95rem;
+          padding: 0.45rem 0.9rem;
+          border-radius: 8px;
+          font-weight: 500;
+          transition: all 0.2s;
+        }
+
+        .top-recetas .view-recipe-btn {
+          background-color: var(--primary);
+          color: #fff;
+          border: none;
+        }
+
+        .top-recetas .view-recipe-btn:hover {
+          background-color: color-mix(in srgb, var(--primary) 85%, black);
+          color: #fff;
+          transform: translateY(-2px);
+        }
+
+        .recipe-card .card-footer {
+          border: 0;
+          background: #fff;
+          padding: 0.6rem 1rem 1rem;
+          color: #D2691E;
+          font-size: 0.95rem;
         }
 
         .popular {
@@ -76,27 +200,15 @@
 
         @media (max-width: 1600px) {
           .typewriter-container {
-            right: 90px;
             width: 760px;
             font-size: 1.8rem;
-          }
-
-          .logo-container {
-            left: 90px;
           }
         }
 
         @media (max-width: 1200px) {
           .typewriter-container {
-            top: 210px;
-            right: 40px;
             width: 620px;
             font-size: 1.5rem;
-          }
-
-          .logo-container {
-            top: 225px;
-            left: 40px;
           }
 
           .logo-container img {
@@ -135,6 +247,16 @@
 
           .carousel-fullwidth {
             margin-top: 1rem;
+          }
+
+          #homeCarousel .carousel-item img {
+            height: 240px;
+          }
+
+          #homeCarousel .carousel-inner,
+          #homeCarousel .carousel-item {
+            max-height: 240px;
+            height: 240px;
           }
 
           .top-recetas,
@@ -226,54 +348,119 @@ Cocina con gusto con ingredientes simples, comparte experiencias culinarias úni
   <div class="container">
     <h5 class="mb-4 fw-bold">TOP 5 Recetas</h5>
 
-    <div class="d-flex gap-4 overflow-auto">
-      <!-- Card receta -->
-      <div class="recipe-card">
-        <div class="fav">♡</div>
-        <div class="img-placeholder"></div>
-        <h6>Receta 1</h6>
-        <div class="card-footer">
-          <span>★★★★★</span>
+    <div class="row recipes-page">
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 recipe-card">
+          <div class="image-wrapper" style="height: 200px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; border-top-left-radius: 12px; border-top-right-radius: 12px; position: relative; overflow: hidden;">
+            <div class="text-center">
+              <i class="fas fa-image fa-3x" style="color: #F28241;"></i>
+              <p class="mt-2 mb-0" style="font-size: 1rem;">Sin imagen</p>
+            </div>
+            <button class="fav" type="button" aria-label="Favorito">♡</button>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title mb-2">Receta 1</h5>
+            <p class="card-text text-muted">Descripción breve de la receta destacada.</p>
+          </div>
+          <div class="card-footer bg-white border-top-0">
+            <div class="d-flex justify-content-center">
+              <button class="btn btn-sm view-recipe-btn" type="button">
+                <i class="fas fa-eye mr-1"></i> Ver
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-       <!-- Card receta -->
-      <div class="recipe-card">
-        <div class="fav">♡</div>
-        <div class="img-placeholder"></div>
-        <h6>Receta 2</h6>
-        <div class="card-footer">
-          <span>★★★★★</span>
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 recipe-card">
+          <div class="image-wrapper" style="height: 200px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; border-top-left-radius: 12px; border-top-right-radius: 12px; position: relative; overflow: hidden;">
+            <div class="text-center">
+              <i class="fas fa-image fa-3x" style="color: #F28241;"></i>
+              <p class="mt-2 mb-0" style="font-size: 1rem;">Sin imagen</p>
+            </div>
+            <button class="fav" type="button" aria-label="Favorito">♡</button>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title mb-2">Receta 2</h5>
+            <p class="card-text text-muted">Descripción breve de la receta destacada.</p>
+          </div>
+          <div class="card-footer bg-white border-top-0">
+            <div class="d-flex justify-content-center">
+              <button class="btn btn-sm view-recipe-btn" type="button">
+                <i class="fas fa-eye mr-1"></i> Ver
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-       <!-- Card receta -->
-      <div class="recipe-card">
-        <div class="fav">♡</div>
-        <div class="img-placeholder"></div>
-        <h6>Receta 3</h6>
-        <div class="card-footer">
-          <span>★★★★★</span>
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 recipe-card">
+          <div class="image-wrapper" style="height: 200px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; border-top-left-radius: 12px; border-top-right-radius: 12px; position: relative; overflow: hidden;">
+            <div class="text-center">
+              <i class="fas fa-image fa-3x" style="color: #F28241;"></i>
+              <p class="mt-2 mb-0" style="font-size: 1rem;">Sin imagen</p>
+            </div>
+            <button class="fav" type="button" aria-label="Favorito">♡</button>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title mb-2">Receta 3</h5>
+            <p class="card-text text-muted">Descripción breve de la receta destacada.</p>
+          </div>
+          <div class="card-footer bg-white border-top-0">
+            <div class="d-flex justify-content-center">
+              <button class="btn btn-sm view-recipe-btn" type="button">
+                <i class="fas fa-eye mr-1"></i> Ver
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-       <!-- Card receta -->
-      <div class="recipe-card">
-        <div class="fav">♡</div>
-        <div class="img-placeholder"></div>
-        <h6>Receta 4</h6>
-        <div class="card-footer">
-          <span>★★★★★</span>
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 recipe-card">
+          <div class="image-wrapper" style="height: 200px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; border-top-left-radius: 12px; border-top-right-radius: 12px; position: relative; overflow: hidden;">
+            <div class="text-center">
+              <i class="fas fa-image fa-3x" style="color: #F28241;"></i>
+              <p class="mt-2 mb-0" style="font-size: 1rem;">Sin imagen</p>
+            </div>
+            <button class="fav" type="button" aria-label="Favorito">♡</button>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title mb-2">Receta 4</h5>
+            <p class="card-text text-muted">Descripción breve de la receta destacada.</p>
+          </div>
+          <div class="card-footer bg-white border-top-0">
+            <div class="d-flex justify-content-center">
+              <button class="btn btn-sm view-recipe-btn" type="button">
+                <i class="fas fa-eye mr-1"></i> Ver
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-       <!-- Card receta -->
-      <div class="recipe-card">
-        <div class="fav">♡</div>
-        <div class="img-placeholder"></div>
-        <h6>Receta 5</h6>
-        <div class="card-footer">
-          <span>★★★★★</span>
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 recipe-card">
+          <div class="image-wrapper" style="height: 200px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; border-top-left-radius: 12px; border-top-right-radius: 12px; position: relative; overflow: hidden;">
+            <div class="text-center">
+              <i class="fas fa-image fa-3x" style="color: #F28241;"></i>
+              <p class="mt-2 mb-0" style="font-size: 1rem;">Sin imagen</p>
+            </div>
+            <button class="fav" type="button" aria-label="Favorito">♡</button>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title mb-2">Receta 5</h5>
+            <p class="card-text text-muted">Descripción breve de la receta destacada.</p>
+          </div>
+          <div class="card-footer bg-white border-top-0">
+            <div class="d-flex justify-content-center">
+              <button class="btn btn-sm view-recipe-btn" type="button">
+                <i class="fas fa-eye mr-1"></i> Ver
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

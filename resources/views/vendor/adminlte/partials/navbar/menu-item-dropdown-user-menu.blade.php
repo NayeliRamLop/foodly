@@ -13,7 +13,6 @@
        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
        title="Cerrar sesión"
        data-toggle="tooltip">
-        <i class="fas fa-fw fa-sign-out-alt"></i>
         <span class="d-none d-md-inline-block">{{ __('Cerrar sesión') }}</span>
     </a>
 

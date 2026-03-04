@@ -9,6 +9,12 @@
         {{-- Left sidebar toggler link --}}
         @include('adminlte::partials.navbar.menu-item-left-sidebar-toggler')
 
+        <li class="nav-item">
+            <a href="{{ url('/') }}" class="nav-link navbar-foodly-brand">
+                <img src="{{ asset(config('adminlte.logo_img')) }}" alt="{{ config('adminlte.logo_img_alt', config('app.name', 'Foodly')) }}" class="navbar-foodly-logo">
+            </a>
+        </li>
+
         {{-- Configured left links --}}
         @each('adminlte::partials.navbar.menu-item', $adminlte->menu('navbar-left'), 'item')
 

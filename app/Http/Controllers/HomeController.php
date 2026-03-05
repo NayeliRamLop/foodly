@@ -71,11 +71,11 @@ public function index()
     {
         $nombreCompleto = explode(' ', $fullName);
         $nombreMostrar = $nombreCompleto[0];
-        
+
         if (count($nombreCompleto) > 1) {
             $nombreMostrar .= ' ' . $nombreCompleto[1];
         }
-        
+
         return $nombreMostrar;
     }
 }

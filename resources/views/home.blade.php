@@ -1,4 +1,4 @@
-@extends(auth()->check() ? 'adminlte::page' : 'layouts.public')
+﻿@extends(auth()->check() ? 'adminlte::page' : 'layouts.public')
 
 
 @section('title', 'Inicio - Cocina con Gusto')
@@ -533,7 +533,7 @@ Cocina con gusto con ingredientes simples, comparte experiencias culinarias úni
             if (typewriterEl) {
                 const fullText = typewriterEl.textContent.trim();
                 typewriterEl.textContent = '';
-                
+
                 let index = 0;
                 function typeWriter() {
                     if (index < fullText.length) {
@@ -542,7 +542,7 @@ Cocina con gusto con ingredientes simples, comparte experiencias culinarias úni
                         setTimeout(typeWriter, 50); // 50ms entre cada letra
                     }
                 }
-                
+
                 typeWriter();
             }
         });

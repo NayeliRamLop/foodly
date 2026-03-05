@@ -282,6 +282,14 @@ private function getAdminActionButtons($recipe)
                             <source src="'.asset('storage/'.$recipe->video).'" type="video/mp4">
                         </video>
                     </div>';
+    } elseif($recipe->video_embed_url) {
+        $return .= '<div class="mb-2 embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item rounded"
+                                src="'.e($recipe->video_embed_url).'"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen
+                                referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                    </div>';
     }
     
     $return .= '
@@ -290,6 +298,8 @@ private function getAdminActionButtons($recipe)
                                         <input type="file" class="custom-file-input" id="edit_video'.$recipe->id.'" name="video" accept="video/*">
                                         <label class="custom-file-label" for="edit_video'.$recipe->id.'" style="font-size: 1.1rem;">Seleccionar video...</label>
                                     </div>
+                                    <label for="edit_video_link'.$recipe->id.'" class="mt-2" style="font-size: 1.1rem;">o URL de video (YouTube, TikTok, Vimeo)</label>
+                                    <input type="url" class="form-control" id="edit_video_link'.$recipe->id.'" name="video_link" value="'.e($recipe->video_link).'" placeholder="https://...">
                                 </div>
                             </div>
                         </div>
@@ -357,6 +367,7 @@ private function getAdminActionButtons($recipe)
                 'subcategory_id' => 'nullable|exists:subcategories,id,category_id,'.$request->category_id,
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
                 'video' => 'nullable|mimes:mp4,mov,ogg,qt|max:20000',
+                'video_link' => 'nullable|url|max:2048',
             ]);
 
             // Procesar la receta
@@ -386,6 +397,9 @@ private function getAdminActionButtons($recipe)
             // Procesar video
             if ($request->hasFile('video')) {
                 $recipeData['video'] = $request->file('video')->store('recipes/videos', 'public');
+                $recipeData['video_link'] = null;
+            } elseif (!empty($validated['video_link'])) {
+                $recipeData['video_link'] = trim($validated['video_link']);
             }
 
             // Crear la receta
@@ -432,6 +446,7 @@ private function getAdminActionButtons($recipe)
         }
 
         $avgRating = (float) $recipe->ratings()->avg('rating');
+        $videoEmbedUrl = $recipe->video_embed_url;
     
         return response()->json([
             'id' => $recipe->id,
@@ -443,6 +458,8 @@ private function getAdminActionButtons($recipe)
             'instructions' => $recipe->instructions,
             'image' => $recipe->image,
             'video' => $recipe->video,
+            'video_link' => $recipe->video_link,
+            'video_embed_url' => $videoEmbedUrl,
             'user' => $recipe->user ? [
                 'id' => $recipe->user->id,
                 'name' => $recipe->user->name,
@@ -483,6 +500,7 @@ private function getAdminActionButtons($recipe)
                 'subcategory_id' => 'nullable|exists:subcategories,id,category_id,'.$request->category_id,
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
                 'video' => 'nullable|mimes:mp4,mov,ogg,qt|max:20000',
+                'video_link' => 'nullable|url|max:2048',
             ]);
 
             // Mapear los campos del formulario a los campos reales de la base de datos
@@ -516,6 +534,13 @@ private function getAdminActionButtons($recipe)
                     Storage::disk('public')->delete($recipe->video);
                 }
                 $recipeData['video'] = $request->file('video')->store('recipes/videos', 'public');
+                $recipeData['video_link'] = null;
+            } elseif (array_key_exists('video_link', $validated) && !empty($validated['video_link'])) {
+                if ($recipe->video) {
+                    Storage::disk('public')->delete($recipe->video);
+                }
+                $recipeData['video'] = null;
+                $recipeData['video_link'] = trim($validated['video_link']);
             }
 
             $recipe->update($recipeData);
@@ -563,21 +588,25 @@ private function getAdminActionButtons($recipe)
     $user = auth()->user();
     
     $categories = Categories::with('subcategories')->get();
-    
-    $categoryIds = DB::table('user_category_preferencias')
-                    ->where('user_id', $user->id)
-                    ->pluck('category_id');
-    
+    $favoriteIds = $user ? $user->favorites()->pluck('recipes.id')->toArray() : [];
+    $followingIds = $user ? $user->following()->pluck('users.id')->toArray() : [];
+
     $recipes = Recipe::where('status', 1) // Solo recetas activas
-               ->where(function($query) use ($user, $categoryIds) {
-                   $query->where('user_id', $user->id)
-                         ->when($categoryIds->isNotEmpty(), function($q) use ($categoryIds) {
-                             $q->orWhereIn('category_id', $categoryIds);
-                         });
+               ->where(function ($query) {
+                   $query->whereNotNull('video')
+                         ->orWhereNotNull('video_link');
                })
-               ->with(['category', 'subcategory'])
+               ->with(['category', 'subcategory', 'user'])
+               ->withCount(['favoritedBy', 'comments'])
                ->latest()
-               ->paginate(10);
+               ->get();
+
+    $recipes = $recipes->transform(function ($recipe) use ($favoriteIds, $followingIds, $user) {
+        $recipe->is_favorite = in_array($recipe->id, $favoriteIds, true);
+        $recipe->is_following_author = $recipe->user && in_array($recipe->user->id, $followingIds, true);
+        $recipe->is_owner = $user && $recipe->user && $recipe->user->id === $user->id;
+        return $recipe;
+    });
     
     return view('recipes.para-ti', compact('recipes', 'categories'));
 }
@@ -784,6 +813,7 @@ private function getAdminActionButtons($recipe)
         $publicPath = storage_path('app/public/');
         return str_replace($publicPath, '', $fullPath);
     }
+
 public function toggleStatus($id)
 {
     try {

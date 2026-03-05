@@ -282,7 +282,20 @@
                         modalContent += `</ol></div>`;
                     }
                     
-                    if (response.video) {
+                    if (response.video_embed_url) {
+                        modalContent += `
+                        <div class="recipe-section">
+                            <h5 class="recipe-section-title"><i class="fas fa-video mr-1"></i> Video:</h5>
+                            <div class="embed-responsive embed-responsive-16by9">
+                                <iframe
+                                    class="embed-responsive-item rounded"
+                                    src="${response.video_embed_url}"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen
+                                    referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                            </div>
+                        </div>`;
+                    } else if (response.video) {
                         modalContent += `
                         <div class="recipe-section">
                             <h5 class="recipe-section-title"><i class="fas fa-video mr-1"></i> Video:</h5>
@@ -321,6 +334,7 @@
                 currentVideoElement.currentTime = 0;
                 currentVideoElement = null;
             }
+            $(this).find('iframe').attr('src', '');
         });
         
         // Toggle de favoritos

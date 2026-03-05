@@ -26,6 +26,7 @@ class Recipe extends Model
         'subcategory_id',
         'image',
         'video',
+        'video_link',
         'status'
         
     ];
@@ -69,6 +70,51 @@ class Recipe extends Model
     public function getVideoUrlAttribute()
     {
         return $this->video ? asset('storage/'.$this->video) : null;
+    }
+
+    public function getVideoEmbedUrlAttribute(): ?string
+    {
+        if (!$this->video_link) {
+            return null;
+        }
+
+        $url = trim($this->video_link);
+        $parts = parse_url($url);
+        if (!$parts || empty($parts['host'])) {
+            return null;
+        }
+
+        $host = strtolower($parts['host']);
+        parse_str($parts['query'] ?? '', $query);
+        $path = trim($parts['path'] ?? '', '/');
+
+        if (str_contains($host, 'youtube.com') || str_contains($host, 'youtu.be')) {
+            $videoId = null;
+
+            if (str_contains($host, 'youtu.be')) {
+                $videoId = strtok($path, '/');
+            } elseif (!empty($query['v'])) {
+                $videoId = $query['v'];
+            } elseif (str_starts_with($path, 'embed/')) {
+                $videoId = substr($path, 6);
+            } elseif (str_starts_with($path, 'shorts/')) {
+                $videoId = substr($path, 7);
+            }
+
+            return $videoId ? "https://www.youtube.com/embed/{$videoId}" : null;
+        }
+
+        if (str_contains($host, 'vimeo.com')) {
+            $segments = explode('/', $path);
+            $videoId = end($segments);
+            return $videoId ? "https://player.vimeo.com/video/{$videoId}" : null;
+        }
+
+        if (str_contains($host, 'tiktok.com')) {
+            return "https://www.tiktok.com/embed/v2/{$path}";
+        }
+
+        return $url;
     }
     // Agrega este método al modelo Recipe
 public function favoritedBy()

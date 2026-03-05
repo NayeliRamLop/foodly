@@ -35,8 +35,15 @@
     @foreach($recipes as $recipe)
     <div class="col-md-6 col-lg-4 mb-4">
         <div class="card h-100 recipe-card" data-recipe-id="{{ $recipe->id }}">
+            @php
+                $hoverEmbedUrl = null;
+                if ($recipe->video_embed_url) {
+                    $separator = str_contains($recipe->video_embed_url, '?') ? '&' : '?';
+                    $hoverEmbedUrl = $recipe->video_embed_url . $separator . 'autoplay=1&mute=1&controls=0&playsinline=1';
+                }
+            @endphp
             <!-- Contenedor flexible para la imagen -->
-            <div class="image-wrapper" style="height: 200px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; border-top-left-radius: 12px; border-top-right-radius: 12px; position: relative; overflow: hidden;">
+            <div class="image-wrapper" style="height: 340px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; border-top-left-radius: 12px; border-top-right-radius: 12px; position: relative; overflow: hidden;">
                 @if($recipe->image)
                 <img src="{{ asset('storage/'.$recipe->image) }}" class="img-fluid" alt="{{ $recipe->recipe_title }}" style="max-height: 100%; max-width: 100%; object-fit: scale-down;">
                 @else
@@ -49,6 +56,15 @@
                 <video class="recipe-video-preview" muted playsinline preload="metadata">
                     <source src="{{ asset('storage/'.$recipe->video) }}" type="video/mp4">
                 </video>
+                @elseif($hoverEmbedUrl)
+                <div class="recipe-embed-preview">
+                    <iframe
+                        data-src="{{ $hoverEmbedUrl }}"
+                        title="Vista previa de video de {{ $recipe->recipe_title }}"
+                        allow="autoplay; encrypted-media; picture-in-picture"
+                        allowfullscreen
+                        referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                </div>
                 @endif
                 
                 <!-- Corazón de favoritos -->
@@ -134,10 +150,29 @@
     .recipe-card:hover .recipe-video-preview {
         opacity: 1;
     }
+    .recipe-embed-preview {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        pointer-events: none;
+        background: #000;
+    }
+    .recipe-embed-preview iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+    .recipe-card:hover .recipe-embed-preview {
+        opacity: 1;
+    }
     .card-title {
         font-size: 1.3rem;
         margin-bottom: 0.75rem;
         color: var(--primary); /* verde destacado */
+        text-align: center;
     }
     .image-wrapper {
         padding: 0;
@@ -184,10 +219,66 @@
         margin: 0 auto;
         border-radius: 8px;
     }
+    .recipe-modal-media {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .recipe-modal-media-content {
+        width: 100%;
+        text-align: center;
+    }
+    .modal-nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 34px;
+        height: 34px;
+        border: 1px solid #e0e0e0;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.92);
+        color: #a85d2d;
+        z-index: 5;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .modal-nav-btn.left {
+        left: 8px;
+    }
+    .modal-nav-btn.right {
+        right: 8px;
+    }
+    .modal-nav-btn:hover:not(:disabled) {
+        background: #D2691E;
+        color: #fff;
+    }
+    .modal-nav-btn:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+    }
     .recipe-modal-title {
         color: #F28241;
         font-weight: 600;
         margin-bottom: 20px;
+        text-align: center;
+    }
+    .recipe-video-wrap {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    .recipe-video-player {
+        width: 100%;
+        height: 56vh;
+        min-height: 360px;
+        max-height: 680px;
+        background-color: #000;
+        border-radius: 10px;
+        object-fit: contain;
     }
     .recipe-section {
         margin-bottom: 20px;
@@ -294,13 +385,21 @@
 <script>
     $(document).ready(function() {
         let currentVideoElement = null;
+        const recipeIds = $('.view-recipe-btn').map(function() {
+            return Number($(this).data('recipe-id'));
+        }).get();
+        let currentRecipeIndex = -1;
         const profileBaseUrl = "{{ url('/perfil') }}";
         const canRate = @json(auth()->check());
         const canComment = @json(auth()->check());
 
-        // Cargar receta en el modal al hacer clic en "Ver"
-        $('.view-recipe-btn').on('click', function() {
-            const recipeId = $(this).data('recipe-id');
+        function loadRecipeById(recipeId) {
+            if (currentVideoElement) {
+                currentVideoElement.pause();
+                currentVideoElement.currentTime = 0;
+                currentVideoElement = null;
+            }
+
             const url = "{{ route('recipes.show', ':id') }}".replace(':id', recipeId);
             
             $('#recipeModalBody').html(`
@@ -319,15 +418,25 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
+                    const hasPrev = currentRecipeIndex > 0;
+                    const hasNext = currentRecipeIndex < recipeIds.length - 1;
                     let modalContent = `
-                        <div class="text-center mb-4">
-                            ${response.image ? 
-                                `<img src="/storage/${response.image}" class="recipe-modal-img img-fluid" alt="${response.recipe_title}">` : 
-                                `<div class="text-center py-4" style="background-color: #f8f9fa; border-radius: 8px;">
-                                    <i class="fas fa-image fa-5x" style="color: #F28241;"></i>
-                                    <p class="mt-2">Sin imagen</p>
-                                </div>`
-                            }
+                        <div class="recipe-modal-media mb-4">
+                            <button type="button" class="modal-nav-btn left" data-dir="prev" ${hasPrev ? '' : 'disabled'} aria-label="Receta anterior">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <div class="recipe-modal-media-content">
+                                ${response.image ? 
+                                    `<img src="/storage/${response.image}" class="recipe-modal-img img-fluid" alt="${response.recipe_title}">` : 
+                                    `<div class="text-center py-4" style="background-color: #f8f9fa; border-radius: 8px;">
+                                        <i class="fas fa-image fa-5x" style="color: #F28241;"></i>
+                                        <p class="mt-2">Sin imagen</p>
+                                    </div>`
+                                }
+                            </div>
+                            <button type="button" class="modal-nav-btn right" data-dir="next" ${hasNext ? '' : 'disabled'} aria-label="Receta siguiente">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
                         </div>
                         
                         <h3 class="recipe-modal-title">${response.recipe_title}</h3>
@@ -345,11 +454,7 @@
                                     <span class="badge badge-pill" style="background-color: #6c757d;">
                                         <i class="fas fa-utensil-spoon"></i> ${response.difficulty}
                                     </span>
-</div>
-
-<div class="d-flex justify-content-center mt-4">
-    {{ $recipes->links() }}
-</div>
+                                </div>
                             </div>
                         </div>
                         
@@ -394,12 +499,28 @@
                         modalContent += `</ol></div>`;
                     }
                     
-                    if (response.video) {
+                    if (response.video_embed_url) {
                         modalContent += `
                         <div class="recipe-section">
                             <h5 class="recipe-section-title"><i class="fas fa-video mr-1"></i> Video:</h5>
-                            <div class="embed-responsive embed-responsive-16by9">
-                                <video id="recipeVideo" controls class="w-100 rounded" style="background-color: #f8f9fa;">
+                            <div class="recipe-video-wrap">
+                                <div class="embed-responsive embed-responsive-16by9">
+                                    <iframe
+                                        id="recipeVideoEmbed"
+                                        class="embed-responsive-item rounded"
+                                        src="${response.video_embed_url}"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                        allowfullscreen
+                                        referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                                </div>
+                            </div>
+                        </div>`;
+                    } else if (response.video) {
+                        modalContent += `
+                        <div class="recipe-section">
+                            <h5 class="recipe-section-title"><i class="fas fa-video mr-1"></i> Video:</h5>
+                            <div class="recipe-video-wrap">
+                                <video id="recipeVideo" controls class="recipe-video-player">
                                     <source src="/storage/${response.video}" type="video/mp4">
                                     Tu navegador no soporta el elemento de video.
                                 </video>
@@ -488,25 +609,79 @@
                     `);
                 }
             });
+        }
+
+        // Cargar receta en el modal al hacer clic en "Ver"
+        $('.view-recipe-btn').on('click', function() {
+            const recipeId = Number($(this).data('recipe-id'));
+            currentRecipeIndex = recipeIds.indexOf(recipeId);
+            loadRecipeById(recipeId);
+        });
+
+        $(document).on('click', '.modal-nav-btn', function() {
+            const direction = $(this).data('dir');
+            if (direction === 'prev' && currentRecipeIndex > 0) {
+                currentRecipeIndex -= 1;
+                loadRecipeById(recipeIds[currentRecipeIndex]);
+            }
+            if (direction === 'next' && currentRecipeIndex < recipeIds.length - 1) {
+                currentRecipeIndex += 1;
+                loadRecipeById(recipeIds[currentRecipeIndex]);
+            }
         });
         
         $('.recipe-card').on('mouseenter', function() {
-            const video = $(this).find('.recipe-video-preview').get(0);
-            if (!video) return;
-            video.currentTime = 0;
-            video.play();
-            setTimeout(() => {
-                if (!video.paused) {
-                    video.pause();
+            const card = $(this);
+            const embed = card.find('.recipe-embed-preview iframe').get(0);
+            if (embed) {
+                const embedSrc = embed.getAttribute('data-src');
+                if (embedSrc && embed.getAttribute('src') !== embedSrc) {
+                    embed.setAttribute('src', embedSrc);
                 }
-            }, 2000);
+            }
+
+            const video = card.find('.recipe-video-preview').get(0);
+            if (!video) return;
+
+            const runLoop = () => {
+                video.currentTime = 0;
+                const playPromise = video.play();
+                if (playPromise && typeof playPromise.catch === 'function') {
+                    playPromise.catch(() => {});
+                }
+
+                const loopTimeoutId = setTimeout(() => {
+                    video.pause();
+                    video.currentTime = 0;
+                    if (card.is(':hover')) {
+                        runLoop();
+                    }
+                }, 2000);
+
+                card.data('previewLoopTimeoutId', loopTimeoutId);
+            };
+
+            runLoop();
         });
 
         $('.recipe-card').on('mouseleave', function() {
-            const video = $(this).find('.recipe-video-preview').get(0);
-            if (!video) return;
-            video.pause();
-            video.currentTime = 0;
+            const card = $(this);
+            const timeoutId = card.data('previewLoopTimeoutId');
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+                card.removeData('previewLoopTimeoutId');
+            }
+
+            const video = card.find('.recipe-video-preview').get(0);
+            if (video) {
+                video.pause();
+                video.currentTime = 0;
+            }
+
+            const embed = card.find('.recipe-embed-preview iframe').get(0);
+            if (embed) {
+                embed.setAttribute('src', '');
+            }
         });
 
         // Detener el video cuando se cierra el modal
@@ -516,6 +691,7 @@
                 currentVideoElement.currentTime = 0;
                 currentVideoElement = null;
             }
+            $(this).find('iframe').attr('src', '');
         });
 
         // Se califica al enviar comentario

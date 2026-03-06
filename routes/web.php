@@ -20,7 +20,11 @@ use App\Http\Controllers\{
 };
 
 Route::get('/', function () {
-    return view('welcome');
+    if (auth()->check()) {
+        return redirect()->route('home');
+    }
+
+    return view('home');
 });
 
 Route::get('/recipes/search', [RecipeController::class, 'search'])->name('recipes.search');

@@ -282,6 +282,12 @@ private function getAdminActionButtons($recipe)
                             <source src="'.asset('storage/'.$recipe->video).'" type="video/mp4">
                         </video>
                     </div>';
+    } elseif($recipe->video_direct_url) {
+        $return .= '<div class="mb-2">
+                        <video controls class="w-full rounded" style="max-height: 150px;">
+                            <source src="'.e($recipe->video_direct_url).'" type="video/mp4">
+                        </video>
+                    </div>';
     } elseif($recipe->video_embed_url) {
         $return .= '<div class="mb-2 embed-responsive embed-responsive-16by9">
                         <iframe class="embed-responsive-item rounded"
@@ -298,7 +304,7 @@ private function getAdminActionButtons($recipe)
                                         <input type="file" class="custom-file-input" id="edit_video'.$recipe->id.'" name="video" accept="video/*">
                                         <label class="custom-file-label" for="edit_video'.$recipe->id.'" style="font-size: 1.1rem;">Seleccionar video...</label>
                                     </div>
-                                    <label for="edit_video_link'.$recipe->id.'" class="mt-2" style="font-size: 1.1rem;">o URL de video (YouTube, TikTok, Vimeo)</label>
+                                    <label for="edit_video_link'.$recipe->id.'" class="mt-2" style="font-size: 1.1rem;">o URL de video (YouTube, TikTok, Vimeo o .mp4)</label>
                                     <input type="url" class="form-control" id="edit_video_link'.$recipe->id.'" name="video_link" value="'.e($recipe->video_link).'" placeholder="https://...">
                                 </div>
                             </div>
@@ -447,6 +453,8 @@ private function getAdminActionButtons($recipe)
 
         $avgRating = (float) $recipe->ratings()->avg('rating');
         $videoEmbedUrl = $recipe->video_embed_url;
+        $videoDirectUrl = $recipe->video_direct_url;
+        $videoLinkType = $recipe->video_link_type;
     
         return response()->json([
             'id' => $recipe->id,
@@ -460,6 +468,8 @@ private function getAdminActionButtons($recipe)
             'video' => $recipe->video,
             'video_link' => $recipe->video_link,
             'video_embed_url' => $videoEmbedUrl,
+            'video_direct_url' => $videoDirectUrl,
+            'video_link_type' => $videoLinkType,
             'user' => $recipe->user ? [
                 'id' => $recipe->user->id,
                 'name' => $recipe->user->name,

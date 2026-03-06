@@ -26,7 +26,7 @@
 
 <!-- ================= NAVBAR PÚBLICO ================= -->
 <nav class="navbar navbar-expand-lg px-4 py-3 public-navbar fixed-top">
-    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="/">
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="{{ auth()->check() ? route('home') : url('/') }}">
         <img src="{{ asset('images/logo.png') }}" alt="Foodly" height="34">
     </a>
 
@@ -37,13 +37,26 @@
     </form>
 
     <div class="nav-actions d-flex align-items-center gap-3">
+      @guest
         <a href="{{ route('user.create') }}" class="nav-link fw-medium register-link">
-            Registrarse
+          Registrarse
         </a>
 
         <a href="{{ route('login') }}" class="btn btn-primary px-4">
-            Iniciar sesion
+          Iniciar sesion
         </a>
+      @else
+        <a href="{{ route('home') }}" class="btn btn-primary px-4">
+          Ir a inicio
+        </a>
+
+        <form method="POST" action="{{ route('logout') }}" class="m-0">
+          @csrf
+          <button type="submit" class="btn btn-outline-secondary px-4">
+            Cerrar sesion
+          </button>
+        </form>
+      @endguest
     </div>
 </nav>
 

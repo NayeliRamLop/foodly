@@ -282,7 +282,29 @@
                         modalContent += `</ol></div>`;
                     }
                     
-                    if (response.video_embed_url) {
+                    if (response.video) {
+                        modalContent += `
+                        <div class="recipe-section">
+                            <h5 class="recipe-section-title"><i class="fas fa-video mr-1"></i> Video:</h5>
+                            <div class="embed-responsive embed-responsive-16by9">
+                                <video id="recipeVideo" controls class="w-100 rounded" style="background-color: #f8f9fa;">
+                                    <source src="/storage/${response.video}" type="video/mp4">
+                                    Tu navegador no soporta el elemento de video.
+                                </video>
+                            </div>
+                        </div>`;
+                    } else if (response.video_link_type === 'direct' && response.video_direct_url) {
+                        modalContent += `
+                        <div class="recipe-section">
+                            <h5 class="recipe-section-title"><i class="fas fa-video mr-1"></i> Video:</h5>
+                            <div class="embed-responsive embed-responsive-16by9">
+                                <video id="recipeVideo" controls class="w-100 rounded" style="background-color: #f8f9fa;">
+                                    <source src="${response.video_direct_url}" type="video/mp4">
+                                    Tu navegador no soporta el elemento de video.
+                                </video>
+                            </div>
+                        </div>`;
+                    } else if (response.video_embed_url) {
                         modalContent += `
                         <div class="recipe-section">
                             <h5 class="recipe-section-title"><i class="fas fa-video mr-1"></i> Video:</h5>
@@ -295,23 +317,12 @@
                                     referrerpolicy="strict-origin-when-cross-origin"></iframe>
                             </div>
                         </div>`;
-                    } else if (response.video) {
-                        modalContent += `
-                        <div class="recipe-section">
-                            <h5 class="recipe-section-title"><i class="fas fa-video mr-1"></i> Video:</h5>
-                            <div class="embed-responsive embed-responsive-16by9">
-                                <video id="recipeVideo" controls class="w-100 rounded" style="background-color: #f8f9fa;">
-                                    <source src="/storage/${response.video}" type="video/mp4">
-                                    Tu navegador no soporta el elemento de video.
-                                </video>
-                            </div>
-                        </div>`;
                     }
                     
                     $('#recipeModalBody').html(modalContent);
                     $('#recipeModalLabel').html(`<i class="fas fa-utensils mr-2"></i> ${response.recipe_title}`);
                     
-                    if (response.video) {
+                    if (response.video || response.video_link_type === 'direct') {
                         currentVideoElement = document.getElementById('recipeVideo');
                     }
                 },

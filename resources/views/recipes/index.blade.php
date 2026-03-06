@@ -41,6 +41,7 @@
                     $separator = str_contains($recipe->video_embed_url, '?') ? '&' : '?';
                     $hoverEmbedUrl = $recipe->video_embed_url . $separator . 'autoplay=1&mute=1&controls=0&playsinline=1';
                 }
+                $hoverDirectVideoUrl = $recipe->video_direct_url;
             @endphp
             <!-- Contenedor flexible para la imagen -->
             <div class="image-wrapper" style="height: 340px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; border-top-left-radius: 12px; border-top-right-radius: 12px; position: relative; overflow: hidden;">
@@ -55,6 +56,10 @@
                 @if($recipe->video)
                 <video class="recipe-video-preview" muted playsinline preload="metadata">
                     <source src="{{ asset('storage/'.$recipe->video) }}" type="video/mp4">
+                </video>
+                @elseif($hoverDirectVideoUrl)
+                <video class="recipe-video-preview" muted playsinline preload="metadata">
+                    <source src="{{ $hoverDirectVideoUrl }}" type="video/mp4">
                 </video>
                 @elseif($hoverEmbedUrl)
                 <div class="recipe-embed-preview">
@@ -130,6 +135,14 @@
         overflow: hidden;
         background: var(--bg-soft, #fff6e9); /* same tono claro que top recetas */
         max-width: 100%;
+    }
+    .recipes-page {
+        row-gap: 10px;
+    }
+    .recipes-page .recipe-card {
+        width: calc(100% - 50px);
+        margin-left: auto;
+        margin-right: auto;
     }
     .recipe-card:hover {
         transform: translateY(-5px);
@@ -499,7 +512,29 @@
                         modalContent += `</ol></div>`;
                     }
                     
-                    if (response.video_embed_url) {
+                    if (response.video) {
+                        modalContent += `
+                        <div class="recipe-section">
+                            <h5 class="recipe-section-title"><i class="fas fa-video mr-1"></i> Video:</h5>
+                            <div class="recipe-video-wrap">
+                                <video id="recipeVideo" controls class="recipe-video-player">
+                                    <source src="/storage/${response.video}" type="video/mp4">
+                                    Tu navegador no soporta el elemento de video.
+                                </video>
+                            </div>
+                        </div>`;
+                    } else if (response.video_link_type === 'direct' && response.video_direct_url) {
+                        modalContent += `
+                        <div class="recipe-section">
+                            <h5 class="recipe-section-title"><i class="fas fa-video mr-1"></i> Video:</h5>
+                            <div class="recipe-video-wrap">
+                                <video id="recipeVideo" controls class="recipe-video-player">
+                                    <source src="${response.video_direct_url}" type="video/mp4">
+                                    Tu navegador no soporta el elemento de video.
+                                </video>
+                            </div>
+                        </div>`;
+                    } else if (response.video_embed_url) {
                         modalContent += `
                         <div class="recipe-section">
                             <h5 class="recipe-section-title"><i class="fas fa-video mr-1"></i> Video:</h5>
@@ -513,17 +548,6 @@
                                         allowfullscreen
                                         referrerpolicy="strict-origin-when-cross-origin"></iframe>
                                 </div>
-                            </div>
-                        </div>`;
-                    } else if (response.video) {
-                        modalContent += `
-                        <div class="recipe-section">
-                            <h5 class="recipe-section-title"><i class="fas fa-video mr-1"></i> Video:</h5>
-                            <div class="recipe-video-wrap">
-                                <video id="recipeVideo" controls class="recipe-video-player">
-                                    <source src="/storage/${response.video}" type="video/mp4">
-                                    Tu navegador no soporta el elemento de video.
-                                </video>
                             </div>
                         </div>`;
                     }
@@ -595,7 +619,7 @@
                     $('#recipeModalBody').html(modalContent);
                     $('#recipeModalLabel').html(`<i class="fas fa-utensils mr-2"></i> ${response.recipe_title}`);
                     
-                    if (response.video) {
+                    if (response.video || response.video_link_type === 'direct') {
                         currentVideoElement = document.getElementById('recipeVideo');
                     }
                 },

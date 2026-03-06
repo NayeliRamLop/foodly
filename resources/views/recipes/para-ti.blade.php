@@ -206,6 +206,7 @@
                 $separator = str_contains($recipe->video_embed_url, '?') ? '&' : '?';
                 $embedUrl = $recipe->video_embed_url . $separator . 'autoplay=1&mute=0&controls=1&playsinline=1';
             }
+            $directVideoUrl = $recipe->video_direct_url;
         @endphp
 
         <article class="for-you-item" data-recipe-id="{{ $recipe->id }}">
@@ -213,6 +214,10 @@
                 @if($recipe->video)
                     <video class="for-you-video" controls playsinline preload="metadata">
                         <source src="{{ asset('storage/'.$recipe->video) }}" type="video/mp4">
+                    </video>
+                @elseif($directVideoUrl)
+                    <video class="for-you-video" controls playsinline preload="metadata">
+                        <source src="{{ $directVideoUrl }}" type="video/mp4">
                     </video>
                 @elseif($embedUrl)
                     <iframe

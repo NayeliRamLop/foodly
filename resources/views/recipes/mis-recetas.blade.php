@@ -97,6 +97,13 @@
                                             Tu navegador no soporta el elemento de video.
                                         </video>
                                     </div>
+                                @elseif($recipe->video_direct_url)
+                                    <div class="video-container p-3" style="background-color: #f8f9fa; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;">
+                                        <video controls class="w-full rounded-lg" style="max-height: 200px;">
+                                            <source src="{{ $recipe->video_direct_url }}" type="video/mp4">
+                                            Tu navegador no soporta el elemento de video.
+                                        </video>
+                                    </div>
                                 @elseif($recipe->video_embed_url)
                                     <div class="video-container p-3" style="background-color: #f8f9fa; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;">
                                         <div class="embed-responsive embed-responsive-16by9">
@@ -329,6 +336,12 @@
                                                 <source src="{{ asset('storage/' . $recipe->video) }}" type="video/mp4">
                                             </video>
                                         </div>
+                                    @elseif($recipe->video_direct_url)
+                                        <div class="mb-2">
+                                            <video controls class="w-full rounded" style="max-height: 150px;">
+                                                <source src="{{ $recipe->video_direct_url }}" type="video/mp4">
+                                            </video>
+                                        </div>
                                     @elseif($recipe->video_embed_url)
                                         <div class="mb-2 embed-responsive embed-responsive-16by9">
                                             <iframe
@@ -480,7 +493,7 @@
                                     <input type="file" class="custom-file-input" id="video" name="video" accept="video/*">
                                     <label class="custom-file-label" for="video" style="font-size: 1.1rem;">Seleccionar video...</label>
                                 </div>
-                                <label for="video_link" class="mt-2" style="font-size: 1.1rem;">o URL de video (YouTube, TikTok, Vimeo)</label>
+                                <label for="video_link" class="mt-2" style="font-size: 1.1rem;">o URL de video (YouTube, TikTok, Vimeo o .mp4)</label>
                                 <input type="url" class="form-control" id="video_link" name="video_link" value="{{ old('video_link') }}" placeholder="https://...">
                             </div>
                         </div>

@@ -74,16 +74,13 @@ class Recipe extends Model
 
     public function getVideoEmbedUrlAttribute(): ?string
     {
-        if (!$this->video_link) {
+        $parsed = $this->parseVideoLink();
+        if (!$parsed) {
             return null;
         }
 
-        $url = trim($this->video_link);
-        $parts = parse_url($url);
-        if (!$parts || empty($parts['host'])) {
-            return null;
-        }
-
+        $url = $parsed['url'];
+        $parts = $parsed['parts'];
         $host = strtolower($parts['host']);
         parse_str($parts['query'] ?? '', $query);
         $path = trim($parts['path'] ?? '', '/');
@@ -114,7 +111,54 @@ class Recipe extends Model
             return "https://www.tiktok.com/embed/v2/{$path}";
         }
 
-        return $url;
+        return null;
+    }
+
+    public function getVideoLinkTypeAttribute(): ?string
+    {
+        if ($this->video_embed_url) {
+            return 'embed';
+        }
+
+        return $this->video_direct_url ? 'direct' : null;
+    }
+
+    public function getVideoDirectUrlAttribute(): ?string
+    {
+        $parsed = $this->parseVideoLink();
+        if (!$parsed) {
+            return null;
+        }
+
+        $url = $parsed['url'];
+        $parts = $parsed['parts'];
+        $path = strtolower($parts['path'] ?? '');
+        $extension = pathinfo($path, PATHINFO_EXTENSION);
+
+        $allowedExtensions = ['mp4', 'webm', 'ogg', 'm4v', 'mov'];
+        if (in_array($extension, $allowedExtensions, true)) {
+            return $url;
+        }
+
+        return null;
+    }
+
+    private function parseVideoLink(): ?array
+    {
+        if (!$this->video_link) {
+            return null;
+        }
+
+        $url = trim($this->video_link);
+        $parts = parse_url($url);
+        if (!$parts || empty($parts['host'])) {
+            return null;
+        }
+
+        return [
+            'url' => $url,
+            'parts' => $parts,
+        ];
     }
     // Agrega este método al modelo Recipe
 public function favoritedBy()

@@ -10,7 +10,7 @@
         @include('adminlte::partials.navbar.menu-item-left-sidebar-toggler')
 
         <li class="nav-item">
-            <a href="{{ url('/') }}" class="nav-link navbar-foodly-brand">
+            <a href="{{ auth()->check() ? route('home') : url('/') }}" class="nav-link navbar-foodly-brand">
                 <img src="{{ asset(config('adminlte.logo_img')) }}" alt="{{ config('adminlte.logo_img_alt', config('app.name', 'Foodly')) }}" class="navbar-foodly-logo">
             </a>
         </li>
@@ -23,18 +23,12 @@
 
         @if(Auth::check())
             <li class="nav-item navbar-search-always">
-                <form class="form-inline" action="{{ route('search.global') }}" method="GET">
-                    <div class="input-group">
-                        <input class="form-control form-control-navbar" type="search"
-                               name="q"
-                               placeholder="Buscar recetas o personas"
-                               aria-label="Buscar recetas o personas">
-                        <div class="input-group-append">
-                            <button class="btn btn-navbar" type="submit">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
+                <form class="search-form d-none d-lg-flex mx-auto position-relative" action="{{ route('search.global') }}" method="GET" autocomplete="off">
+                    <input class="form-control form-control-navbar" type="search"
+                           name="q"
+                           placeholder="Buscar recetas..."
+                           aria-label="Buscar recetas...">
+                    <button class="btn btn-search btn-navbar" type="submit">Buscar</button>
                 </form>
             </li>
             @if(request()->is('home'))

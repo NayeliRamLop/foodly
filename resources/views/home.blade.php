@@ -3,9 +3,6 @@
 
 @section('title', 'Inicio - Cocina con Gusto')
 
-@section('content_header')
-@stop
-
 @section('css')
   <link rel="stylesheet" href="{{ asset('css/custom-public.css') }}">
     <style>
@@ -21,6 +18,22 @@
           background: transparent !important;
         }
 
+        /* Home autenticado: navbar pegado arriba */
+        .wrapper {
+          margin-top: 0 !important;
+          padding-top: 0 !important;
+        }
+
+        .wrapper > .main-header.navbar {
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          right: 0 !important;
+          width: 100% !important;
+          margin-top: 0 !important;
+          z-index: 1040 !important;
+        }
+
         .content-wrapper {
           background-image: url('/images/fondo-04.jpg');
           background-size: cover;
@@ -28,9 +41,8 @@
           background-attachment: fixed;
         }
 
-        main {
-            padding-top: 60px;
-            background: transparent;
+        .content-wrapper > .content {
+          padding: 0 !important;
         }
 
         /* Logo */
@@ -64,8 +76,8 @@
 
         .hero-section {
             background: transparent;
-            padding: 40px;
-            min-height: 400px;
+            padding: 10px 40px 40px !important;
+            min-height: auto;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -76,18 +88,21 @@
 
         .carousel-fullwidth {
             margin-top: 2rem;
+            width: min(1300px, 96vw);
+            margin-left: auto;
+            margin-right: auto;
         }
 
         #homeCarousel .carousel-inner {
-          max-height: 360px;
+          max-height: 487px;
         }
 
         #homeCarousel .carousel-item {
-          height: 360px;
+          height: 487px;
         }
 
         #homeCarousel .carousel-item img {
-          height: 360px;
+          height: 487px;
           object-fit: cover;
           object-position: center;
         }
@@ -118,27 +133,69 @@
           max-width: 100%;
         }
 
-        .recipe-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 10px 20px rgba(242, 130, 65, 0.15);
-          border-color: rgba(242, 130, 65, 0.3);
+        .top-recetas .recipe-card {
+          width: 100%;
+          max-width: 320px;
+          padding: 0;
+          margin-left: auto;
+          margin-right: auto;
+          flex-shrink: 1;
+          border-radius: 16px;
+          background: var(--bg-soft, #fff6e9);
         }
 
-        .recipe-card .fav {
+        .popular .recipe-card {
+          width: 100%;
+          padding: 0;
+          margin-right: 0;
+          flex-shrink: 1;
+          border-radius: 16px;
+          background: var(--bg-soft, #fff6e9);
+        }
+
+        .recipe-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 10px 20px rgba(var(--primary-rgb, 65,89,29), 0.15);
+          border-color: rgba(var(--primary-rgb, 65,89,29), 0.3);
+        }
+
+        .recipe-card .image-wrapper {
+          height: 200px;
+          background-color: #f8f9fa;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-top-left-radius: 12px;
+          border-top-right-radius: 12px;
+          position: relative;
+          overflow: hidden;
+          padding: 0;
+        }
+
+        .recipe-card .btn-favorite {
           position: absolute;
           top: 10px;
           right: 10px;
-          background: rgba(255,255,255,0.75);
+          background: rgba(255,255,255,0.7);
           border: none;
           border-radius: 50%;
           width: 36px;
           height: 36px;
-          display: flex;
+          padding: 0;
+          z-index: 10;
+          display: inline-flex;
           align-items: center;
           justify-content: center;
-          color: #D2691E;
+        }
+
+        .recipe-card .btn-favorite i {
           font-size: 1.2rem;
-          z-index: 3;
+          color: #6c757d;
+          transition: color 0.2s ease;
+        }
+
+        .recipe-card .btn-favorite:hover i {
+          color: #dc3545;
         }
 
         .recipe-card .img-placeholder {
@@ -149,23 +206,25 @@
           border-bottom: 1px solid #f1c29c;
         }
 
-        .top-recetas .card-title {
+        .recipe-card .card-title {
           font-size: 1.3rem;
           color: var(--primary);
           margin-bottom: 0.75rem;
           font-weight: 600;
+          text-align: center;
         }
 
-        .top-recetas .card-body {
+        .recipe-card .card-body {
           min-height: 140px;
         }
 
-        .top-recetas .card-text {
+        .recipe-card .card-text {
           font-size: 1rem;
           margin: 0 0 0.5rem;
+          text-align: center;
         }
 
-        .top-recetas .recipe-card .btn {
+        .recipe-card .btn {
           font-size: 0.95rem;
           padding: 0.45rem 0.9rem;
           border-radius: 8px;
@@ -173,24 +232,29 @@
           transition: all 0.2s;
         }
 
-        .top-recetas .view-recipe-btn {
+        .recipe-card .btn:hover {
+          transform: translateY(-2px);
+        }
+
+        .view-recipe-btn {
           background-color: var(--primary);
           color: #fff;
           border: none;
         }
 
-        .top-recetas .view-recipe-btn:hover {
+        .view-recipe-btn:hover {
           background-color: color-mix(in srgb, var(--primary) 85%, black);
           color: #fff;
-          transform: translateY(-2px);
         }
 
         .recipe-card .card-footer {
-          border: 0;
+          display: block;
+          justify-content: initial;
+          align-items: initial;
+          margin-top: 0;
           background: #fff;
           padding: 0.6rem 1rem 1rem;
-          color: #D2691E;
-          font-size: 0.95rem;
+          border: 0;
         }
 
         .popular {
@@ -247,16 +311,18 @@
 
           .carousel-fullwidth {
             margin-top: 1rem;
+            width: min(1300px, 97vw);
           }
 
           #homeCarousel .carousel-item img {
-            height: 240px;
+            height: calc(97vw * 487 / 1300);
+            max-height: 487px;
           }
 
           #homeCarousel .carousel-inner,
           #homeCarousel .carousel-item {
-            max-height: 240px;
-            height: 240px;
+            max-height: calc(97vw * 487 / 1300);
+            height: calc(97vw * 487 / 1300);
           }
 
           .top-recetas,
@@ -299,6 +365,7 @@
             font-size: 1.25rem;
           }
         }
+
     </style>
 @stop
 
@@ -351,12 +418,14 @@ Cocina con gusto con ingredientes simples, comparte experiencias culinarias úni
     <div class="row recipes-page">
       <div class="col-md-6 col-lg-4 mb-4">
         <div class="card h-100 recipe-card">
-          <div class="image-wrapper" style="height: 200px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; border-top-left-radius: 12px; border-top-right-radius: 12px; position: relative; overflow: hidden;">
+          <div class="image-wrapper">
             <div class="text-center">
               <i class="fas fa-image fa-3x" style="color: #F28241;"></i>
               <p class="mt-2 mb-0" style="font-size: 1rem;">Sin imagen</p>
             </div>
-            <button class="fav" type="button" aria-label="Favorito">♡</button>
+            <button class="btn-favorite" type="button" aria-label="Favorito">
+              <i class="fas fa-heart"></i>
+            </button>
           </div>
           <div class="card-body">
             <h5 class="card-title mb-2">Receta 1</h5>
@@ -374,12 +443,14 @@ Cocina con gusto con ingredientes simples, comparte experiencias culinarias úni
 
       <div class="col-md-6 col-lg-4 mb-4">
         <div class="card h-100 recipe-card">
-          <div class="image-wrapper" style="height: 200px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; border-top-left-radius: 12px; border-top-right-radius: 12px; position: relative; overflow: hidden;">
+          <div class="image-wrapper">
             <div class="text-center">
               <i class="fas fa-image fa-3x" style="color: #F28241;"></i>
               <p class="mt-2 mb-0" style="font-size: 1rem;">Sin imagen</p>
             </div>
-            <button class="fav" type="button" aria-label="Favorito">♡</button>
+            <button class="btn-favorite" type="button" aria-label="Favorito">
+              <i class="fas fa-heart"></i>
+            </button>
           </div>
           <div class="card-body">
             <h5 class="card-title mb-2">Receta 2</h5>
@@ -397,12 +468,14 @@ Cocina con gusto con ingredientes simples, comparte experiencias culinarias úni
 
       <div class="col-md-6 col-lg-4 mb-4">
         <div class="card h-100 recipe-card">
-          <div class="image-wrapper" style="height: 200px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; border-top-left-radius: 12px; border-top-right-radius: 12px; position: relative; overflow: hidden;">
+          <div class="image-wrapper">
             <div class="text-center">
               <i class="fas fa-image fa-3x" style="color: #F28241;"></i>
               <p class="mt-2 mb-0" style="font-size: 1rem;">Sin imagen</p>
             </div>
-            <button class="fav" type="button" aria-label="Favorito">♡</button>
+            <button class="btn-favorite" type="button" aria-label="Favorito">
+              <i class="fas fa-heart"></i>
+            </button>
           </div>
           <div class="card-body">
             <h5 class="card-title mb-2">Receta 3</h5>
@@ -420,12 +493,14 @@ Cocina con gusto con ingredientes simples, comparte experiencias culinarias úni
 
       <div class="col-md-6 col-lg-4 mb-4">
         <div class="card h-100 recipe-card">
-          <div class="image-wrapper" style="height: 200px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; border-top-left-radius: 12px; border-top-right-radius: 12px; position: relative; overflow: hidden;">
+          <div class="image-wrapper">
             <div class="text-center">
               <i class="fas fa-image fa-3x" style="color: #F28241;"></i>
               <p class="mt-2 mb-0" style="font-size: 1rem;">Sin imagen</p>
             </div>
-            <button class="fav" type="button" aria-label="Favorito">♡</button>
+            <button class="btn-favorite" type="button" aria-label="Favorito">
+              <i class="fas fa-heart"></i>
+            </button>
           </div>
           <div class="card-body">
             <h5 class="card-title mb-2">Receta 4</h5>
@@ -443,12 +518,14 @@ Cocina con gusto con ingredientes simples, comparte experiencias culinarias úni
 
       <div class="col-md-6 col-lg-4 mb-4">
         <div class="card h-100 recipe-card">
-          <div class="image-wrapper" style="height: 200px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; border-top-left-radius: 12px; border-top-right-radius: 12px; position: relative; overflow: hidden;">
+          <div class="image-wrapper">
             <div class="text-center">
               <i class="fas fa-image fa-3x" style="color: #F28241;"></i>
               <p class="mt-2 mb-0" style="font-size: 1rem;">Sin imagen</p>
             </div>
-            <button class="fav" type="button" aria-label="Favorito">♡</button>
+            <button class="btn-favorite" type="button" aria-label="Favorito">
+              <i class="fas fa-heart"></i>
+            </button>
           </div>
           <div class="card-body">
             <h5 class="card-title mb-2">Receta 5</h5>
@@ -490,11 +567,20 @@ Cocina con gusto con ingredientes simples, comparte experiencias culinarias úni
     <!-- Grid recetas -->
     <div class="row g-4">
       <div class="col-md-3">
-        <div class="recipe-card">
-          <div class="fav">♡</div>
-          <div class="img-placeholder"></div>
-          <h6>Receta</h6>
-          <div class="card-footer">
+        <div class="card h-100 recipe-card">
+          <div class="image-wrapper">
+            <div class="text-center">
+              <i class="fas fa-image fa-3x" style="color: #F28241;"></i>
+              <p class="mt-2 mb-0" style="font-size: 1rem;">Sin imagen</p>
+            </div>
+            <button class="btn-favorite" type="button" aria-label="Favorito">
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title mb-2">Receta</h6>
+          </div>
+          <div class="card-footer bg-white border-top-0 text-center">
             <span>★★★★★</span>
           </div>
         </div>
@@ -516,6 +602,7 @@ Cocina con gusto con ingredientes simples, comparte experiencias culinarias úni
                 </div>
             </div>
         </div>
+    </div>
 @stop
 
 @section('js')

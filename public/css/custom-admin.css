@@ -1,0 +1,495 @@
+:root {
+    --primary: #F28241;
+    --secondary: #D9D9D9;
+    --danger: #d64545;
+    --text-dark: #2f2f2f;
+    --text-soft: #7a7a7a;
+    --bg-light: #fff9f4;
+    --bg-soft: #f7f9fc;
+    --radius-pill: 999px;
+    --radius-md: 6px;
+    --navbar-y-pad: 0.35rem;
+    --navbar-x-pad: 1rem;
+    --sidebar-collapsed-width: 86px;
+    --sidebar-expanded-width: 250px;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6,
+p, a, span, small, li,
+label, input, textarea, button {
+    font-size: 1rem !important;
+}
+
+input, select, textarea, button,
+.btn, .form-control, .form-control-navbar, .form-control-sidebar {
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
+}
+
+/* ===============================
+   AdminLTE (Navbar + Sidebar)
+================================ */
+
+/* Main Header */
+.main-header.navbar {
+    background-color: var(--bg-light) !important;
+    border-bottom: 1px solid #f1c29c !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
+    min-height: auto !important;
+    height: auto !important;
+    padding-left: var(--navbar-x-pad) !important;
+    padding-right: var(--navbar-x-pad) !important;
+    padding-top: var(--navbar-y-pad) !important;
+    padding-bottom: var(--navbar-y-pad) !important;
+    display: flex !important;
+    align-items: center !important;
+    position: relative;
+}
+
+.main-header.navbar .nav-link {
+    color: var(--text-dark) !important;
+    font-size: 1rem;
+    height: auto !important;
+    line-height: 1.1 !important;
+    padding-top: var(--navbar-y-pad) !important;
+    padding-bottom: var(--navbar-y-pad) !important;
+}
+
+.main-header.navbar .nav-link:hover,
+.main-header.navbar .nav-link:focus {
+    color: var(--primary) !important;
+}
+
+.main-header .nav-link[data-widget="pushmenu"] {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.45rem;
+}
+
+.main-header .nav-link[data-widget="pushmenu"] .navbar-toggle-menu-text {
+    display: inline;
+    font-size: 1rem;
+    line-height: 1;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.main-header.navbar .navbar-foodly-brand {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.45rem;
+    font-weight: 700;
+    color: var(--primary) !important;
+    margin-right: 0.35rem;
+}
+
+.main-header.navbar .navbar-foodly-logo {
+    height: 28px;
+    width: auto;
+    display: block;
+}
+
+.main-header.navbar .navbar-foodly-text {
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.main-header.navbar .navbar-nav > .nav-item,
+.main-header.navbar .navbar-nav > .nav-item > .nav-link {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.main-header .dropdown-toggle::after {
+    display: none !important;
+}
+
+/* Sidebar Brand */
+.main-sidebar .brand-link,
+.main-sidebar .brand-link:hover {
+    background-color: #ffffff !important;
+}
+
+.main-sidebar .brand-link {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 0.5rem;
+    line-height: 1;
+    height: auto !important;
+    min-height: 44px !important;
+    padding: 0.35rem 12px !important;
+}
+
+.brand-image {
+    height: 30px !important;
+    width: auto !important;
+    border-radius: 0 !important;
+    float: none !important;
+    margin: 0 !important;
+    max-height: none !important;
+    display: block !important;
+}
+
+.main-sidebar .brand-text {
+    color: #ffffff !important;
+    font-size: 20px;
+}
+
+/* Ocultar por completo la marca del sidebar (dejar solo navbar) */
+.main-sidebar .brand-link,
+.main-sidebar .brand-link:hover,
+body.sidebar-open .main-sidebar .brand-link,
+body.sidebar-collapse .main-sidebar .brand-link {
+    display: none !important;
+}
+
+.main-sidebar .brand-image,
+.main-sidebar .brand-text {
+    display: none !important;
+}
+
+/* Sidebar */
+.main-sidebar {
+    background-color: transparent !important;
+    color: var(--text-dark) !important;
+    position: fixed !important;
+    top: 50px !important;
+    left: 10px !important;
+    width: var(--sidebar-collapsed-width) !important;
+    min-height: 0 !important;
+    height: auto !important;
+    box-shadow: none !important;
+    transform: translateY(-10px) !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transition: opacity .18s ease, transform .18s ease, width .2s ease !important;
+    z-index: 1040 !important;
+}
+
+.main-sidebar .sidebar {
+    background-color: #ffd4b1 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 12px;
+    padding-left: 0;
+    padding-right: 0;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+@media (max-width: 991.98px) {
+    .main-sidebar {
+        top: 50px !important;
+    }
+}
+
+/* Mostrar menú solo al activar el botón de 3 líneas */
+body.sidebar-collapse .main-sidebar,
+body.sidebar-open .main-sidebar {
+    transform: translateY(0) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+/* Al pasar el mouse (o foco), el menu crece a su ancho completo */
+body.sidebar-collapse .main-sidebar:hover,
+body.sidebar-open .main-sidebar:hover,
+body.sidebar-collapse .main-sidebar:focus-within,
+body.sidebar-open .main-sidebar:focus-within {
+    width: var(--sidebar-expanded-width) !important;
+}
+
+/* Sin columna lateral fija */
+.main-header,
+.content-wrapper,
+.main-footer,
+.control-sidebar,
+.main-sidebar,
+.main-sidebar::before {
+    margin-left: 0 !important;
+}
+
+/* Evitar desplazamiento del layout al abrir/cerrar menú */
+body:not(.layout-top-nav) .main-header,
+body:not(.layout-top-nav) .content-wrapper,
+body:not(.layout-top-nav) .main-footer,
+body.sidebar-open .main-header,
+body.sidebar-open .content-wrapper,
+body.sidebar-open .main-footer,
+body.sidebar-collapse .main-header,
+body.sidebar-collapse .content-wrapper,
+body.sidebar-collapse .main-footer,
+body.sidebar-is-opening .main-header,
+body.sidebar-is-opening .content-wrapper,
+body.sidebar-is-opening .main-footer {
+    margin-left: 0 !important;
+    transition: none !important;
+}
+
+body:not(.layout-top-nav) .main-header {
+    left: 0 !important;
+    width: 100% !important;
+}
+
+/* Anti-hueco: anular reglas desktop de AdminLTE (sidebar-mini) */
+@media (min-width: 768px) {
+    body:not(.layout-top-nav) .wrapper .main-header,
+    body:not(.layout-top-nav) .wrapper .content-wrapper,
+    body:not(.layout-top-nav) .wrapper .main-footer,
+    body.sidebar-open .wrapper .main-header,
+    body.sidebar-open .wrapper .content-wrapper,
+    body.sidebar-open .wrapper .main-footer,
+    body.sidebar-collapse .wrapper .main-header,
+    body.sidebar-collapse .wrapper .content-wrapper,
+    body.sidebar-collapse .wrapper .main-footer,
+    body.sidebar-is-opening .wrapper .main-header,
+    body.sidebar-is-opening .wrapper .content-wrapper,
+    body.sidebar-is-opening .wrapper .main-footer,
+    body.sidebar-mini-md .wrapper .main-header,
+    body.sidebar-mini-md .wrapper .content-wrapper,
+    body.sidebar-mini-md .wrapper .main-footer,
+    body.sidebar-mini-xs .wrapper .main-header,
+    body.sidebar-mini-xs .wrapper .content-wrapper,
+    body.sidebar-mini-xs .wrapper .main-footer {
+        margin-left: 0 !important;
+    }
+
+    body:not(.layout-top-nav) .wrapper .main-header {
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+    }
+}
+
+/* Logo completo en el menú desplegado */
+body.sidebar-collapse .main-sidebar .brand-link,
+body.sidebar-open .main-sidebar .brand-link {
+    white-space: nowrap !important;
+    overflow: visible !important;
+}
+
+body.sidebar-collapse .main-sidebar .brand-text,
+body.sidebar-open .main-sidebar .brand-text {
+    display: inline !important;
+    max-width: none !important;
+}
+
+.main-sidebar .nav-header {
+    color: var(--text-dark);
+    font-weight: 600;
+    font-size: 13px;
+    padding: 12px 16px;
+}
+
+/* Sidebar Nav Links */
+.nav-sidebar .nav-link {
+    color: var(--text-dark) !important;
+    font-size: 0.93rem !important;
+    line-height: 1.25 !important;
+    padding: 0.45rem 0.6rem !important;
+    border-radius: 8px;
+    margin: 3px 10px;
+}
+
+.nav-sidebar .nav-link .nav-icon {
+    font-size: 0.95rem !important;
+    margin-right: calc(0.45rem + 6px) !important;
+}
+
+/* Estado compacto: solo iconos */
+body.sidebar-collapse .main-sidebar .nav-sidebar .nav-link,
+body.sidebar-open .main-sidebar .nav-sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+body.sidebar-collapse .main-sidebar .nav-sidebar .nav-link .nav-icon,
+body.sidebar-open .main-sidebar .nav-sidebar .nav-link .nav-icon {
+    margin-right: 0 !important;
+}
+
+body.sidebar-collapse .main-sidebar .nav-sidebar .nav-link p,
+body.sidebar-open .main-sidebar .nav-sidebar .nav-link p,
+body.sidebar-collapse .main-sidebar .nav-sidebar .nav-treeview,
+body.sidebar-open .main-sidebar .nav-sidebar .nav-treeview,
+body.sidebar-collapse .main-sidebar .nav-header,
+body.sidebar-open .main-sidebar .nav-header {
+    display: none !important;
+}
+
+/* Estado expandido: texto y espaciado normal */
+body.sidebar-collapse .main-sidebar:hover .nav-sidebar .nav-link,
+body.sidebar-open .main-sidebar:hover .nav-sidebar .nav-link,
+body.sidebar-collapse .main-sidebar:focus-within .nav-sidebar .nav-link,
+body.sidebar-open .main-sidebar:focus-within .nav-sidebar .nav-link {
+    justify-content: flex-start;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+body.sidebar-collapse .main-sidebar:hover .nav-sidebar .nav-link .nav-icon,
+body.sidebar-open .main-sidebar:hover .nav-sidebar .nav-link .nav-icon,
+body.sidebar-collapse .main-sidebar:focus-within .nav-sidebar .nav-link .nav-icon,
+body.sidebar-open .main-sidebar:focus-within .nav-sidebar .nav-link .nav-icon {
+    margin-right: calc(0.45rem + 6px) !important;
+}
+
+/* Empujar texto un poco mas a la derecha al expandir */
+body.sidebar-collapse .main-sidebar:hover .nav-sidebar .nav-link p,
+body.sidebar-open .main-sidebar:hover .nav-sidebar .nav-link p,
+body.sidebar-collapse .main-sidebar:focus-within .nav-sidebar .nav-link p,
+body.sidebar-open .main-sidebar:focus-within .nav-sidebar .nav-link p {
+    margin-left: 4px !important;
+}
+
+body.sidebar-collapse .main-sidebar:hover .nav-sidebar .nav-link p,
+body.sidebar-open .main-sidebar:hover .nav-sidebar .nav-link p,
+body.sidebar-collapse .main-sidebar:focus-within .nav-sidebar .nav-link p,
+body.sidebar-open .main-sidebar:focus-within .nav-sidebar .nav-link p,
+body.sidebar-collapse .main-sidebar:hover .nav-sidebar .nav-treeview,
+body.sidebar-open .main-sidebar:hover .nav-sidebar .nav-treeview,
+body.sidebar-collapse .main-sidebar:focus-within .nav-sidebar .nav-treeview,
+body.sidebar-open .main-sidebar:focus-within .nav-sidebar .nav-treeview,
+body.sidebar-collapse .main-sidebar:hover .nav-header,
+body.sidebar-open .main-sidebar:hover .nav-header,
+body.sidebar-collapse .main-sidebar:focus-within .nav-header,
+body.sidebar-open .main-sidebar:focus-within .nav-header {
+    display: block !important;
+}
+
+.nav-sidebar .nav-link:hover,
+.nav-sidebar .nav-link.active {
+    color: var(--text-dark) !important;
+}
+
+.nav-sidebar .nav-link:hover {
+    background-color: #f5c09a !important;
+}
+
+.nav-sidebar .nav-link.active {
+    background-color: #f1b98e !important;
+    font-weight: 600;
+}
+
+/* Sidebar Search */
+.form-control-sidebar {
+    background-color: #ffffff !important;
+    color: var(--text-dark) !important;
+    border: 1px solid #e7b28a;
+}
+
+.form-control-sidebar::placeholder {
+    color: #999;
+}
+
+/* Content Area */
+.content {
+    padding: 40px;
+}
+
+.content-header {
+    margin-bottom: 1.5rem;
+}
+
+/* Search Form - Navbar */
+.navbar-search-always {
+    max-width: 700px;
+    flex: 1;
+}
+
+.main-header.navbar .navbar-search-always .search-form {
+    max-width: 700px;
+    width: 100%;
+    flex: 1;
+    gap: 0.4rem;
+    margin: 0;
+}
+
+.navbar-search-always .form-control-navbar {
+    width: 100% !important;
+    border-radius: var(--radius-pill);
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    border: 1px solid #e7b28a;
+    height: 35px;
+    padding-left: 1rem;
+}
+
+.main-header.navbar.navbar-light .navbar-search-always .form-control-navbar,
+.main-header.navbar.navbar-light .navbar-search-always .form-control-navbar:focus {
+    background-color: #ffffff !important;
+}
+
+.navbar-search-always .btn-navbar {
+    background-color: var(--secondary);
+    color: var(--text-dark);
+    border-radius: var(--radius-pill);
+    padding: var(--navbar-y-pad) 1.6rem;
+    border: none;
+}
+
+.navbar-search-always .btn-navbar,
+.navbar-search-always .btn-navbar:hover {
+    color: var(--text-dark);
+}
+
+.navbar-search-always .btn-navbar:hover {
+    background-color: color-mix(in srgb, var(--secondary) 85%, black);
+}
+
+.navbar-search-always .btn-search {
+    background-color: var(--secondary);
+    color: var(--text-dark);
+    border-radius: var(--radius-pill);
+    padding: var(--navbar-y-pad) 1.6rem;
+    border: none;
+}
+
+/* Centrar horizontalmente la barra como en el navbar de login */
+@media (min-width: 992px) {
+    .main-header.navbar .navbar-nav:first-child {
+        flex: 1 1 auto;
+        display: flex;
+        align-items: center;
+    }
+
+    .main-header.navbar .navbar-nav:first-child > .navbar-search-always {
+        flex: 1 1 700px;
+        width: 100%;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .navbar-search-always {
+        max-width: 100%;
+    }
+
+    .main-header.navbar .navbar-search-always .search-form {
+        display: none !important;
+    }
+}
+
+/* Navbar Items Alignment */
+.main-header .navbar-nav {
+    align-items: center !important;
+}

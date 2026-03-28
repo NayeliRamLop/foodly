@@ -8,26 +8,132 @@ use App\Models\Categories;
 use App\Models\Subcategory;
 use App\Models\RecipeRating;
 use App\Models\RecipeComment;
+use App\Notifications\RecipeCommentedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class RecipeController extends Controller
 {
+    private function getRecipeFilterOptions(): array
+    {
+        return [
+            'brand' => $this->getAvailableBrands()->all(),
+            'dish_type' => ['Desayuno', 'Comida', 'Cena', 'Entrada', 'Botana', 'Sopa', 'Ensalada', 'Bebida'],
+            'daily_category' => ['Rapidas', 'Economicas', 'Saludables', 'Faciles', 'Familiares'],
+            'special_occasion' => ['Cumpleanos', 'Navidad', 'Ano Nuevo', 'Fiestas patrias', 'San Valentin', 'Cuaresma'],
+            'baking_category' => ['Pasteles', 'Galletas', 'Pan dulce', 'Pan salado', 'Postres'],
+            'seasonality' => ['Primavera', 'Verano', 'Otono', 'Invierno', 'Todo el ano'],
+            'preparation_method' => ['Horno', 'Sarten', 'Parrilla', 'Sin coccion', 'Freidora de aire', 'Olla', 'Licuadora'],
+        ];
+    }
+
+    private function getOptionalRecipeColumns(): array
+    {
+        return [
+            'brand',
+            'dish_type',
+            'daily_category',
+            'special_occasion',
+            'baking_category',
+            'seasonality',
+            'preparation_method',
+        ];
+    }
+
+    private function appendRecipeOptionalData(array $recipeData, array $validated): array
+    {
+        foreach ($this->getOptionalRecipeColumns() as $column) {
+            if (Schema::hasColumn('recipes', $column)) {
+                $recipeData[$column] = $validated[$column] ?? null;
+            }
+        }
+
+        return $recipeData;
+    }
+
+    private function getAvailableBrands()
+    {
+        return collect([
+            'Nestle',
+            'Herdez',
+            'McCormick',
+            'Knorr',
+            'Maggi',
+            'La Costena',
+            'Gamesa',
+            'Lala',
+            'Philadelphia',
+            'Del Fuerte',
+            'Great Value',
+            'Otra',
+        ]);
+    }
+
     /**
      * Display a listing of recipes for public view
      */
-  public function index()
+public function index()
 {
+    $filterOptions = $this->getRecipeFilterOptions();
+    $selectedCategory = request('category_id');
+    $availableColumns = [
+        'brand' => Schema::hasColumn('recipes', 'brand'),
+        'dish_type' => Schema::hasColumn('recipes', 'dish_type'),
+        'daily_category' => Schema::hasColumn('recipes', 'daily_category'),
+        'special_occasion' => Schema::hasColumn('recipes', 'special_occasion'),
+        'baking_category' => Schema::hasColumn('recipes', 'baking_category'),
+        'seasonality' => Schema::hasColumn('recipes', 'seasonality'),
+        'preparation_method' => Schema::hasColumn('recipes', 'preparation_method'),
+    ];
+    $selectedFilters = [];
+    foreach ($availableColumns as $column => $exists) {
+        $selectedFilters[$column] = $exists ? trim((string) request($column, '')) : '';
+    }
+
     $recipes = Recipe::with(['category', 'subcategory', 'user'])
-                    ->where('status', 1) // Solo recetas activas (status = 1)
+                    ->where('status', 1)
+                    ->when($selectedCategory, function ($query) use ($selectedCategory) {
+                        $query->where('category_id', $selectedCategory);
+                    })
+                    ->when($selectedFilters['brand'] !== '', fn ($query) => $query->where('brand', $selectedFilters['brand']))
+                    ->when($selectedFilters['dish_type'] !== '', fn ($query) => $query->where('dish_type', $selectedFilters['dish_type']))
+                    ->when($selectedFilters['daily_category'] !== '', fn ($query) => $query->where('daily_category', $selectedFilters['daily_category']))
+                    ->when($selectedFilters['special_occasion'] !== '', fn ($query) => $query->where('special_occasion', $selectedFilters['special_occasion']))
+                    ->when($selectedFilters['baking_category'] !== '', fn ($query) => $query->where('baking_category', $selectedFilters['baking_category']))
+                    ->when($selectedFilters['seasonality'] !== '', fn ($query) => $query->where('seasonality', $selectedFilters['seasonality']))
+                    ->when($selectedFilters['preparation_method'] !== '', fn ($query) => $query->where('preparation_method', $selectedFilters['preparation_method']))
                     ->latest()
-                    ->paginate(10);
-    
+                    ->paginate(10)
+                    ->appends(array_merge(['category_id' => $selectedCategory], $selectedFilters));
+
     $categories = Categories::with('subcategories')->get();
-    
-    return view('recipes.index', compact('recipes', 'categories'));
+    $brands = $availableColumns['brand']
+        ? Recipe::query()
+            ->where('status', 1)
+            ->whereNotNull('brand')
+            ->where('brand', '!=', '')
+            ->distinct()
+            ->orderBy('brand')
+            ->pluck('brand')
+        : collect();
+    $brands = $this->getAvailableBrands()
+        ->merge($brands)
+        ->unique()
+        ->values();
+    $filterOptions['brand'] = $brands->all();
+
+    return view('recipes.index', [
+        'recipes' => $recipes,
+        'categories' => $categories,
+        'brands' => $brands,
+        'selectedCategory' => $selectedCategory,
+        'selectedBrand' => $selectedFilters['brand'],
+        'selectedFilters' => $selectedFilters,
+        'filterOptions' => $filterOptions,
+    ]);
 }
 
     /**
@@ -204,6 +310,10 @@ private function getAdminActionButtons($recipe)
                                         <option value="Difícil" '.($recipe->difficulty == 'Difícil' ? 'selected' : '').'>Difícil</option>
                                     </select>
                                 </div>
+                                <div class="form-group">
+                                    <label for="edit_brand'.$recipe->id.'" style="font-size: 1.1rem;">Marca</label>
+                                    <input type="text" class="form-control" id="edit_brand'.$recipe->id.'" name="brand" value="'.e($recipe->brand).'" style="font-size: 1.1rem;" placeholder="Ej. Nestle, McCormick, Herdez">
+                                </div>
                             </div>
                         </div>
                         
@@ -352,7 +462,10 @@ private function getAdminActionButtons($recipe)
     public function create()
     {
         $categories = Categories::with('subcategories')->get();
-        return view('recipes.create', compact('categories'));
+        $brands = $this->getAvailableBrands();
+        $filterOptions = $this->getRecipeFilterOptions();
+
+        return view('recipes.create', compact('categories', 'brands', 'filterOptions'));
     }
 
     /**
@@ -371,6 +484,13 @@ private function getAdminActionButtons($recipe)
                 'difficulty' => 'required|string|in:Fácil,Media,Difícil',
                 'category_id' => 'required|exists:categories,id',
                 'subcategory_id' => 'nullable|exists:subcategories,id,category_id,'.$request->category_id,
+                'brand' => 'nullable|string|max:255',
+                'dish_type' => 'nullable|string|max:255',
+                'daily_category' => 'nullable|string|max:255',
+                'special_occasion' => 'nullable|string|max:255',
+                'baking_category' => 'nullable|string|max:255',
+                'seasonality' => 'nullable|string|max:255',
+                'preparation_method' => 'nullable|string|max:255',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
                 'video' => 'nullable|mimes:mp4,mov,ogg,qt|max:20000',
                 'video_link' => 'nullable|url|max:2048',
@@ -389,6 +509,7 @@ private function getAdminActionButtons($recipe)
                 'category_id' => $validated['category_id'],
                 'status' => 1 // Activo por defecto
             ];
+            $recipeData = $this->appendRecipeOptionalData($recipeData, $validated);
 
             // Subcategory es opcional
             if (isset($validated['subcategory_id']) && $validated['subcategory_id']) {
@@ -477,6 +598,13 @@ private function getAdminActionButtons($recipe)
             ] : null,
             'category' => $recipe->category ? ['name' => $recipe->category->name] : null,
             'subcategory' => $recipe->subcategory ? ['name' => $recipe->subcategory->name] : null,
+            'brand' => $recipe->brand,
+            'dish_type' => $recipe->dish_type,
+            'daily_category' => $recipe->daily_category,
+            'special_occasion' => $recipe->special_occasion,
+            'baking_category' => $recipe->baking_category,
+            'seasonality' => $recipe->seasonality,
+            'preparation_method' => $recipe->preparation_method,
             'comments' => $comments,
             'comment_rating_counts' => $commentRatingCounts,
             'avg_rating' => $avgRating,
@@ -489,7 +617,9 @@ private function getAdminActionButtons($recipe)
     public function edit(Recipe $recipe)
     {
         $categories = Categories::with('subcategories')->get();
-        return view('recipes.edit', compact('recipe', 'categories'));
+        $filterOptions = $this->getRecipeFilterOptions();
+
+        return view('recipes.edit', compact('recipe', 'categories', 'filterOptions'));
     }
 
     /**
@@ -508,6 +638,13 @@ private function getAdminActionButtons($recipe)
                 'difficulty' => 'required|string|in:Fácil,Media,Difícil',
                 'category_id' => 'required|exists:categories,id',
                 'subcategory_id' => 'nullable|exists:subcategories,id,category_id,'.$request->category_id,
+                'brand' => 'nullable|string|max:255',
+                'dish_type' => 'nullable|string|max:255',
+                'daily_category' => 'nullable|string|max:255',
+                'special_occasion' => 'nullable|string|max:255',
+                'baking_category' => 'nullable|string|max:255',
+                'seasonality' => 'nullable|string|max:255',
+                'preparation_method' => 'nullable|string|max:255',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
                 'video' => 'nullable|mimes:mp4,mov,ogg,qt|max:20000',
                 'video_link' => 'nullable|url|max:2048',
@@ -524,6 +661,7 @@ private function getAdminActionButtons($recipe)
                 'difficulty' => $validated['difficulty'],
                 'category_id' => $validated['category_id'],
             ];
+            $recipeData = $this->appendRecipeOptionalData($recipeData, $validated);
 
             // Agregar subcategory_id si existe
             if (isset($validated['subcategory_id'])) {
@@ -666,8 +804,10 @@ private function getAdminActionButtons($recipe)
                 ->paginate(10);
     
     $categories = Categories::with('subcategories')->get();
+    $brands = $this->getAvailableBrands();
+    $filterOptions = $this->getRecipeFilterOptions();
 
-    return view('recipes.mis-recetas', compact('recipes', 'categories'));
+    return view('recipes.mis-recetas', compact('recipes', 'categories', 'brands', 'filterOptions'));
 }
 
     /**
@@ -884,6 +1024,10 @@ public function toggleStatus($id)
                 'rating' => $validated['rating'],
             ]
         );
+
+        if ($recipe->user && $recipe->user->id !== Auth::id()) {
+            $recipe->user->notify(new RecipeCommentedNotification(Auth::user(), $recipe));
+        }
 
         return response()->json([
             'success' => true,

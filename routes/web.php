@@ -8,12 +8,15 @@
         AuthenticatedSessionController
     };
 use App\Http\Controllers\{
+    AdminAnalyticsController,
     UserController,
+    GuestRecipeAuthController,
     ProfileController,
     HomeController,
     CategoriesController,
     AssetController,
     GeneradorController,
+    NotificationController,
     RecipeController,
     FavoriteController,
     SearchController
@@ -24,7 +27,7 @@ Route::get('/', function () {
         return redirect()->route('home');
     }
 
-    return view('home');
+    return app(\App\Http\Controllers\HomeController::class)->landing();
 });
 
 Route::get('/recipes/search', [RecipeController::class, 'search'])->name('recipes.search');
@@ -56,6 +59,7 @@ Route::post('/perfil/{user}/follow', [ProfileController::class, 'toggleFollow'])
         // Registro sin login
         Route::get('user/create', [UserController::class, 'create'])->name('user.create');
         Route::post('user', [UserController::class, 'store'])->name('user.store');
+        Route::post('recipe-auth/register', [GuestRecipeAuthController::class, 'register'])->name('guest.recipe-auth.register');
     });
 
     // Logout
@@ -68,6 +72,12 @@ Route::middleware('auth')->group(function () {
     // Dashboard
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/search', [SearchController::class, 'index'])->name('search.global');
+    Route::middleware('can:user')->group(function () {
+        Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+        Route::get('/notifications/{notification}/open', [NotificationController::class, 'open'])->name('notifications.open');
+        Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
+        Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    });
 
         // Gestión de usuarios
         Route::prefix('users')->group(function () {
@@ -179,5 +189,7 @@ Route::middleware('auth')->group(function () {
              ->name('admin.recipes.index');
         Route::delete('/recipes/{recipe}', [\App\Http\Controllers\RecipeController::class, 'adminDelete'])
              ->name('admin.recipes.delete');
+        Route::get('/analytics', [AdminAnalyticsController::class, 'index'])
+             ->name('admin.analytics.index');
     });
     });

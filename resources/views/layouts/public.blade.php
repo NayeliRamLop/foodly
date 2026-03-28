@@ -11,7 +11,7 @@
     <!-- Tipografía -->
     <link href="https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-    <!-- CSS global -->
+    <link rel="stylesheet" href="{{ asset('css/app-theme.css') }}">
     <link rel="stylesheet" href="{{ asset('css/custom-public.css') }}">
 
     <style>
@@ -65,6 +65,10 @@
     @yield('content')
 </main>
 
+@guest
+    @include('partials.guest-recipe-auth-modal')
+@endguest
+
 <!-- ================= FOOTER OPCIONAL ================= -->
 <footer class="text-center py-4 text-muted small">
     © {{ date('Y') }} Cocina con Gusto · Todos los derechos reservados
@@ -106,7 +110,7 @@
             ? `<img src="${imageUrl}" alt="" class="suggest-thumb">`
             : `<div class="suggest-thumb placeholder"></div>`;
           return `
-            <button type="button" class="suggest-item" data-value="${item.recipe_title}">
+            <button type="button" class="suggest-item" data-value="${item.recipe_title}" data-id="${item.id}">
               ${imageHtml}
               <span class="suggest-text">${item.recipe_title}</span>
             </button>
@@ -142,10 +146,86 @@
       box.addEventListener('click', (event) => {
         const target = event.target.closest('.suggest-item');
         if (!target) return;
-        input.value = target.getAttribute('data-value') || '';
         render([]);
-        form.submit();
+        const recipeId = target.getAttribute('data-id');
+        if (!recipeId) return;
+        if (@json(auth()->check())) {
+          window.location.href = `{{ route('recipes.index') }}?open_recipe=${recipeId}`;
+          return;
+        }
+        if (window.openGuestRecipeAuthModal) {
+          window.openGuestRecipeAuthModal(`{{ route('home') }}?open_recipe=${recipeId}`);
+        }
       });
+    });
+  })();
+</script>
+
+@guest
+<script>
+  (function () {
+    const modalEl = document.getElementById('guestRecipeAuthModal');
+    if (!modalEl) return;
+
+    const redirectInputs = modalEl.querySelectorAll('.guest-redirect-input');
+    const returnInputs = modalEl.querySelectorAll('.guest-return-input');
+    const currentUrl = window.location.href;
+
+    const setModalTarget = (redirectUrl) => {
+      redirectInputs.forEach((input) => {
+        input.value = redirectUrl || `{{ route('home') }}`;
+      });
+
+      returnInputs.forEach((input) => {
+        input.value = currentUrl;
+      });
+    };
+
+    window.openGuestRecipeAuthModal = (redirectUrl) => {
+      setModalTarget(redirectUrl);
+      const instance = new bootstrap.Modal(modalEl);
+      instance.show();
+    };
+
+    document.addEventListener('click', (event) => {
+      const trigger = event.target.closest('.js-recipe-auth-trigger');
+      if (!trigger) return;
+
+      event.preventDefault();
+      window.openGuestRecipeAuthModal(trigger.getAttribute('data-redirect-url'));
+    });
+
+    if (@json(session('guest_recipe_open_modal', false)) || @json((bool) old('auth_modal_tab'))) {
+      setModalTarget(@json(old('redirect_to', session('guest_recipe_redirect_to', route('home')))));
+      const instance = new bootstrap.Modal(modalEl);
+      instance.show();
+    }
+  })();
+</script>
+@endguest
+
+<script>
+  (function () {
+    const hideModal = (modalEl) => {
+      if (!modalEl) return;
+
+      if (window.bootstrap && window.bootstrap.Modal) {
+        const instance = window.bootstrap.Modal.getInstance(modalEl) || new window.bootstrap.Modal(modalEl);
+        instance.hide();
+        return;
+      }
+
+      if (window.jQuery && typeof window.jQuery(modalEl).modal === 'function') {
+        window.jQuery(modalEl).modal('hide');
+      }
+    };
+
+    document.addEventListener('click', (event) => {
+      const closeButton = event.target.closest('.modal .close, .modal [data-dismiss="modal"], .modal [data-bs-dismiss="modal"]');
+      if (!closeButton) return;
+
+      event.preventDefault();
+      hideModal(closeButton.closest('.modal'));
     });
   })();
 </script>

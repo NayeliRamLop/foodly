@@ -7,6 +7,7 @@
   <!-- Incluir Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ asset('css/app-theme.css') }}">
   <link rel="stylesheet" href="{{ asset('css/custom-public.css') }}">
 
   <style>
@@ -45,6 +46,7 @@
     .typewriter-container {
       position: static;
       width: min(860px, 92vw);
+      min-height: 3.6em;
       height: auto;
       max-height: none;
       font-size: clamp(1.1rem, 1.35vw, 1.5rem);
@@ -350,6 +352,7 @@ Descubre, comparte y cocina con gusto.
   <script>
     const typewriterEl = document.getElementById('typewriter');
     const fullText = typewriterEl.textContent.trim();
+    typewriterEl.style.minHeight = `${typewriterEl.offsetHeight}px`;
     typewriterEl.textContent = '';
     
     let index = 0;
@@ -392,7 +395,7 @@ Descubre, comparte y cocina con gusto.
             ? `<img src="${imageUrl}" alt="" class="suggest-thumb">`
             : `<div class="suggest-thumb placeholder"></div>`;
           return `
-            <button type="button" class="suggest-item" data-value="${item.recipe_title}">
+            <button type="button" class="suggest-item" data-value="${item.recipe_title}" data-id="${item.id}">
               ${imageHtml}
               <span class="suggest-text">${item.recipe_title}</span>
             </button>
@@ -428,9 +431,10 @@ Descubre, comparte y cocina con gusto.
       box.addEventListener('click', (event) => {
         const target = event.target.closest('.suggest-item');
         if (!target) return;
-        input.value = target.getAttribute('data-value') || '';
         render([]);
-        form.submit();
+        const recipeId = target.getAttribute('data-id');
+        if (!recipeId) return;
+        window.location.href = "{{ route('login') }}";
       });
     })();
   </script>

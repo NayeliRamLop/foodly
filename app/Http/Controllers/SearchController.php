@@ -17,6 +17,8 @@ class SearchController extends Controller
 
         if ($query !== '') {
             $recipes = Recipe::with('user')
+                ->withCount(['favoritedBy', 'comments'])
+                ->withAvg('ratings', 'rating')
                 ->where('status', 1)
                 ->where(function ($builder) use ($query) {
                     $builder->where('recipe_title', 'like', "%{$query}%")
@@ -24,7 +26,11 @@ class SearchController extends Controller
                 })
                 ->latest()
                 ->take(12)
-                ->get();
+                ->get()
+                ->map(function ($recipe) {
+                    $recipe->avg_rating = round((float) ($recipe->ratings_avg_rating ?? 0), 1);
+                    return $recipe;
+                });
 
             $users = User::where('status', 1)
                 ->where(function ($builder) use ($query) {

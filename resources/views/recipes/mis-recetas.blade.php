@@ -270,6 +270,36 @@
                                         <option value="Difícil" {{ $recipe->difficulty == 'Difícil' ? 'selected' : '' }}>Difícil</option>
                                     </select>
                                 </div>
+                                <div class="form-group">
+                                    <label for="edit_brand{{ $recipe->id }}" style="font-size: 1.1rem;">Marca</label>
+                                    <input type="hidden" id="edit_brand{{ $recipe->id }}" name="brand" value="{{ $recipe->brand }}">
+                                    <div class="brand-chip-group" data-target="edit_brand{{ $recipe->id }}">
+                                        <button type="button" class="brand-chip {{ empty($recipe->brand) ? 'active' : '' }}" data-value="">Sin marca</button>
+                                        @foreach($brands as $brand)
+                                            <button type="button" class="brand-chip {{ $recipe->brand === $brand ? 'active' : '' }}" data-value="{{ $brand }}">
+                                                {{ $brand }}
+                                            </button>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                @foreach ([
+                                    'dish_type' => 'Tipo de platillo',
+                                    'daily_category' => 'Para todos los dias',
+                                    'special_occasion' => 'Ocasion especial',
+                                    'baking_category' => 'Reposteria y panaderia',
+                                    'seasonality' => 'Temporalidad',
+                                    'preparation_method' => 'Metodos de preparacion',
+                                ] as $field => $label)
+                                    <div class="form-group">
+                                        <label for="edit_{{ $field }}{{ $recipe->id }}" style="font-size: 1.1rem;">{{ $label }}</label>
+                                        <select class="form-control" id="edit_{{ $field }}{{ $recipe->id }}" name="{{ $field }}" style="font-size: 1.1rem;">
+                                            <option value="">Seleccione una opcion</option>
+                                            @foreach($filterOptions[$field] as $option)
+                                                <option value="{{ $option }}" {{ $recipe->{$field} === $option ? 'selected' : '' }}>{{ $option }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
 
@@ -439,6 +469,36 @@
                                     <option value="Difícil">Difícil</option>
                                 </select>
                             </div>
+                            <div class="form-group">
+                                <label for="brand" style="font-size: 1.1rem;">Marca</label>
+                                <input type="hidden" id="brand" name="brand" value="{{ old('brand') }}">
+                                <div class="brand-chip-group" data-target="brand">
+                                    <button type="button" class="brand-chip {{ empty(old('brand')) ? 'active' : '' }}" data-value="">Sin marca</button>
+                                    @foreach($brands as $brand)
+                                        <button type="button" class="brand-chip {{ old('brand') === $brand ? 'active' : '' }}" data-value="{{ $brand }}">
+                                            {{ $brand }}
+                                        </button>
+                                    @endforeach
+                                </div>
+                            </div>
+                            @foreach ([
+                                'dish_type' => 'Tipo de platillo',
+                                'daily_category' => 'Para todos los dias',
+                                'special_occasion' => 'Ocasion especial',
+                                'baking_category' => 'Reposteria y panaderia',
+                                'seasonality' => 'Temporalidad',
+                                'preparation_method' => 'Metodos de preparacion',
+                            ] as $field => $label)
+                                <div class="form-group">
+                                    <label for="{{ $field }}" style="font-size: 1.1rem;">{{ $label }}</label>
+                                    <select class="form-control" id="{{ $field }}" name="{{ $field }}" style="font-size: 1.1rem;">
+                                        <option value="">Seleccione una opcion</option>
+                                        @foreach($filterOptions[$field] as $option)
+                                            <option value="{{ $option }}" {{ old($field) === $option ? 'selected' : '' }}>{{ $option }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
 
@@ -560,6 +620,28 @@
     .view-recipe-btn:hover {
         background-color: #6a8cb6 !important;
     }
+    .brand-chip-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        margin-top: 0.5rem;
+    }
+    .brand-chip {
+        border: 1.5px solid #c2185b;
+        background: #fff;
+        color: #7a173f;
+        border-radius: 999px;
+        padding: 0.5rem 1rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+    .brand-chip:hover,
+    .brand-chip.active {
+        background: #c2185b;
+        color: #fff;
+        box-shadow: 0 6px 14px rgba(194, 24, 91, 0.18);
+    }
 </style>
 @stop
 
@@ -570,6 +652,16 @@
         $('.custom-file-input').on('change', function() {
             let fileName = $(this).val().split('\\').pop();
             $(this).next('.custom-file-label').addClass("selected").html(fileName);
+        });
+
+        $(document).on('click', '.brand-chip-group .brand-chip', function() {
+            const button = $(this);
+            const group = button.closest('.brand-chip-group');
+            const targetId = group.data('target');
+
+            group.find('.brand-chip').removeClass('active');
+            button.addClass('active');
+            $('#' + targetId).val(button.data('value'));
         });
 
         // Cargar subcategorías cuando cambia la categoría (para agregar)
@@ -606,6 +698,8 @@
             $(this).find('.custom-file-label').html('Seleccionar archivo...');
             $('.subcategory-option').hide();
             $('#subcategory_id').val('');
+            $(this).find('.brand-chip').removeClass('active');
+            $(this).find('.brand-chip[data-value=""]').addClass('active');
         });
 
         // Ocultar alerta de éxito

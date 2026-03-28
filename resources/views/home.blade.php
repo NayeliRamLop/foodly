@@ -60,6 +60,7 @@
         .typewriter-container {
             position: static;
           width: min(1100px, 86vw);
+            min-height: 3.4em;
             height: auto;
             max-height: none;
             font-size: 2.0rem;
@@ -416,130 +417,43 @@ Cocina con gusto con ingredientes simples, comparte experiencias culinarias úni
     <h5 class="mb-4 fw-bold">TOP 5 Recetas</h5>
 
     <div class="row recipes-page">
-      <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card h-100 recipe-card">
-          <div class="image-wrapper">
-            <div class="text-center">
-              <i class="fas fa-image fa-3x" style="color: #F28241;"></i>
-              <p class="mt-2 mb-0" style="font-size: 1rem;">Sin imagen</p>
+      @forelse($topRecipes as $recipe)
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card h-100 recipe-card">
+            <div class="image-wrapper">
+              @if($recipe->image)
+                <img src="{{ asset('storage/'.$recipe->image) }}" class="img-fluid" alt="{{ $recipe->recipe_title }}" style="max-height: 100%; max-width: 100%; object-fit: scale-down;">
+              @else
+                <div class="text-center">
+                  <i class="fas fa-image fa-3x" style="color: #F28241;"></i>
+                  <p class="mt-2 mb-0" style="font-size: 1rem;">Sin imagen</p>
+                </div>
+              @endif
             </div>
-            <button class="btn-favorite" type="button" aria-label="Favorito">
-              <i class="fas fa-heart"></i>
-            </button>
-          </div>
-          <div class="card-body">
-            <h5 class="card-title mb-2">Receta 1</h5>
-            <p class="card-text text-muted">Descripción breve de la receta destacada.</p>
-          </div>
-          <div class="card-footer bg-white border-top-0">
-            <div class="d-flex justify-content-center">
-              <button class="btn btn-sm view-recipe-btn" type="button">
-                <i class="fas fa-eye mr-1"></i> Ver
-              </button>
+            <div class="card-body">
+              <h5 class="card-title mb-2">{{ $recipe->recipe_title }}</h5>
+              <p class="card-text text-muted">{{ \Illuminate\Support\Str::limit($recipe->recipe_description, 90) }}</p>
+              <p class="card-text text-muted mb-0">
+                <small>{{ $recipe->favorited_by_count }} favoritos • {{ $recipe->comments_count }} comentarios • {{ number_format($recipe->avg_rating, 1) }}★</small>
+              </p>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card h-100 recipe-card">
-          <div class="image-wrapper">
-            <div class="text-center">
-              <i class="fas fa-image fa-3x" style="color: #F28241;"></i>
-              <p class="mt-2 mb-0" style="font-size: 1rem;">Sin imagen</p>
-            </div>
-            <button class="btn-favorite" type="button" aria-label="Favorito">
-              <i class="fas fa-heart"></i>
-            </button>
-          </div>
-          <div class="card-body">
-            <h5 class="card-title mb-2">Receta 2</h5>
-            <p class="card-text text-muted">Descripción breve de la receta destacada.</p>
-          </div>
-          <div class="card-footer bg-white border-top-0">
-            <div class="d-flex justify-content-center">
-              <button class="btn btn-sm view-recipe-btn" type="button">
-                <i class="fas fa-eye mr-1"></i> Ver
-              </button>
+            <div class="card-footer bg-white border-top-0">
+              <div class="d-flex justify-content-center">
+                <a class="btn btn-sm view-recipe-btn {{ auth()->check() ? '' : 'js-recipe-auth-trigger' }}"
+                   href="#"
+                   @auth data-recipe-id="{{ $recipe->id }}" @endauth
+                   @guest data-redirect-url="{{ route('home', ['open_recipe' => $recipe->id]) }}" @endguest>
+                  <i class="fas fa-eye mr-1"></i> Ver
+                </a>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card h-100 recipe-card">
-          <div class="image-wrapper">
-            <div class="text-center">
-              <i class="fas fa-image fa-3x" style="color: #F28241;"></i>
-              <p class="mt-2 mb-0" style="font-size: 1rem;">Sin imagen</p>
-            </div>
-            <button class="btn-favorite" type="button" aria-label="Favorito">
-              <i class="fas fa-heart"></i>
-            </button>
-          </div>
-          <div class="card-body">
-            <h5 class="card-title mb-2">Receta 3</h5>
-            <p class="card-text text-muted">Descripción breve de la receta destacada.</p>
-          </div>
-          <div class="card-footer bg-white border-top-0">
-            <div class="d-flex justify-content-center">
-              <button class="btn btn-sm view-recipe-btn" type="button">
-                <i class="fas fa-eye mr-1"></i> Ver
-              </button>
-            </div>
-          </div>
+      @empty
+        <div class="col-12 text-center text-muted">
+          No hay recetas disponibles todavía.
         </div>
-      </div>
-
-      <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card h-100 recipe-card">
-          <div class="image-wrapper">
-            <div class="text-center">
-              <i class="fas fa-image fa-3x" style="color: #F28241;"></i>
-              <p class="mt-2 mb-0" style="font-size: 1rem;">Sin imagen</p>
-            </div>
-            <button class="btn-favorite" type="button" aria-label="Favorito">
-              <i class="fas fa-heart"></i>
-            </button>
-          </div>
-          <div class="card-body">
-            <h5 class="card-title mb-2">Receta 4</h5>
-            <p class="card-text text-muted">Descripción breve de la receta destacada.</p>
-          </div>
-          <div class="card-footer bg-white border-top-0">
-            <div class="d-flex justify-content-center">
-              <button class="btn btn-sm view-recipe-btn" type="button">
-                <i class="fas fa-eye mr-1"></i> Ver
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card h-100 recipe-card">
-          <div class="image-wrapper">
-            <div class="text-center">
-              <i class="fas fa-image fa-3x" style="color: #F28241;"></i>
-              <p class="mt-2 mb-0" style="font-size: 1rem;">Sin imagen</p>
-            </div>
-            <button class="btn-favorite" type="button" aria-label="Favorito">
-              <i class="fas fa-heart"></i>
-            </button>
-          </div>
-          <div class="card-body">
-            <h5 class="card-title mb-2">Receta 5</h5>
-            <p class="card-text text-muted">Descripción breve de la receta destacada.</p>
-          </div>
-          <div class="card-footer bg-white border-top-0">
-            <div class="d-flex justify-content-center">
-              <button class="btn btn-sm view-recipe-btn" type="button">
-                <i class="fas fa-eye mr-1"></i> Ver
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      @endforelse
     </div>
   </div>
 </section>
@@ -549,43 +463,55 @@ Cocina con gusto con ingredientes simples, comparte experiencias culinarias úni
     <h2 class="text-center mb-4">Lo más popular</h2>
 
     <!-- Tabs -->
-    <ul class="nav nav-tabs justify-content-center mb-4">
-      <li class="nav-item">
-        <a class="nav-link active" href="#">Regional</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Ingredientes</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Marcas de productos</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Tipos de recetas</a>
-      </li>
+    <ul class="nav nav-tabs justify-content-center mb-4" role="tablist">
+      @foreach($popularSections as $title => $sectionRecipes)
+        <li class="nav-item">
+          <a class="nav-link {{ $loop->first ? 'active' : '' }}" data-bs-toggle="tab" href="#popular-{{ $loop->index }}" role="tab">
+            {{ $title }}
+          </a>
+        </li>
+      @endforeach
     </ul>
 
-    <!-- Grid recetas -->
-    <div class="row g-4">
-      <div class="col-md-3">
-        <div class="card h-100 recipe-card">
-          <div class="image-wrapper">
-            <div class="text-center">
-              <i class="fas fa-image fa-3x" style="color: #F28241;"></i>
-              <p class="mt-2 mb-0" style="font-size: 1rem;">Sin imagen</p>
-            </div>
-            <button class="btn-favorite" type="button" aria-label="Favorito">
-              <i class="fas fa-heart"></i>
-            </button>
-          </div>
-          <div class="card-body">
-            <h6 class="card-title mb-2">Receta</h6>
-          </div>
-          <div class="card-footer bg-white border-top-0 text-center">
-            <span>★★★★★</span>
+    <div class="tab-content">
+      @foreach($popularSections as $title => $sectionRecipes)
+        <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="popular-{{ $loop->index }}" role="tabpanel">
+          <div class="row g-4">
+            @forelse($sectionRecipes as $recipe)
+              <div class="col-md-6 col-lg-3">
+                <div class="card h-100 recipe-card">
+                  <div class="image-wrapper">
+                    @if($recipe->image)
+                      <img src="{{ asset('storage/'.$recipe->image) }}" class="img-fluid" alt="{{ $recipe->recipe_title }}" style="max-height: 100%; max-width: 100%; object-fit: scale-down;">
+                    @else
+                      <div class="text-center">
+                        <i class="fas fa-image fa-3x" style="color: #F28241;"></i>
+                        <p class="mt-2 mb-0" style="font-size: 1rem;">Sin imagen</p>
+                      </div>
+                    @endif
+                  </div>
+                  <div class="card-body">
+                    <h6 class="card-title mb-2">{{ \Illuminate\Support\Str::limit($recipe->recipe_title, 40) }}</h6>
+                    <p class="card-text text-muted mb-0">{{ number_format($recipe->avg_rating, 1) }}★ • {{ $recipe->favorited_by_count }} favoritos</p>
+                  </div>
+                  <div class="card-footer bg-white border-top-0 text-center">
+                    <a class="btn btn-sm view-recipe-btn {{ auth()->check() ? '' : 'js-recipe-auth-trigger' }}"
+                       href="#"
+                       @auth data-recipe-id="{{ $recipe->id }}" @endauth
+                       @guest data-redirect-url="{{ route('home', ['open_recipe' => $recipe->id]) }}" @endguest>
+                      Ver
+                    </a>
+                  </div>
+                </div>
+              </div>
+            @empty
+              <div class="col-12 text-center text-muted">
+                No hay recetas para esta sección.
+              </div>
+            @endforelse
           </div>
         </div>
-      </div>
-
+      @endforeach
     </div>
   </div>
 </section>
@@ -603,12 +529,40 @@ Cocina con gusto con ingredientes simples, comparte experiencias culinarias úni
             </div>
         </div>
     </div>
+
+    @auth
+    <div class="modal fade" id="homeRecipeModal" tabindex="-1" role="dialog" aria-labelledby="homeRecipeModalLabel">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="homeRecipeModalLabel">
+                        <i class="fas fa-utensils mr-2"></i> Receta Completa
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="homeRecipeModalBody">
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="sr-only">Cargando...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endauth
 @stop
 
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const initialRecipeId = Number(@json(request('open_recipe')));
             // Inicializar carrusel
             var myCarousel = new bootstrap.Carousel(document.getElementById('homeCarousel'), {
                 interval: 5000,
@@ -619,19 +573,158 @@ Cocina con gusto con ingredientes simples, comparte experiencias culinarias úni
             const typewriterEl = document.getElementById('typewriter');
             if (typewriterEl) {
                 const fullText = typewriterEl.textContent.trim();
-                typewriterEl.textContent = '';
+                typewriterEl.style.minHeight = `${typewriterEl.offsetHeight}px`;
+                const typeWriter = function () {
+                    typewriterEl.textContent = '';
 
-                let index = 0;
-                function typeWriter() {
-                    if (index < fullText.length) {
-                        typewriterEl.textContent += fullText[index];
-                        index++;
-                        setTimeout(typeWriter, 50); // 50ms entre cada letra
-                    }
-                }
+                    let index = 0;
+                    const writeNext = function () {
+                        if (index < fullText.length) {
+                            typewriterEl.textContent += fullText[index];
+                            index++;
+                            setTimeout(writeNext, 50);
+                            return;
+                        }
+
+                        setTimeout(typeWriter, 1400);
+                    };
+
+                    writeNext();
+                };
 
                 typeWriter();
             }
+
+            @auth
+            const modalElement = document.getElementById('homeRecipeModal');
+            const modalBody = document.getElementById('homeRecipeModalBody');
+            const modalTitle = document.getElementById('homeRecipeModalLabel');
+            const profileBaseUrl = "{{ url('/perfil') }}";
+
+            const renderRecipeModal = function (response) {
+                let modalContent = `
+                    <div class="recipe-modal-media mb-4 text-center">
+                        ${response.image ?
+                            `<img src="/storage/${response.image}" class="img-fluid rounded" alt="${response.recipe_title}" style="max-height: 380px; width: 100%; object-fit: contain;">` :
+                            `<div class="text-center py-4" style="background-color: #f8f9fa; border-radius: 8px;">
+                                <i class="fas fa-image fa-5x" style="color: #F28241;"></i>
+                                <p class="mt-2">Sin imagen</p>
+                            </div>`
+                        }
+                    </div>
+                    <h3 class="recipe-modal-title">${response.recipe_title}</h3>
+                    <div class="recipe-section">
+                        <p>${response.recipe_description}</p>
+                        <div class="d-flex justify-content-between align-items-center flex-wrap">
+                            <div class="text-muted small mb-2">
+                                <i class="fas fa-user-circle mr-1"></i>
+                                Creado por:
+                                ${response.user ? `<a href="${profileBaseUrl}/${response.user.id}" class="text-decoration-none">${response.user.name} ${response.user.last_name || ''}</a>` : 'Administrador'}
+                            </div>
+                            <div class="mb-2">
+                                <span class="badge badge-pill mr-2" style="background-color: #5cb85c;">
+                                    <i class="fas fa-clock"></i> ${response.preparation_time} min
+                                </span>
+                                <span class="badge badge-pill" style="background-color: #6c757d;">
+                                    <i class="fas fa-utensil-spoon"></i> ${response.difficulty}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-4 flex-wrap">
+                        <span class="badge badge-pill mr-2 mb-2" style="background-color: #F28241;">
+                            <i class="fas fa-tag"></i> ${response.category ? response.category.name : 'Sin categoria'}
+                        </span>
+                        ${response.subcategory ? `<span class="badge badge-pill badge-light mb-2"><i class="fas fa-tags"></i> ${response.subcategory.name}</span>` : ''}
+                    </div>`;
+
+                if (response.ingredients) {
+                    modalContent += `<div class="recipe-section"><h5 class="recipe-section-title"><i class="fas fa-list-ul mr-1"></i> Ingredientes</h5><ul class="pl-3">`;
+                    response.ingredients.split('\n').forEach((ingredient) => {
+                        if (ingredient.trim() !== '') {
+                            modalContent += `<li>${ingredient}</li>`;
+                        }
+                    });
+                    modalContent += `</ul></div>`;
+                }
+
+                if (response.instructions) {
+                    modalContent += `<div class="recipe-section"><h5 class="recipe-section-title"><i class="fas fa-list-ol mr-1"></i> Preparacion</h5><ol class="pl-3">`;
+                    response.instructions.split('\n').forEach((step) => {
+                        if (step.trim() !== '') {
+                            modalContent += `<li>${step}</li>`;
+                        }
+                    });
+                    modalContent += `</ol></div>`;
+                }
+
+                if (response.comments && response.comments.length) {
+                    modalContent += `<div class="recipe-section"><h5 class="recipe-section-title"><i class="fas fa-comments mr-1"></i> Comentarios</h5>`;
+                    response.comments.forEach((comment) => {
+                        modalContent += `
+                            <div class="comment-item mb-3">
+                                <div class="d-flex justify-content-between flex-wrap">
+                                    <strong>${comment.user}</strong>
+                                    <span class="text-muted small">${comment.created_at}</span>
+                                </div>
+                                <div>${'★'.repeat(comment.rating)}${'☆'.repeat(5 - comment.rating)}</div>
+                                <div>${comment.comment}</div>
+                            </div>`;
+                    });
+                    modalContent += `</div>`;
+                }
+
+                modalBody.innerHTML = modalContent;
+                modalTitle.innerHTML = `<i class="fas fa-utensils mr-2"></i> ${response.recipe_title}`;
+            };
+
+            document.querySelectorAll('.view-recipe-btn[data-recipe-id]').forEach((button) => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
+
+                    const recipeId = this.getAttribute('data-recipe-id');
+                    const recipeUrl = "{{ route('recipes.show', ':id') }}".replace(':id', recipeId);
+
+                    modalBody.innerHTML = `
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="sr-only">Cargando...</span>
+                            </div>
+                            <p class="mt-2">Cargando receta...</p>
+                        </div>
+                    `;
+
+                    $('#homeRecipeModal').modal('show');
+
+                    fetch(recipeUrl, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').getAttribute('content') : ''
+                        }
+                    })
+                        .then((response) => response.json())
+                        .then((data) => renderRecipeModal(data))
+                        .catch(() => {
+                            modalBody.innerHTML = `
+                                <div class="alert alert-danger mb-0">
+                                    No se pudo cargar la receta.
+                                </div>
+                            `;
+                        });
+                });
+            });
+
+            if (modalElement) {
+                $('#homeRecipeModal').on('hidden.bs.modal', function () {
+                    modalBody.innerHTML = '';
+                });
+            }
+
+            if (initialRecipeId) {
+                loadRecipeById(initialRecipeId);
+                $('#homeRecipeModal').modal('show');
+            }
+            @endauth
         });
     </script>
 @stop

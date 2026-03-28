@@ -18,25 +18,69 @@ class HomeController extends Controller
      */
  public function __construct()
 {
-    $this->middleware('auth');
+    $this->middleware('auth')->only('index');
 }
     /**
      * Show the application dashboard.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+public function landing()
+{
+    return view('home', $this->buildHomeViewData());
+}
+
 public function index()
 {
-    $categories = Categories::with('subcategories')->get();
     $user = Auth::user();
-    $recipes = $this->getRecommendedRecipes($user);
 
-    return view('home', [
-        'categories' => $categories,
-        'recipes' => $recipes,
-        'nombreMostrar' => $this->getShortName($user->name)
-    ]);
+    return view('home', array_merge(
+        $this->buildHomeViewData(),
+        [
+            'recipes' => $this->getRecommendedRecipes($user),
+            'nombreMostrar' => $this->getShortName($user->name),
+        ]
+    ));
 }
+
+    private function buildHomeViewData(): array
+    {
+        $categories = Categories::with('subcategories')->get();
+        $popularRecipes = $this->getPopularRecipes();
+
+        return [
+            'categories' => $categories,
+            'topRecipes' => $popularRecipes->take(5),
+            'popularSections' => [
+                'Mas guardadas' => $popularRecipes->sortByDesc('favorited_by_count')->take(4)->values(),
+                'Mas comentadas' => $popularRecipes->sortByDesc('comments_count')->take(4)->values(),
+                'Mejor calificadas' => $popularRecipes->sortByDesc('avg_rating')->take(4)->values(),
+                'Recientes' => $popularRecipes->sortByDesc('created_at')->take(4)->values(),
+            ],
+        ];
+    }
+
+    private function getPopularRecipes()
+    {
+        return Recipe::query()
+            ->where('status', 1)
+            ->with(['category', 'subcategory', 'user'])
+            ->withCount(['favoritedBy', 'comments', 'ratings'])
+            ->withAvg('ratings', 'rating')
+            ->latest()
+            ->get()
+            ->map(function ($recipe) {
+                $recipe->avg_rating = round((float) ($recipe->ratings_avg_rating ?? 0), 1);
+                $recipe->popularity_score = ($recipe->favorited_by_count * 3)
+                    + ($recipe->comments_count * 2)
+                    + $recipe->ratings_count
+                    + $recipe->avg_rating;
+
+                return $recipe;
+            })
+            ->sortByDesc('popularity_score')
+            ->values();
+    }
 
     /**
      * Obtiene recetas recomendadas para el usuario

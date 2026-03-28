@@ -160,7 +160,7 @@ return [
     'use_route_url' => false,
     'dashboard_url' => 'home',
     'logout_url' => 'logout',
-    'login_url' => 'http://localhost:8000/login',
+    'login_url' => 'login',
     'register_url' => 'register',
     'password_reset_url' => 'reset',
     'password_email_url' => 'password/email',
@@ -184,6 +184,7 @@ return [
     'menu' => [
         // Navbar items:
         [
+            'key' => 'topnav_profile',
             'text' => 'Mi perfil',
             'route' => 'user.perfil',
             'icon' => 'fas fa-fw fa-user',
@@ -211,7 +212,7 @@ return [
             'route' => 'recipes.para-ti',
             'icon' => 'fas fa-fw fa-video'
         ],
-        
+
         // Menús de administración (solo para admin)
         [
             'header' => 'Administración',
@@ -229,8 +230,14 @@ return [
             'can' => 'admin',
             'route' => 'admin.recipes.index',
         ],
-        
-        
+        [
+            'text' => 'Analitica',
+            'icon' => 'fas fa-fw fa-chart-pie',
+            'can' => 'admin',
+            'route' => 'admin.analytics.index',
+        ],
+
+
     ],
 
     /*
@@ -297,6 +304,11 @@ return [
         'CustomCSS' => [
             'active' => true,
             'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'css/app-theme.css',
+                ],
                 [
                     'type' => 'css',
                     'asset' => true,

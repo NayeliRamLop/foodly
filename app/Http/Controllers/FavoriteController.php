@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\RecipeLikedNotification;
 use App\Models\Recipe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,11 +36,18 @@ class FavoriteController extends Controller
             return response()->json(['error' => 'Unauthenticated'], 401);
         }
 
-        Auth::user()->favorites()->toggle($recipe->id);
+        $user = Auth::user();
+        $wasFavorite = $user->favorites()->where('recipe_id', $recipe->id)->exists();
+        $user->favorites()->toggle($recipe->id);
+        $isFavorite = $user->favorites()->where('recipe_id', $recipe->id)->exists();
+
+        if (!$wasFavorite && $isFavorite && $recipe->user && $recipe->user->id !== $user->id) {
+            $recipe->user->notify(new RecipeLikedNotification($user, $recipe));
+        }
         
         return response()->json([
             'success' => true,
-            'is_favorite' => Auth::user()->favorites()->where('recipe_id', $recipe->id)->exists()
+            'is_favorite' => $isFavorite
         ]);
     }
 }

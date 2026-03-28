@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\UserFollowedNotification;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -46,7 +47,12 @@ class ProfileController extends Controller
             return back()->with('error', 'No puedes seguirte a ti mismo.');
         }
 
+        $alreadyFollowing = $viewer->following()->where('user_id', $user->id)->exists();
         $viewer->following()->toggle($user->id);
+
+        if (!$alreadyFollowing) {
+            $user->notify(new UserFollowedNotification($viewer));
+        }
 
         return back();
     }

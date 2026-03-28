@@ -79,6 +79,7 @@ class UserController extends Controller
             'registration_date' => 'required|date',
             'password' => 'required|string|confirmed|min:6',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'redirect_to' => 'nullable|string|max:2048',
         ]);
 
         if ($validator->fails()) {

@@ -31,6 +31,131 @@
     </div>
 @endif
 
+<div class="card filter-card mb-4">
+    <div class="card-body">
+        @php
+            $activePanel = 'all';
+            foreach (['brand', 'dish_type', 'daily_category', 'special_occasion', 'baking_category', 'seasonality', 'preparation_method'] as $panelKey) {
+                if (!empty($selectedFilters[$panelKey] ?? null)) {
+                    $activePanel = $panelKey;
+                    break;
+                }
+            }
+            if ($activePanel === 'all' && !empty($selectedCategory)) {
+                $activePanel = 'category_id';
+            }
+        @endphp
+        <form method="GET" action="{{ route('recipes.index') }}" class="row align-items-end" id="recipeFilterForm">
+            <input type="hidden" name="dish_type" id="dish_type" value="{{ $selectedFilters['dish_type'] ?? '' }}">
+            <input type="hidden" name="daily_category" id="daily_category" value="{{ $selectedFilters['daily_category'] ?? '' }}">
+            <input type="hidden" name="special_occasion" id="special_occasion" value="{{ $selectedFilters['special_occasion'] ?? '' }}">
+            <input type="hidden" name="baking_category" id="baking_category" value="{{ $selectedFilters['baking_category'] ?? '' }}">
+            <input type="hidden" name="seasonality" id="seasonality" value="{{ $selectedFilters['seasonality'] ?? '' }}">
+            <input type="hidden" name="preparation_method" id="preparation_method" value="{{ $selectedFilters['preparation_method'] ?? '' }}">
+            <div class="col-12 mb-3">
+                <div class="filter-tab-row mb-3">
+                    <button type="button" class="filter-tab filter-tab-reset {{ empty($selectedCategory) && empty(array_filter($selectedFilters ?? [])) ? 'active' : '' }}" data-panel="all" data-reset-all="true">Todas</button>
+                    <button type="button" class="filter-tab {{ $activePanel === 'brand' ? 'active' : '' }}" data-panel="brand">Recetas con...</button>
+                    <button type="button" class="filter-tab {{ $activePanel === 'dish_type' ? 'active' : '' }}" data-panel="dish_type">Tipo de platillo</button>
+                    <button type="button" class="filter-tab {{ $activePanel === 'daily_category' ? 'active' : '' }}" data-panel="daily_category">Para todos los dias</button>
+                    <button type="button" class="filter-tab {{ $activePanel === 'special_occasion' ? 'active' : '' }}" data-panel="special_occasion">Ocasion especial</button>
+                    <button type="button" class="filter-tab {{ $activePanel === 'baking_category' ? 'active' : '' }}" data-panel="baking_category">Reposteria y panaderia</button>
+                    <button type="button" class="filter-tab {{ $activePanel === 'seasonality' ? 'active' : '' }}" data-panel="seasonality">Temporalidad</button>
+                    <button type="button" class="filter-tab {{ $activePanel === 'preparation_method' ? 'active' : '' }}" data-panel="preparation_method">Metodos de preparacion</button>
+                    <button type="button" class="filter-tab {{ $activePanel === 'category_id' ? 'active' : '' }}" data-panel="category_id">Categorias</button>
+                </div>
+                <div class="filter-section {{ $activePanel === 'category_id' ? 'is-visible' : '' }}" data-panel="category_id">
+                    <div class="filter-chip-row" data-target="category_id">
+                        @foreach($categories as $category)
+                            <button type="button" class="filter-chip {{ (string) $selectedCategory === (string) $category->id ? 'active' : '' }}" data-value="{{ $category->id }}">
+                                {{ $category->name }}
+                            </button>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="filter-section mt-3 {{ $activePanel === 'brand' ? 'is-visible' : '' }}" data-panel="brand">
+                    <div class="filter-chip-row" data-target="brand">
+                        @foreach($brands as $brand)
+                            <button type="button" class="filter-chip {{ $selectedBrand === $brand ? 'active' : '' }}" data-value="{{ $brand }}">
+                                {{ $brand }}
+                            </button>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="filter-section mt-3 {{ $activePanel === 'dish_type' ? 'is-visible' : '' }}" data-panel="dish_type">
+                    <div class="filter-chip-row" data-target="dish_type">
+                        @foreach($filterOptions['dish_type'] as $option)
+                            <button type="button" class="filter-chip {{ ($selectedFilters['dish_type'] ?? '') === $option ? 'active' : '' }}" data-value="{{ $option }}">{{ $option }}</button>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="filter-section mt-3 {{ $activePanel === 'daily_category' ? 'is-visible' : '' }}" data-panel="daily_category">
+                    <div class="filter-chip-row" data-target="daily_category">
+                        @foreach($filterOptions['daily_category'] as $option)
+                            <button type="button" class="filter-chip {{ ($selectedFilters['daily_category'] ?? '') === $option ? 'active' : '' }}" data-value="{{ $option }}">{{ $option }}</button>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="filter-section mt-3 {{ $activePanel === 'special_occasion' ? 'is-visible' : '' }}" data-panel="special_occasion">
+                    <div class="filter-chip-row" data-target="special_occasion">
+                        @foreach($filterOptions['special_occasion'] as $option)
+                            <button type="button" class="filter-chip {{ ($selectedFilters['special_occasion'] ?? '') === $option ? 'active' : '' }}" data-value="{{ $option }}">{{ $option }}</button>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="filter-section mt-3 {{ $activePanel === 'baking_category' ? 'is-visible' : '' }}" data-panel="baking_category">
+                    <div class="filter-chip-row" data-target="baking_category">
+                        @foreach($filterOptions['baking_category'] as $option)
+                            <button type="button" class="filter-chip {{ ($selectedFilters['baking_category'] ?? '') === $option ? 'active' : '' }}" data-value="{{ $option }}">{{ $option }}</button>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="filter-section mt-3 {{ $activePanel === 'seasonality' ? 'is-visible' : '' }}" data-panel="seasonality">
+                    <div class="filter-chip-row" data-target="seasonality">
+                        @foreach($filterOptions['seasonality'] as $option)
+                            <button type="button" class="filter-chip {{ ($selectedFilters['seasonality'] ?? '') === $option ? 'active' : '' }}" data-value="{{ $option }}">{{ $option }}</button>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="filter-section mt-3 {{ $activePanel === 'preparation_method' ? 'is-visible' : '' }}" data-panel="preparation_method">
+                    <div class="filter-chip-row" data-target="preparation_method">
+                        @foreach($filterOptions['preparation_method'] as $option)
+                            <button type="button" class="filter-chip {{ ($selectedFilters['preparation_method'] ?? '') === $option ? 'active' : '' }}" data-value="{{ $option }}">{{ $option }}</button>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 mb-3 mb-md-0">
+                <label for="category_id" class="filter-label">Categoría</label>
+                <select name="category_id" id="category_id" class="form-control">
+                    <option value="">Todas las categorías</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}" {{ (string) $selectedCategory === (string) $category->id ? 'selected' : '' }}>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-5 mb-3 mb-md-0">
+                <label for="brand" class="filter-label">Marca</label>
+                <select name="brand" id="brand" class="form-control">
+                    <option value="">Todas las marcas</option>
+                    @foreach($brands as $brand)
+                        <option value="{{ $brand }}" {{ $selectedBrand === $brand ? 'selected' : '' }}>
+                            {{ $brand }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-filter-action w-100">
+                    <i class="fas fa-filter mr-1"></i> Filtrar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div class="row recipes-page">
     @foreach($recipes as $recipe)
     <div class="col-md-6 col-lg-4 mb-4">
@@ -80,6 +205,9 @@
             
             <div class="card-body">
                 <h5 class="card-title">{{ Str::limit($recipe->recipe_title, 40) }}</h5>
+                @if($recipe->brand)
+                    <p class="recipe-brand mb-2">{{ $recipe->brand }}</p>
+                @endif
                 <p class="card-text text-muted">{{ Str::limit($recipe->recipe_description, 70) }}</p>
             </div>
             
@@ -125,6 +253,98 @@
 <style>
     body {
         font-size: 1.1rem;
+    }
+    .filter-card {
+        border: 0;
+        border-radius: 18px;
+        box-shadow: 0 12px 28px rgba(0,0,0,0.06);
+    }
+    .filter-card .col-md-5,
+    .filter-card .col-md-2 {
+        display: none;
+    }
+    .filter-tab-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+    }
+    .filter-tab {
+        border: 1.5px solid #c2185b;
+        background: #fff;
+        color: #6e1739;
+        border-radius: 999px;
+        padding: 0.75rem 1.3rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        line-height: 1;
+        transition: all 0.2s ease;
+    }
+    .filter-tab:hover,
+    .filter-tab.active {
+        background: #c2185b;
+        color: #fff;
+        box-shadow: 0 8px 18px rgba(194, 24, 91, 0.18);
+    }
+    .filter-section {
+        margin-bottom: 0.25rem;
+        display: none;
+    }
+    .filter-section.is-visible {
+        display: block;
+    }
+    .filter-label {
+        display: block;
+        font-weight: 700;
+        color: #2f2f2f;
+        margin-bottom: 0.75rem;
+        font-size: 1.05rem;
+    }
+    .filter-chip-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+    }
+    .filter-chip {
+        border: 1.5px solid #c2185b;
+        background: #fff;
+        color: #6e1739;
+        border-radius: 999px;
+        padding: 0.7rem 1.35rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        line-height: 1;
+        transition: all 0.2s ease;
+    }
+    .filter-chip:hover,
+    .filter-chip.active {
+        background: #c2185b;
+        color: #fff;
+        box-shadow: 0 8px 18px rgba(194, 24, 91, 0.18);
+    }
+    .btn-filter-action {
+        background-color: #F28241;
+        color: #fff;
+        border-radius: 10px;
+        font-weight: 600;
+    }
+    .btn-filter-action:hover {
+        color: #fff;
+        background-color: #da6d30;
+    }
+    .recipe-brand {
+        color: #a85d2d;
+        font-weight: 600;
+        text-align: center;
+        font-size: 0.95rem;
+    }
+    @media (max-width: 768px) {
+        .filter-chip-row {
+            gap: 0.55rem;
+        }
+        .filter-chip {
+            padding: 0.6rem 1rem;
+            font-size: 0.9rem;
+        }
     }
     
     .recipe-card {
@@ -401,10 +621,49 @@
         const recipeIds = $('.view-recipe-btn').map(function() {
             return Number($(this).data('recipe-id'));
         }).get();
+        const initialRecipeId = Number(@json(request('open_recipe')));
         let currentRecipeIndex = -1;
         const profileBaseUrl = "{{ url('/perfil') }}";
         const canRate = @json(auth()->check());
         const canComment = @json(auth()->check());
+
+        $(document).on('click', '.filter-chip-row .filter-chip', function() {
+            const button = $(this);
+            const group = button.closest('.filter-chip-row');
+            const target = group.data('target');
+
+            if (group.data('reset-all')) {
+                $('#recipeFilterForm').find('input[type="hidden"], select').val('');
+                $('.filter-chip-row').each(function() {
+                    const row = $(this);
+                    row.find('.filter-chip').removeClass('active');
+                    row.find('.filter-chip[data-value=""]').first().addClass('active');
+                });
+                $('#recipeFilterForm').submit();
+                return;
+            }
+
+            group.find('.filter-chip').removeClass('active');
+            button.addClass('active');
+            $('#' + target).val(button.data('value'));
+            $('#recipeFilterForm').submit();
+        });
+
+        $(document).on('click', '.filter-tab', function() {
+            const button = $(this);
+            const panel = button.data('panel');
+
+            if (button.data('reset-all')) {
+                $('#recipeFilterForm').find('input[type="hidden"], select').val('');
+                window.location = "{{ route('recipes.index') }}";
+                return;
+            }
+
+            $('.filter-tab').removeClass('active');
+            button.addClass('active');
+            $('.filter-section').removeClass('is-visible');
+            $('.filter-section[data-panel="' + panel + '"]').addClass('is-visible');
+        });
 
         function loadRecipeById(recipeId) {
             if (currentVideoElement) {
@@ -467,6 +726,11 @@
                                     <span class="badge badge-pill" style="background-color: #6c757d;">
                                         <i class="fas fa-utensil-spoon"></i> ${response.difficulty}
                                     </span>
+                                    ${response.brand ? `
+                                        <span class="badge badge-pill ml-2" style="background-color: #f0ad4e;">
+                                            <i class="fas fa-copyright"></i> ${response.brand}
+                                        </span>
+                                    ` : ''}
                                 </div>
                             </div>
                         </div>
@@ -717,6 +981,12 @@
             }
             $(this).find('iframe').attr('src', '');
         });
+
+        if (initialRecipeId && recipeIds.includes(initialRecipeId)) {
+            currentRecipeIndex = recipeIds.indexOf(initialRecipeId);
+            $('#recipeModal').modal('show');
+            loadRecipeById(initialRecipeId);
+        }
 
         // Se califica al enviar comentario
 

@@ -30,6 +30,7 @@ class AuthenticatedSessionController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
+            'redirect_to' => 'nullable|string|max:2048',
         ]);
 
         // Intentar autenticar al usuario
@@ -49,6 +50,10 @@ class AuthenticatedSessionController extends Controller
         }
 
         $request->session()->regenerate();
+
+        if ($request->filled('redirect_to')) {
+            $request->session()->put('url.intended', $request->input('redirect_to'));
+        }
 
         if (Auth::user()->isAdmin()) {
             return redirect()->route('admin.users.index');

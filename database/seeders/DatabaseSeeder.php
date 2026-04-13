@@ -80,8 +80,7 @@ class DatabaseSeeder extends Seeder
             }
         }
         $this->call([
-        DatabaseSeeder::class, // Tu seeder original de categorías
-        UsersAndRecipesSeeder::class // El nuevo seeder
-    ]);
+            UsersAndRecipesSeeder::class,
+        ]);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Recipe;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SearchController extends Controller
 {
@@ -16,6 +17,10 @@ class SearchController extends Controller
         $users = collect();
 
         if ($query !== '') {
+            $favoriteIds = Auth::check()
+                ? Auth::user()->favorites()->pluck('recipes.id')->all()
+                : [];
+
             $recipes = Recipe::with('user')
                 ->withCount(['favoritedBy', 'comments'])
                 ->withAvg('ratings', 'rating')
@@ -27,8 +32,9 @@ class SearchController extends Controller
                 ->latest()
                 ->take(12)
                 ->get()
-                ->map(function ($recipe) {
+                ->map(function ($recipe) use ($favoriteIds) {
                     $recipe->avg_rating = round((float) ($recipe->ratings_avg_rating ?? 0), 1);
+                    $recipe->is_favorite = in_array($recipe->id, $favoriteIds, true);
                     return $recipe;
                 });
 

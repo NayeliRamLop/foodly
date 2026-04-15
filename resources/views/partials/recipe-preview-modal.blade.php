@@ -1,4 +1,4 @@
-<div class="modal fade recipe-preview-modal" id="{{ $modalId }}" tabindex="-1" aria-labelledby="{{ $titleId }}" aria-hidden="true">
+<div class="modal fade recipe-preview-modal {{ $modalClass ?? '' }}" id="{{ $modalId }}" tabindex="-1" aria-labelledby="{{ $titleId }}" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">

@@ -5,6 +5,36 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}">
     @include('partials.recipe-ui-styles')
+    <style>
+        .recipe-card .image-wrapper {
+            height: 200px;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            padding: 0;
+        }
+
+        .recipe-card .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center center;
+            display: block;
+        }
+
+        .recipe-card .img-placeholder {
+            height: 200px;
+            background-color: #f8f9fa;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            border-bottom: 1px solid #f1c29c;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -24,7 +54,7 @@
         <div class="row g-4">
             @foreach($recipes as $recipe)
                 <div class="col-md-6 col-lg-4">
-                    @include('partials.recipe-card', ['recipe' => $recipe])
+                    @include('partials.recipe-card', ['recipe' => $recipe, 'showHoverPreview' => false, 'showFavoriteButton' => auth()->check()])
                 </div>
             @endforeach
         </div>
@@ -35,15 +65,17 @@
     @endif
 </div>
 
+@endsection
+
 @include('partials.recipe-preview-modal', [
     'modalId' => 'guestSearchRecipeModal',
     'titleId' => 'guestSearchRecipeModalLabel',
     'bodyId' => 'guestSearchRecipeModalBody',
 ])
-@endsection
 
 @section('js')
 @include('partials.recipe-preview-modal-script')
+@include('partials.favorite-toggle-card-script')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const recipePreview = window.createRecipePreviewModalController({
@@ -52,6 +84,7 @@
             titleId: 'guestSearchRecipeModalLabel',
             profileBaseUrl: "{{ url('/perfil') }}",
             showUrlTemplate: "{{ route('recipes.show', '__ID__') }}",
+            renderFooterActions: () => '',
             isGuest: @json(!auth()->check()),
             loginUrl: "{{ route('login') }}",
             registerUrl: "{{ route('user.create') }}",

@@ -1,10 +1,12 @@
 @php
+    $showHoverPreview = $showHoverPreview ?? true;
+    $showFavoriteButton = $showFavoriteButton ?? auth()->check();
     $hoverEmbedUrl = null;
-    if (!empty($recipe->video_embed_url)) {
+    if ($showHoverPreview && !empty($recipe->video_embed_url)) {
         $separator = str_contains($recipe->video_embed_url, '?') ? '&' : '?';
         $hoverEmbedUrl = $recipe->video_embed_url . $separator . 'autoplay=1&mute=1&controls=0&playsinline=1';
     }
-    $hoverDirectVideoUrl = $recipe->video_direct_url ?? $recipe->video_url ?? null;
+    $hoverDirectVideoUrl = $showHoverPreview ? ($recipe->video_direct_url ?? $recipe->video_url ?? null) : null;
 @endphp
 
 <div class="card h-100 recipe-card">
@@ -33,20 +35,16 @@
             </div>
         @endif
 
-        @auth
+        @if($showFavoriteButton)
             @php $isFav = $recipe->is_favorite ?? false; @endphp
-            <form method="POST"
-                  action="{{ route('recipes.toggle-favorite', $recipe->id) }}"
-                  class="btn-favorite-form"
-                  style="position:absolute;top:0.5rem;right:0.5rem;">
-                @csrf
-                <button type="submit"
-                        class="btn-favorite {{ $isFav ? 'active' : '' }}"
-                        title="{{ $isFav ? 'Quitar de favoritos' : 'Agregar a favoritos' }}">
-                    <i class="fas fa-heart"></i>
-                </button>
-            </form>
-        @endauth
+            <button type="button"
+                    class="btn-favorite {{ $isFav ? 'active' : '' }}"
+                    data-favorite-url="{{ route('favorites.toggle', $recipe->id) }}"
+                    title="{{ $isFav ? 'Quitar de favoritos' : 'Agregar a favoritos' }}"
+                    style="position:absolute;top:0.5rem;right:0.5rem;z-index:2;">
+                <i class="fas fa-heart"></i>
+            </button>
+        @endif
     </div>
 
     <div class="card-body">

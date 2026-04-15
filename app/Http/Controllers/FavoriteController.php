@@ -151,16 +151,24 @@ class FavoriteController extends Controller
     public function toggle(Recipe $recipe)
     {
         if (!Auth::check()) {
-            return response()->json(['error' => 'Unauthenticated'], 401);
+            if (request()->expectsJson()) {
+                return response()->json(['error' => 'Unauthenticated'], 401);
+            }
+
+            return redirect()->route('login');
         }
 
         $user = Auth::user();
-        $wasFavorite = $user->favorites()->where('recipe_id', $recipe->id)->exists();
+        $wasFavorite = $user->favorites()->whereKey($recipe->id)->exists();
         $user->favorites()->toggle($recipe->id);
-        $isFavorite = $user->favorites()->where('recipe_id', $recipe->id)->exists();
+        $isFavorite = $user->favorites()->whereKey($recipe->id)->exists();
 
         if (!$wasFavorite && $isFavorite && $recipe->user && $recipe->user->id !== $user->id) {
             $recipe->user->notify(new RecipeLikedNotification($user, $recipe));
+        }
+
+        if (!request()->expectsJson()) {
+            return back()->with('success', $isFavorite ? 'Receta agregada a favoritos' : 'Receta eliminada de favoritos');
         }
 
         return response()->json([

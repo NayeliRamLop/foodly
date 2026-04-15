@@ -19,13 +19,13 @@
                 <span class="text-muted">Busqueda: "{{ $query }}"</span>
             </div>
 
-            <div class="row g-4">
-                @foreach($recipes as $recipe)
-                    <div class="col-md-6 col-lg-4">
-                        @include('partials.recipe-card', ['recipe' => $recipe])
-                    </div>
-                @endforeach
-            </div>
+                <div class="row g-4">
+                    @foreach($recipes as $recipe)
+                        <div class="col-md-6 col-lg-4">
+                            @include('partials.recipe-card', ['recipe' => $recipe, 'showHoverPreview' => false, 'showFavoriteButton' => auth()->check()])
+                        </div>
+                    @endforeach
+                </div>
         @endif
 
         @if($users->isNotEmpty())
@@ -69,19 +69,49 @@
         @endif
     @endif
 
-    @include('partials.recipe-preview-modal', [
-        'modalId' => 'searchRecipeModal',
-        'titleId' => 'searchRecipeModalLabel',
-        'bodyId' => 'searchRecipeModalBody',
-    ])
 </div>
 @stop
+
+@include('partials.recipe-preview-modal', [
+    'modalId' => 'searchRecipeModal',
+    'titleId' => 'searchRecipeModalLabel',
+    'bodyId' => 'searchRecipeModalBody',
+])
 
 @section('css')
 @include('partials.recipe-ui-styles')
 <style>
     .search-results-page {
         max-width: none;
+    }
+
+    .search-results-page .recipe-card .image-wrapper {
+        height: 200px;
+        background-color: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+        position: relative;
+        overflow: hidden;
+        padding: 0;
+    }
+
+    .search-results-page .recipe-card .image-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center center;
+        display: block;
+    }
+
+    .search-results-page .recipe-card .img-placeholder {
+        height: 200px;
+        background-color: #f8f9fa;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+        border-bottom: 1px solid #f1c29c;
     }
 
     .search-user-card {
@@ -189,6 +219,7 @@
 
 @section('js')
 @include('partials.recipe-preview-modal-script')
+@include('partials.favorite-toggle-card-script')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const recipePreview = window.createRecipePreviewModalController({
@@ -197,7 +228,8 @@
             titleId: 'searchRecipeModalLabel',
             profileBaseUrl: "{{ url('/perfil') }}",
             showUrlTemplate: "{{ route('recipes.show', '__ID__') }}",
-            isGuest: false,
+            renderFooterActions: () => '',
+            isGuest: @json(!auth()->check()),
             loginUrl: "{{ route('login') }}",
             registerUrl: "{{ route('user.create') }}",
             profilePromptUrl: "{{ route('user.create') }}?intent=profile#crear-cuenta",

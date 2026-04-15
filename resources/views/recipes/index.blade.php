@@ -144,6 +144,15 @@
                                             referrerpolicy="strict-origin-when-cross-origin"></iframe>
                                     </div>
                                 @endif
+                                @auth
+                                    <button type="button"
+                                            class="btn-favorite {{ ($recipe->is_favorite ?? false) ? 'active' : '' }}"
+                                            data-favorite-url="{{ route('favorites.toggle', $recipe->id) }}"
+                                            title="{{ ($recipe->is_favorite ?? false) ? 'Quitar de favoritos' : 'Agregar a favoritos' }}"
+                                            style="position:absolute;top:0.5rem;right:0.5rem;z-index:2;">
+                                        <i class="fas fa-heart"></i>
+                                    </button>
+                                @endauth
                             </div>
                             <div class="card-body">
                                 <h5 class="card-title">{{ \Illuminate\Support\Str::limit($recipe->recipe_title, 48) }}</h5>
@@ -175,6 +184,7 @@
             'modalId' => 'recipesIndexModal',
             'titleId' => 'recipesIndexModalLabel',
             'bodyId'  => 'recipesIndexModalBody',
+            'modalClass' => 'modal-media-cover',
         ])
     </div>
 @stop
@@ -183,6 +193,35 @@
     @include('partials.recipe-ui-styles')
     @include('partials.my-recipes-styles')
     <style>
+        .btn-favorite {
+            width: 2.5rem;
+            height: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.82);
+            border-radius: 999px;
+            background: rgba(30, 30, 30, 0.26);
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.16);
+            backdrop-filter: blur(4px);
+            transition: background 0.16s ease, color 0.16s ease, border-color 0.16s ease, transform 0.16s ease;
+        }
+
+        .btn-favorite:hover {
+            color: #fff;
+            background: rgba(220, 53, 69, 0.84);
+            border-color: rgba(255, 255, 255, 0.92);
+            transform: translateY(-1px);
+        }
+
+        .btn-favorite.active {
+            background: rgba(255, 255, 255, 0.96);
+            border-color: rgba(255, 255, 255, 0.98);
+            color: #dc3545;
+        }
+
         .filter-card {
             border: 0;
             border-radius: 18px;
@@ -233,6 +272,7 @@
 
 @section('js')
     @include('partials.recipe-preview-modal-script')
+    @include('partials.favorite-toggle-card-script')
     <script>
     document.addEventListener('DOMContentLoaded', function () {
         const filterForm = document.getElementById('recipeIndexFilterForm');

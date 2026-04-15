@@ -423,28 +423,26 @@
         }
 
         .recipe-card .btn-favorite {
-          position: absolute;
-          top: 10px;
-          right: 10px;
-          background: rgba(255,255,255,0.7);
-          border: none;
-          border-radius: 50%;
-          width: 36px;
-          height: 36px;
-          padding: 0;
-          z-index: 10;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
+          background: rgba(30, 30, 30, 0.26);
+          border: 1px solid rgba(255,255,255,0.82);
         }
 
         .recipe-card .btn-favorite i {
           font-size: 1.2rem;
-          color: #6c757d;
+          color: #fff;
           transition: color 0.2s ease;
         }
 
         .recipe-card .btn-favorite:hover i {
+          color: #dc3545;
+        }
+
+        .recipe-card .btn-favorite.active {
+          background: rgba(255,255,255,0.96);
+          border-color: rgba(255,255,255,0.98);
+        }
+
+        .recipe-card .btn-favorite.active i {
           color: #dc3545;
         }
 
@@ -787,7 +785,7 @@ Cocina con gusto con ingredientes simples, comparte experiencias culinarias úni
     <div class="row g-4">
       @forelse($topRecipes as $recipe)
         <div class="col-md-6 col-lg-4 col-xl-1-5">
-          @include('partials.recipe-card', ['recipe' => $recipe])
+          @include('partials.recipe-card', ['recipe' => $recipe, 'showHoverPreview' => false, 'showFavoriteButton' => auth()->check()])
         </div>
       @empty
         <div class="col-12 text-center text-muted">
@@ -819,7 +817,7 @@ Cocina con gusto con ingredientes simples, comparte experiencias culinarias úni
           <div class="row g-4">
             @forelse($sectionRecipes as $recipe)
               <div class="col-md-6 col-lg-3">
-                @include('partials.recipe-card', ['recipe' => $recipe])
+                @include('partials.recipe-card', ['recipe' => $recipe, 'showHoverPreview' => false, 'showFavoriteButton' => auth()->check()])
               </div>
             @empty
               <div class="col-12 text-center text-muted">
@@ -850,6 +848,7 @@ Cocina con gusto con ingredientes simples, comparte experiencias culinarias úni
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     @include('partials.recipe-preview-modal-script')
+    @include('partials.favorite-toggle-card-script')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const initialRecipeId = Number(@json(request('open_recipe')));
@@ -891,6 +890,13 @@ Cocina con gusto con ingredientes simples, comparte experiencias culinarias úni
                 titleId: 'homeRecipeModalLabel',
                 profileBaseUrl: "{{ url('/perfil') }}",
                 showUrlTemplate: "{{ route('recipes.show', '__ID__') }}",
+                getRecipeIds: function () {
+                    return Array.from(document.querySelectorAll('.view-recipe-btn[data-recipe-id]'))
+                        .map(function (button) { return button.getAttribute('data-recipe-id'); });
+                },
+                showPrevNav: false,
+                showNextNav: true,
+                renderFooterActions: () => '',
                 isGuest: @json(!auth()->check()),
                 loginUrl: "{{ route('login') }}",
                 registerUrl: "{{ route('user.create') }}",

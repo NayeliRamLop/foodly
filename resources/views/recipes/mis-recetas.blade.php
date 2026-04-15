@@ -153,6 +153,7 @@
             'modalId' => 'myRecipesPreviewModal',
             'titleId' => 'myRecipesPreviewModalLabel',
             'bodyId' => 'myRecipesPreviewModalBody',
+            'modalClass' => 'modal-media-cover',
         ])
 
         @include('partials.recipe-manage-modal', [

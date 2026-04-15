@@ -18,6 +18,24 @@ use Illuminate\Support\Facades\Schema;
 
 class RecipeController extends Controller
 {
+    private function serializeRecipeComment(RecipeComment $comment): array
+    {
+        $currentUserId = Auth::id();
+
+        return [
+            'id' => $comment->id,
+            'user_id' => $comment->user_id,
+            'user' => $comment->user ? $comment->user->name : 'Usuario',
+            'rating' => $comment->rating,
+            'comment' => $comment->comment,
+            'created_at' => $comment->created_at->format('d/m/Y H:i'),
+            'reactions_count' => (int) ($comment->reactions_count ?? 0),
+            'reacted_by_current_user' => $currentUserId
+                ? $comment->reactions->contains('id', $currentUserId)
+                : false,
+        ];
+    }
+
     private function getRecipeFilterOptions(): array
     {
         return [
@@ -80,6 +98,9 @@ public function index()
 {
     $filterOptions = $this->getRecipeFilterOptions();
     $selectedCategory = request('category_id');
+    $favoriteIds = Auth::check()
+        ? Auth::user()->favorites()->pluck('recipes.id')->all()
+        : [];
     $availableColumns = [
         'brand' => Schema::hasColumn('recipes', 'brand'),
         'dish_type' => Schema::hasColumn('recipes', 'dish_type'),
@@ -109,6 +130,11 @@ public function index()
                     ->latest()
                     ->paginate(10)
                     ->appends(array_merge(['category_id' => $selectedCategory], $selectedFilters));
+
+    $recipes->through(function ($recipe) use ($favoriteIds) {
+        $recipe->is_favorite = in_array($recipe->id, $favoriteIds, true);
+        return $recipe;
+    });
 
     $categories = Categories::with('subcategories')->get();
     $brands = $availableColumns['brand']
@@ -143,6 +169,9 @@ public function index()
     public function search(Request $request)
     {
         $query = trim((string) $request->get('q', ''));
+        $favoriteIds = Auth::check()
+            ? Auth::user()->favorites()->pluck('recipes.id')->all()
+            : [];
 
         $recipesQuery = Recipe::with(['category', 'subcategory', 'user'])
             ->withCount(['favoritedBy', 'comments', 'ratings'])
@@ -158,8 +187,9 @@ public function index()
         }
 
         $recipes = $recipesQuery->latest()->paginate(12)->appends(['q' => $query]);
-        $recipes->through(function ($recipe) {
+        $recipes->through(function ($recipe) use ($favoriteIds) {
             $recipe->avg_rating = round((float) ($recipe->ratings_avg_rating ?? 0), 1);
+            $recipe->is_favorite = in_array($recipe->id, $favoriteIds, true);
 
             return $recipe;
         });
@@ -566,19 +596,11 @@ private function getAdminActionButtons($recipe)
         $recipe->load('user', 'category', 'subcategory');
 
         $comments = $recipe->comments()
-            ->with('user')
+            ->with(['user', 'reactions'])
+            ->withCount('reactions')
             ->latest()
             ->get()
-            ->map(function ($comment) {
-                return [
-                    'id'         => $comment->id,
-                    'user_id'    => $comment->user_id,
-                    'user'       => $comment->user ? $comment->user->name : 'Usuario',
-                    'rating'     => $comment->rating,
-                    'comment'    => $comment->comment,
-                    'created_at' => $comment->created_at->format('d/m/Y H:i'),
-                ];
-            });
+            ->map(fn ($comment) => $this->serializeRecipeComment($comment));
 
         $ratingCounts = $recipe->comments()
             ->select('rating', DB::raw('count(*) as total'))
@@ -1028,16 +1050,10 @@ public function toggleStatus($id)
     {
         $validated = $request->validate([
             'rating'  => 'required|integer|min:1|max:5',
-            'comment' => ['required', 'string', 'max:500', new NoOffensiveContent()],
+            'comment' => ['nullable', 'string', 'max:500', new NoOffensiveContent()],
         ]);
 
-        $comment = RecipeComment::create([
-            'recipe_id' => $recipe->id,
-            'user_id' => Auth::id(),
-            'rating' => $validated['rating'],
-            'comment' => $validated['comment'],
-        ]);
-        $comment->load('user');
+        $commentText = trim((string) ($validated['comment'] ?? ''));
 
         RecipeRating::updateOrCreate(
             [
@@ -1049,20 +1065,81 @@ public function toggleStatus($id)
             ]
         );
 
+        $comment = RecipeComment::create([
+            'recipe_id' => $recipe->id,
+            'user_id' => Auth::id(),
+            'rating' => $validated['rating'],
+            'comment' => $commentText,
+        ]);
+        $comment->load(['user', 'reactions']);
+        $comment->loadCount('reactions');
+
         if ($recipe->user && $recipe->user->id !== Auth::id()) {
             $recipe->user->notify(new RecipeCommentedNotification(Auth::user(), $recipe));
         }
 
         return response()->json([
             'success' => true,
-            'comment' => [
-                'id'         => $comment->id,
-                'user_id'    => $comment->user_id,
-                'user'       => $comment->user ? $comment->user->name : 'Usuario',
-                'rating'     => $comment->rating,
-                'comment'    => $comment->comment,
-                'created_at' => $comment->created_at->format('d/m/Y H:i'),
+            'comment' => $this->serializeRecipeComment($comment),
+        ]);
+    }
+
+    public function toggleCommentReaction(Request $request, RecipeComment $comment)
+    {
+        if ($comment->user_id === Auth::id()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No puedes reaccionar a tu propio comentario.',
+            ], 422);
+        }
+
+        $isReacted = $comment->reactions()->where('user_id', Auth::id())->exists();
+
+        if ($isReacted) {
+            $comment->reactions()->detach(Auth::id());
+        } else {
+            $comment->reactions()->syncWithoutDetaching([Auth::id()]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'reacted' => !$isReacted,
+            'reactions_count' => $comment->reactions()->count(),
+        ]);
+    }
+
+    public function updateComment(Request $request, RecipeComment $comment)
+    {
+        if ($comment->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => ['nullable', 'string', 'max:500', new NoOffensiveContent()],
+        ]);
+
+        $comment->update([
+            'rating' => $validated['rating'],
+            'comment' => trim((string) ($validated['comment'] ?? '')),
+        ]);
+
+        RecipeRating::updateOrCreate(
+            [
+                'recipe_id' => $comment->recipe_id,
+                'user_id' => Auth::id(),
             ],
+            [
+                'rating' => $validated['rating'],
+            ]
+        );
+
+        $comment->load(['user', 'reactions']);
+        $comment->loadCount('reactions');
+
+        return response()->json([
+            'success' => true,
+            'comment' => $this->serializeRecipeComment($comment),
         ]);
     }
 

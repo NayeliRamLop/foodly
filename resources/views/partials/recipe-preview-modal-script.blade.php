@@ -16,8 +16,7 @@
         const isGuest = Boolean(config.isGuest);
         modalElement.classList.toggle('is-guest-preview', isGuest);
         let currentRecipeIndex = -1;
-        let _qRating = 5;
-        let _cRating = 5;
+        let currentRating = 5;
 
         const resolveRecipeIds = () => {
             const source = typeof config.getRecipeIds === 'function'
@@ -89,6 +88,15 @@
             .map((item) => `<${tagName}>${escapeHtml(item)}</${tagName}>`)
             .join('');
 
+        const renderStars = (rating) => {
+            const value = Math.max(0, Math.min(5, Number(rating) || 0));
+            return '&#9733;'.repeat(value) + '&#9734;'.repeat(5 - value);
+        };
+
+        const renderEditorStars = (rating, commentId, scope) => [1, 2, 3, 4, 5].map((n) => `
+            <button type="button" class="comment-edit-star${n <= Number(rating || 0) ? ' active' : ''}" data-comment-id="${commentId}" data-scope="${scope}" data-n="${n}">★</button>
+        `).join('');
+
         const renderPreviewListItems = (value, tagName, limit) => String(value || '')
             .split(/\r?\n/)
             .map((item) => item.trim())
@@ -105,8 +113,10 @@
 
         const renderNavigationButtons = () => {
             const recipeIds = resolveRecipeIds();
+            const showPrevNav = config.showPrevNav !== false;
+            const showNextNav = config.showNextNav !== false;
 
-            if (recipeIds.length <= 1 || currentRecipeIndex === -1) {
+            if (recipeIds.length <= 1 || currentRecipeIndex === -1 || (!showPrevNav && !showNextNav)) {
                 return '';
             }
 
@@ -114,12 +124,16 @@
             const hasNext = currentRecipeIndex < recipeIds.length - 1;
 
             return `
-                <button type="button" class="modal-nav-btn left" data-dir="prev" ${hasPrev ? '' : 'disabled'} aria-label="Receta anterior">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <button type="button" class="modal-nav-btn right" data-dir="next" ${hasNext ? '' : 'disabled'} aria-label="Receta siguiente">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
+                ${showPrevNav ? `
+                    <button type="button" class="modal-nav-btn left" data-dir="prev" ${hasPrev ? '' : 'disabled'} aria-label="Receta anterior">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                ` : ''}
+                ${showNextNav ? `
+                    <button type="button" class="modal-nav-btn right" data-dir="next" ${hasNext ? '' : 'disabled'} aria-label="Receta siguiente">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                ` : ''}
             `;
         };
 
@@ -222,23 +236,43 @@
                             ? `<a href="${authorUrl}" class="text-decoration-none font-weight-bold recipe-author-link">${escapeHtml(comment.user)}</a>`
                             : `<strong>${escapeHtml(comment.user)}</strong>`;
                         const isOwnComment = !isGuest && currentUserId && Number(comment.user_id) === Number(currentUserId);
-                        const deleteBtn = isOwnComment
-                            ? `<form method="POST" action="/recipes/comments/${comment.id}" style="display:inline;" onsubmit="return confirm('¿Eliminar comentario?')">
-                                    <input type="hidden" name="_method" value="DELETE">
-                                    <input type="hidden" name="_token" value="${document.querySelector('meta[name=csrf-token]')?.content || ''}">
-                                    <button type="submit" class="btn btn-link btn-sm text-danger p-0 ml-2" title="Eliminar">
+                        const ownerActions = isOwnComment
+                            ? `<div class="comment-owner-actions">
+                                    <button type="button" class="comment-inline-action comment-edit-toggle" data-comment-id="${comment.id}" title="Editar">
+                                        <i class="fas fa-pen"></i>
+                                    </button>
+                                    <button type="button" class="comment-inline-action is-danger comment-delete-btn" data-comment-id="${comment.id}" title="Eliminar">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
-                               </form>`
+                               </div>`
+                            : '';
+                        const reactionBtn = !isGuest && !isOwnComment
+                            ? `<button type="button" class="comment-reaction-btn${comment.reacted_by_current_user ? ' active' : ''}" data-comment-id="${comment.id}" title="${comment.reacted_by_current_user ? 'Quitar reacción' : 'Reaccionar'}">
+                                    <i class="fas fa-heart"></i>
+                                    <span>${Number(comment.reactions_count || 0)}</span>
+                               </button>`
                             : '';
                         return `
                             <div class="comment-item">
                                 <div class="d-flex justify-content-between flex-wrap align-items-center">
-                                    <div>${authorHtml}${deleteBtn}</div>
+                                    <div>${authorHtml}</div>
+                                    ${ownerActions}
                                     <span class="text-muted small">${escapeHtml(comment.created_at)}</span>
                                 </div>
-                                <div class="mb-1">${'&#9733;'.repeat(Number(comment.rating || 0))}${'&#9734;'.repeat(5 - Number(comment.rating || 0))}</div>
-                                <div>${escapeHtml(comment.comment)}</div>
+                                <div class="mb-1">${renderStars(comment.rating)}</div>
+                                <div class="comment-content-text">${comment.comment ? escapeHtml(comment.comment) : '<span class="comment-empty-note">Calificó esta receta.</span>'}</div>
+                                ${isOwnComment ? `
+                                    <div class="comment-edit-panel" data-comment-id="${comment.id}" style="display:none;">
+                                        <div class="comment-edit-stars">${renderEditorStars(comment.rating, comment.id, 'modal')}</div>
+                                        <textarea class="form-control comment-edit-textarea" rows="3">${escapeHtml(comment.comment || '')}</textarea>
+                                        <div class="comment-edit-actions">
+                                            <button type="button" class="comment-save-btn" data-comment-id="${comment.id}">Guardar</button>
+                                            <button type="button" class="comment-cancel-btn" data-comment-id="${comment.id}">Cancelar</button>
+                                        </div>
+                                        <div class="comment-edit-error text-danger small mt-1" style="display:none;"></div>
+                                    </div>
+                                ` : ''}
+                                ${reactionBtn ? `<div class="comment-reactions-row">${reactionBtn}</div>` : ''}
                             </div>
                         `;
                     }).join('')}
@@ -249,28 +283,19 @@
         const renderRatingForms = (recipeId) => {
             if (isGuest) return '';
             const csrf = document.querySelector('meta[name=csrf-token]')?.content || '';
-            const qStars = [1,2,3,4,5].map(n =>
-                `<button type="button" class="modal-star${n <= _qRating ? ' active' : ''}" data-picker="quick" data-n="${n}">&#9733;</button>`
-            ).join('');
-            const cStars = [1,2,3,4,5].map(n =>
-                `<button type="button" class="modal-star${n <= _cRating ? ' active' : ''}" data-picker="comment" data-n="${n}">&#9733;</button>`
+            const stars = [1,2,3,4,5].map(n =>
+                `<button type="button" class="modal-star${n <= currentRating ? ' active' : ''}" data-n="${n}" aria-label="Calificar con ${n} estrella${n === 1 ? '' : 's'}">★</button>`
             ).join('');
             return `
                 <div class="recipe-section modal-rating-section">
-                    <h5 class="recipe-section-title"><i class="fas fa-star mr-1"></i> Calificar esta receta</h5>
-                    <div class="modal-star-row mb-2" data-picker="quick">${qStars}</div>
-                    <button type="button" class="btn btn-sm btn-warning mb-4 modal-rate-btn"
-                        data-recipe-id="${recipeId}" data-csrf="${escapeHtml(csrf)}">
-                        <i class="fas fa-star mr-1"></i> Calificar
-                    </button>
-                    <h5 class="recipe-section-title"><i class="fas fa-comment-alt mr-1"></i> Agregar comentario</h5>
-                    <div class="modal-star-row mb-2" data-picker="comment">${cStars}</div>
+                    <div class="modal-star-row mb-2" role="group" aria-label="Calificación con estrellas">${stars}</div>
+                    <div class="modal-comment-label">Agregar comentario</div>
                     <textarea class="form-control mb-2 modal-comment-textarea" rows="3"
                         placeholder="Escribe tu comentario..."
                         style="border-radius:10px;border:1px solid #f0d5be;font-size:0.93rem;"></textarea>
                     <button type="button" class="btn btn-sm view-recipe-btn modal-comment-submit-btn"
                         data-recipe-id="${recipeId}" data-csrf="${escapeHtml(csrf)}">
-                        <i class="fas fa-paper-plane mr-1"></i> Enviar comentario
+                        <i class="fas fa-paper-plane mr-1"></i> Enviar
                     </button>
                     <div class="modal-comment-error-msg text-danger small mt-1" style="display:none;"></div>
                 </div>
@@ -355,8 +380,7 @@
         };
 
         const renderRecipe = (response) => {
-            _qRating = 5;
-            _cRating = 5;
+            currentRating = 5;
             const authorName = response.user
                 ? `${escapeHtml(response.user.name)} ${escapeHtml(response.user.last_name || '')}`.trim()
                 : 'Administrador';
@@ -501,37 +525,14 @@
             // Star rating click
             const star = event.target.closest('.modal-star');
             if (star && modalBody.contains(star)) {
-                const picker = star.getAttribute('data-picker');
                 const n = parseInt(star.getAttribute('data-n'), 10) || 1;
-                if (picker === 'quick') { _qRating = n; } else { _cRating = n; }
+                currentRating = n;
                 const row = star.closest('.modal-star-row');
                 if (row) {
                     row.querySelectorAll('.modal-star').forEach(s => {
                         s.classList.toggle('active', parseInt(s.getAttribute('data-n'), 10) <= n);
                     });
                 }
-                return;
-            }
-
-            // Quick rate button
-            const rateBtn = event.target.closest('.modal-rate-btn');
-            if (rateBtn && modalBody.contains(rateBtn)) {
-                const recipeId = rateBtn.getAttribute('data-recipe-id');
-                const csrf = rateBtn.getAttribute('data-csrf');
-                rateBtn.disabled = true;
-                fetch(`{{ url('/recipes') }}/${recipeId}/rate`, {
-                    method: 'POST',
-                    headers: { 'X-CSRF-TOKEN': csrf, 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify({ rating: _qRating })
-                }).then(r => {
-                    if (!r.ok) return r.json().then(d => { throw d; });
-                    return r.json();
-                }).then(() => {
-                    rateBtn.innerHTML = '<i class="fas fa-check mr-1"></i> Calificado';
-                    rateBtn.disabled = false;
-                }).catch(() => {
-                    rateBtn.disabled = false;
-                });
                 return;
             }
 
@@ -545,26 +546,146 @@
                 const errorEl = section ? section.querySelector('.modal-comment-error-msg') : null;
                 const comment = textarea ? textarea.value.trim() : '';
                 if (errorEl) errorEl.style.display = 'none';
-                if (!comment) {
-                    if (errorEl) { errorEl.textContent = 'El comentario es requerido.'; errorEl.style.display = 'block'; }
-                    return;
-                }
                 commentBtn.disabled = true;
                 fetch(`{{ url('/recipes') }}/${recipeId}/comments`, {
                     method: 'POST',
                     headers: { 'X-CSRF-TOKEN': csrf, 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify({ rating: _cRating, comment: comment })
+                    body: JSON.stringify({ rating: currentRating, comment })
                 }).then(r => {
                     if (!r.ok) return r.json().then(d => { throw d; });
                     return r.json();
                 }).then(() => {
                     commentBtn.disabled = false;
-                    // Reload recipe to show new comment in the list
+                    if (textarea) {
+                        textarea.value = '';
+                    }
                     open(parseInt(recipeId, 10));
                 }).catch(err => {
                     commentBtn.disabled = false;
                     const msg = err?.errors?.comment?.[0] || err?.message || 'Error al enviar el comentario.';
                     if (errorEl) { errorEl.textContent = msg; errorEl.style.display = 'block'; }
+                });
+                return;
+            }
+
+            const reactionBtn = event.target.closest('.comment-reaction-btn');
+            if (reactionBtn && modalBody.contains(reactionBtn)) {
+                const commentId = reactionBtn.getAttribute('data-comment-id');
+                const csrf = document.querySelector('meta[name=csrf-token]')?.content || '';
+                reactionBtn.disabled = true;
+                fetch(`{{ url('/recipes/comments') }}/${commentId}/react`, {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': csrf, 'Content-Type': 'application/json', 'Accept': 'application/json' }
+                }).then(r => {
+                    if (!r.ok) return r.json().then(d => { throw d; });
+                    return r.json();
+                }).then((resp) => {
+                    reactionBtn.disabled = false;
+                    reactionBtn.classList.toggle('active', Boolean(resp.reacted));
+                    const countEl = reactionBtn.querySelector('span');
+                    if (countEl) {
+                        countEl.textContent = Number(resp.reactions_count || 0);
+                    }
+                }).catch(() => {
+                    reactionBtn.disabled = false;
+                });
+                return;
+            }
+
+            const editToggleBtn = event.target.closest('.comment-edit-toggle');
+            if (editToggleBtn && modalBody.contains(editToggleBtn)) {
+                const commentId = editToggleBtn.getAttribute('data-comment-id');
+                const panel = modalBody.querySelector(`.comment-edit-panel[data-comment-id="${commentId}"]`);
+                if (panel) {
+                    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+                }
+                return;
+            }
+
+            const cancelBtn = event.target.closest('.comment-cancel-btn');
+            if (cancelBtn && modalBody.contains(cancelBtn)) {
+                const commentId = cancelBtn.getAttribute('data-comment-id');
+                const panel = modalBody.querySelector(`.comment-edit-panel[data-comment-id="${commentId}"]`);
+                if (panel) {
+                    panel.style.display = 'none';
+                }
+                return;
+            }
+
+            const editStar = event.target.closest('.comment-edit-star');
+            if (editStar && modalBody.contains(editStar)) {
+                const commentId = editStar.getAttribute('data-comment-id');
+                const n = parseInt(editStar.getAttribute('data-n'), 10) || 1;
+                const row = editStar.closest('.comment-edit-stars');
+                if (row) {
+                    row.setAttribute('data-rating', n);
+                    row.querySelectorAll('.comment-edit-star').forEach((starEl) => {
+                        starEl.classList.toggle('active', (parseInt(starEl.getAttribute('data-n'), 10) || 0) <= n);
+                    });
+                }
+                return;
+            }
+
+            const saveBtn = event.target.closest('.comment-save-btn');
+            if (saveBtn && modalBody.contains(saveBtn)) {
+                const commentId = saveBtn.getAttribute('data-comment-id');
+                const panel = modalBody.querySelector(`.comment-edit-panel[data-comment-id="${commentId}"]`);
+                const textarea = panel ? panel.querySelector('.comment-edit-textarea') : null;
+                const starsRow = panel ? panel.querySelector('.comment-edit-stars') : null;
+                const errorEl = panel ? panel.querySelector('.comment-edit-error') : null;
+                const csrf = document.querySelector('meta[name=csrf-token]')?.content || '';
+                const rating = parseInt(starsRow?.getAttribute('data-rating') || '5', 10) || 5;
+                const comment = textarea ? textarea.value.trim() : '';
+                if (errorEl) {
+                    errorEl.style.display = 'none';
+                }
+                saveBtn.disabled = true;
+                fetch(`{{ url('/recipes/comments') }}/${commentId}`, {
+                    method: 'PATCH',
+                    headers: { 'X-CSRF-TOKEN': csrf, 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({ rating, comment })
+                }).then((r) => {
+                    if (!r.ok) return r.json().then((d) => { throw d; });
+                    return r.json();
+                }).then(() => {
+                    saveBtn.disabled = false;
+                    if (currentRecipeIndex !== -1) {
+                        const recipeIds = resolveRecipeIds();
+                        open(recipeIds[currentRecipeIndex]);
+                    }
+                }).catch((err) => {
+                    saveBtn.disabled = false;
+                    const msg = err?.errors?.comment?.[0] || err?.message || 'Error al actualizar el comentario.';
+                    if (errorEl) {
+                        errorEl.textContent = msg;
+                        errorEl.style.display = 'block';
+                    }
+                });
+                return;
+            }
+
+            const deleteBtn = event.target.closest('.comment-delete-btn');
+            if (deleteBtn && modalBody.contains(deleteBtn)) {
+                if (!window.confirm('¿Eliminar comentario?')) {
+                    return;
+                }
+                const commentId = deleteBtn.getAttribute('data-comment-id');
+                const csrf = document.querySelector('meta[name=csrf-token]')?.content || '';
+                deleteBtn.disabled = true;
+                fetch(`{{ url('/recipes/comments') }}/${commentId}`, {
+                    method: 'DELETE',
+                    headers: { 'X-CSRF-TOKEN': csrf, 'Accept': 'application/json' }
+                }).then((r) => {
+                    if (!r.ok) throw new Error('Error al eliminar el comentario.');
+                    return r.json();
+                }).then(() => {
+                    deleteBtn.disabled = false;
+                    if (currentRecipeIndex !== -1) {
+                        const recipeIds = resolveRecipeIds();
+                        open(recipeIds[currentRecipeIndex]);
+                    }
+                }).catch(() => {
+                    deleteBtn.disabled = false;
                 });
                 return;
             }

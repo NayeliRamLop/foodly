@@ -47,6 +47,14 @@ public function index()
     {
         $categories = Categories::with('subcategories')->get();
         $popularRecipes = $this->getPopularRecipes();
+        $favoriteIds = Auth::check()
+            ? Auth::user()->favorites()->pluck('recipes.id')->all()
+            : [];
+
+        $popularRecipes = $popularRecipes->map(function ($recipe) use ($favoriteIds) {
+            $recipe->is_favorite = in_array($recipe->id, $favoriteIds, true);
+            return $recipe;
+        });
 
         return [
             'categories' => $categories,

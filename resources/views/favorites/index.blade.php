@@ -138,7 +138,7 @@
         </div>
 
         @if($favorites->isEmpty())
-            <div class="empty-my-recipes-state">
+            <div class="empty-my-recipes-state" id="favoritesEmptyState">
                 <div class="empty-my-recipes-icon">
                     <i class="fas fa-heart"></i>
                 </div>
@@ -146,9 +146,16 @@
                 <p>No se encontraron recetas favoritas con el filtro seleccionado. Prueba con otra opcion o vuelve a "Todas".</p>
             </div>
         @else
-            <div class="row g-4">
+            <div class="empty-my-recipes-state" id="favoritesEmptyState" style="display:none;">
+                <div class="empty-my-recipes-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h3>No hay recetas favoritas</h3>
+                <p>No se encontraron recetas favoritas con el filtro seleccionado. Prueba con otra opcion o vuelve a "Todas".</p>
+            </div>
+            <div class="row g-4" id="favoritesGrid">
                 @foreach($favorites as $recipe)
-                    <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="col-md-6 col-lg-4 mb-4" data-favorite-card>
                         <div class="card h-100 recipe-card my-recipe-card">
                             @php
                                 $hoverEmbedUrl = null;
@@ -181,6 +188,16 @@
                                             referrerpolicy="strict-origin-when-cross-origin"></iframe>
                                     </div>
                                 @endif
+                                @auth
+                                    <button type="button"
+                                            class="btn-favorite active"
+                                            data-favorite-url="{{ route('favorites.toggle', $recipe->id) }}"
+                                            data-remove-on-inactive="true"
+                                            title="Quitar de favoritos"
+                                            style="position:absolute;top:0.5rem;right:0.5rem;z-index:2;">
+                                        <i class="fas fa-heart"></i>
+                                    </button>
+                                @endauth
                             </div>
                             <div class="card-body">
                                 <h5 class="card-title">{{ \Illuminate\Support\Str::limit($recipe->recipe_title, 48) }}</h5>
@@ -203,7 +220,7 @@
                 @endforeach
             </div>
 
-            <div class="d-flex justify-content-center mt-4">
+            <div class="d-flex justify-content-center mt-4" id="favoritesPagination">
                 {{ $favorites->links() }}
             </div>
         @endif
@@ -212,6 +229,7 @@
             'modalId' => 'favoritesRecipeModal',
             'titleId' => 'favoritesRecipeModalLabel',
             'bodyId' => 'favoritesRecipeModalBody',
+            'modalClass' => 'modal-media-cover',
         ])
 
         @include('partials.recipe-manage-modal', [
@@ -285,5 +303,6 @@
 
 @section('js')
     @include('partials.recipe-preview-modal-script')
+    @include('partials.favorite-toggle-card-script')
     @include('partials.favorites-script', ['recipePayloads' => $recipePayloads])
 @stop

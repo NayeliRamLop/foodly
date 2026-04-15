@@ -42,7 +42,9 @@ Route::get('/juego/descargar', function () {
 })->name('game.download');
 Route::post('/recipes/{recipe}/rate', [RecipeController::class, 'rate'])->middleware('auth')->name('recipes.rate');
 Route::post('/recipes/{recipe}/comments', [RecipeController::class, 'addComment'])->middleware('auth')->name('recipes.comments');
+Route::match(['put', 'patch'], '/recipes/comments/{comment}', [RecipeController::class, 'updateComment'])->middleware('auth')->name('recipes.comments.update');
 Route::delete('/recipes/comments/{comment}', [RecipeController::class, 'deleteComment'])->middleware('auth')->name('recipes.comments.delete');
+Route::post('/recipes/comments/{comment}/react', [RecipeController::class, 'toggleCommentReaction'])->middleware('auth')->name('recipes.comments.react');
 Route::get('/perfil/{user}', [ProfileController::class, 'showPublic'])->name('profile.public');
 Route::post('/perfil/{user}/follow', [ProfileController::class, 'toggleFollow'])->middleware('auth')->name('profile.follow');
 
@@ -154,7 +156,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{recipe}/remove-video', [RecipeController::class, 'removeVideo'])->name('remove-video');
 
         // Rutas para favoritos (si están relacionadas con recetas)
-        Route::post('/{recipe}/favorite', [FavoriteController::class, 'toggleFavorite'])->name('toggle-favorite');
+        Route::post('/{recipe}/favorite', [FavoriteController::class, 'toggle'])->name('toggle-favorite');
     });
 
         Route::resource('assets', AssetController::class);

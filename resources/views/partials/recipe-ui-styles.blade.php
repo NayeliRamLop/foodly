@@ -39,6 +39,42 @@
         object-fit: cover;
     }
 
+    .recipe-card .btn-favorite-form {
+        position: absolute;
+        top: 0.65rem;
+        right: 0.65rem;
+        z-index: 2;
+    }
+
+    .recipe-card .btn-favorite {
+        width: 2.45rem;
+        height: 2.45rem;
+        border: 1px solid rgba(255, 255, 255, 0.82);
+        border-radius: 999px;
+        background: rgba(30, 30, 30, 0.26);
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.16);
+        backdrop-filter: blur(4px);
+        transition: background 0.16s ease, color 0.16s ease, border-color 0.16s ease, transform 0.16s ease;
+    }
+
+    .recipe-card .btn-favorite:hover {
+        color: #fff;
+        background: rgba(220, 53, 69, 0.84);
+        border-color: rgba(255, 255, 255, 0.92);
+        transform: translateY(-1px);
+    }
+
+    .recipe-card .btn-favorite.active {
+        color: #dc3545;
+        background: rgba(255, 255, 255, 0.96);
+        border-color: rgba(255, 255, 255, 0.98);
+    }
+
     .recipe-video-preview,
     .recipe-embed-preview {
         position: absolute;
@@ -247,6 +283,28 @@
         width: 100%;
         max-height: 380px;
         object-fit: contain;
+    }
+
+    .recipe-preview-modal.modal-media-cover .recipe-modal-media {
+        padding: 0;
+        min-height: 380px;
+        overflow: hidden;
+    }
+
+    .recipe-preview-modal.modal-media-cover .recipe-modal-media-content {
+        width: 100%;
+        height: 100%;
+        min-height: 380px;
+    }
+
+    .recipe-preview-modal.modal-media-cover .recipe-modal-media img {
+        width: 100%;
+        height: 100%;
+        min-height: 380px;
+        max-height: none;
+        display: block;
+        object-fit: cover;
+        object-position: center center;
     }
 
     .recipe-preview-modal .modal-nav-btn {
@@ -461,6 +519,147 @@
         border-top: 0;
     }
 
+    .comment-reactions-row {
+        margin-top: 0.65rem;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .comment-owner-actions {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        margin-left: auto;
+        margin-right: 0.5rem;
+    }
+
+    .comment-inline-action {
+        width: 1.9rem;
+        height: 1.9rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #f1d7c3;
+        background: #fff8f2;
+        color: #c9783e;
+        border-radius: 999px;
+        font-size: 0.82rem;
+    }
+
+    .comment-inline-action.is-danger {
+        color: #d25443;
+    }
+
+    .comment-inline-action:hover {
+        border-color: #F28241;
+        color: #F28241;
+    }
+
+    .comment-inline-action.is-danger:hover {
+        border-color: #d25443;
+        color: #d25443;
+    }
+
+    .comment-edit-panel {
+        margin-top: 0.75rem;
+        padding: 0.75rem;
+        border: 1px solid #f1e3d7;
+        border-radius: 12px;
+        background: #fffaf6;
+    }
+
+    .comment-edit-stars {
+        display: flex;
+        gap: 0.25rem;
+        margin-bottom: 0.55rem;
+    }
+
+    .comment-edit-star {
+        width: 2rem;
+        height: 2rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #f1c29c;
+        background: #fff5ec;
+        color: #d9a57f;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        padding: 0;
+    }
+
+    .comment-edit-star.active {
+        background: #F28241;
+        border-color: #F28241;
+        color: #fff;
+    }
+
+    .comment-edit-textarea {
+        border-radius: 10px;
+        border: 1px solid #f0d5be;
+        font-size: 0.93rem;
+    }
+
+    .comment-edit-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 0.65rem;
+    }
+
+    .comment-save-btn,
+    .comment-cancel-btn {
+        border: 0;
+        border-radius: 999px;
+        padding: 0.42rem 0.9rem;
+        font-size: 0.82rem;
+        font-weight: 700;
+    }
+
+    .comment-save-btn {
+        background: #F28241;
+        color: #fff;
+    }
+
+    .comment-cancel-btn {
+        background: #f4ebe4;
+        color: #8f5b37;
+    }
+
+    .comment-empty-note {
+        color: #9a8575;
+        font-style: italic;
+    }
+
+    .comment-reaction-btn {
+        border: 1px solid #f1d7c3;
+        background: #fff8f2;
+        color: #c9783e;
+        border-radius: 999px;
+        padding: 0.28rem 0.7rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.82rem;
+        font-weight: 700;
+        transition: background 0.16s ease, color 0.16s ease, border-color 0.16s ease;
+    }
+
+    .comment-reaction-btn.active {
+        background: #F28241;
+        color: #fff;
+        border-color: #F28241;
+    }
+
+    .comment-reaction-btn:hover {
+        border-color: #F28241;
+        color: #F28241;
+    }
+
+    .comment-reaction-btn.active:hover {
+        color: #fff;
+    }
+
     .recipe-login-invite {
         margin-top: 1.2rem;
         padding: 1.1rem 1.2rem;
@@ -604,31 +803,52 @@
     .modal-star-row {
         display: flex;
         gap: 0.2rem;
+        align-items: center;
+        flex-wrap: nowrap;
+        min-height: 2.6rem;
     }
 
     .modal-star {
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        color: #ddd;
+        width: 2.2rem;
+        height: 2.2rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff5ec;
+        border: 1px solid #f1c29c;
+        border-radius: 10px;
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: #d9a57f;
         cursor: pointer;
-        padding: 0 0.1rem;
+        padding: 0;
         line-height: 1;
-        transition: color 0.12s;
+        transition: color 0.12s ease, background 0.12s ease, border-color 0.12s ease, transform 0.12s ease;
     }
 
     .modal-star.active {
-        color: #F28241;
+        color: #fff;
+        background: #F28241;
+        border-color: #F28241;
     }
 
     .modal-star:hover {
         color: #F28241;
-        opacity: 0.8;
+        border-color: #F28241;
+        transform: translateY(-1px);
     }
 
     .modal-rating-section {
         padding-top: 1rem;
         margin-top: 0.5rem;
         border-top: 1px solid #f1e3d7;
+    }
+
+    .modal-comment-label {
+        color: #8f5b37;
+        font-size: 0.92rem;
+        font-weight: 700;
+        margin-bottom: 0.45rem;
+        margin-top: 0.15rem;
     }
 </style>

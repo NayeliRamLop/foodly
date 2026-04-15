@@ -1,4 +1,4 @@
-﻿﻿﻿@extends(auth()->check() ? 'adminlte::page' : 'layouts.public')
+﻿﻿﻿﻿@extends(auth()->check() ? 'adminlte::page' : 'layouts.public')
 
 
 @section('title', 'Inicio - Cocina con Gusto')

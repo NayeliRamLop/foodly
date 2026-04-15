@@ -14,6 +14,27 @@
         const bootstrapModal = window.bootstrap ? new window.bootstrap.Modal(modalElement) : null;
         const isGuest = Boolean(config.isGuest);
         modalElement.classList.toggle('is-guest-preview', isGuest);
+        let currentRecipeIndex = -1;
+
+        const resolveRecipeIds = () => {
+            const source = typeof config.getRecipeIds === 'function'
+                ? config.getRecipeIds()
+                : config.recipeIds;
+
+            if (!Array.isArray(source)) {
+                return [];
+            }
+
+            return source
+                .map((value) => Number(value))
+                .filter((value, index, items) => Number.isFinite(value) && items.indexOf(value) === index);
+        };
+
+        const syncCurrentRecipeIndex = (recipeId) => {
+            const recipeIds = resolveRecipeIds();
+            currentRecipeIndex = recipeIds.indexOf(Number(recipeId));
+            return recipeIds;
+        };
 
         const showModal = () => {
             if (bootstrapModal) {
@@ -78,6 +99,26 @@
                 <i class="fas ${icon}"></i> ${escapeHtml(value)}
             </span>
         `;
+
+        const renderNavigationButtons = () => {
+            const recipeIds = resolveRecipeIds();
+
+            if (recipeIds.length <= 1 || currentRecipeIndex === -1) {
+                return '';
+            }
+
+            const hasPrev = currentRecipeIndex > 0;
+            const hasNext = currentRecipeIndex < recipeIds.length - 1;
+
+            return `
+                <button type="button" class="modal-nav-btn left" data-dir="prev" ${hasPrev ? '' : 'disabled'} aria-label="Receta anterior">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button type="button" class="modal-nav-btn right" data-dir="next" ${hasNext ? '' : 'disabled'} aria-label="Receta siguiente">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            `;
+        };
 
         const renderTags = (response) => {
             const tags = [];
@@ -273,13 +314,16 @@
             modalTitle.innerHTML = `<i class="fas fa-utensils mr-2"></i> ${escapeHtml(response.recipe_title)}`;
             modalBody.innerHTML = `
                 <div class="recipe-modal-media">
-                    ${response.image
-                        ? `<img src="${escapeHtml(resolveMediaUrl(response.image))}" alt="${escapeHtml(response.recipe_title)}">`
-                        : `<div class="text-center py-4">
-                                <i class="fas fa-image fa-5x" style="color: #F28241;"></i>
-                                <p class="mt-2 mb-0">Sin imagen</p>
-                           </div>`
-                    }
+                    ${renderNavigationButtons()}
+                    <div class="recipe-modal-media-content">
+                        ${response.image
+                            ? `<img src="${escapeHtml(resolveMediaUrl(response.image))}" alt="${escapeHtml(response.recipe_title)}">`
+                            : `<div class="text-center py-4">
+                                    <i class="fas fa-image fa-5x" style="color: #F28241;"></i>
+                                    <p class="mt-2 mb-0">Sin imagen</p>
+                               </div>`
+                        }
+                    </div>
                 </div>
                 <h3 class="recipe-modal-title">${escapeHtml(response.recipe_title)}</h3>
                 <p class="recipe-modal-description">${escapeHtml(response.recipe_description)}</p>
@@ -331,6 +375,24 @@
             }
         };
 
+        const navigate = (direction) => {
+            const recipeIds = resolveRecipeIds();
+
+            if (currentRecipeIndex === -1 || recipeIds.length <= 1) {
+                return;
+            }
+
+            const nextIndex = direction === 'prev'
+                ? currentRecipeIndex - 1
+                : currentRecipeIndex + 1;
+
+            if (nextIndex < 0 || nextIndex >= recipeIds.length) {
+                return;
+            }
+
+            open(recipeIds[nextIndex]);
+        };
+
         const renderLoading = () => {
             modalTitle.innerHTML = '<i class="fas fa-utensils mr-2"></i> Receta Completa';
             modalBody.innerHTML = `
@@ -348,6 +410,7 @@
 
         const open = async (recipeId) => {
             const url = config.showUrlTemplate.replace('__ID__', recipeId);
+            syncCurrentRecipeIndex(recipeId);
             renderLoading();
             showModal();
 
@@ -376,6 +439,36 @@
                 `;
             }
         };
+
+        modalElement.addEventListener('click', (event) => {
+            const navButton = event.target.closest('.modal-nav-btn');
+
+            if (!navButton || !modalElement.contains(navButton)) {
+                return;
+            }
+
+            event.preventDefault();
+            navigate(navButton.getAttribute('data-dir'));
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (!modalElement.classList.contains('show')) {
+                return;
+            }
+
+            const activeElement = document.activeElement;
+            if (activeElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(activeElement.tagName)) {
+                return;
+            }
+
+            if (event.key === 'ArrowLeft') {
+                navigate('prev');
+            }
+
+            if (event.key === 'ArrowRight') {
+                navigate('next');
+            }
+        });
 
         modalElement.addEventListener('hidden.bs.modal', () => {
             modalElement.querySelectorAll('video').forEach((video) => {

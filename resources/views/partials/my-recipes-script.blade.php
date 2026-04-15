@@ -366,6 +366,9 @@
             modalId: 'myRecipesPreviewModal',
             bodyId: 'myRecipesPreviewModalBody',
             titleId: 'myRecipesPreviewModalLabel',
+            getRecipeIds: () => Array.from(document.querySelectorAll('.view-recipe-btn[data-recipe-id]'))
+                .map((button) => Number(button.getAttribute('data-recipe-id')))
+                .filter((value) => Number.isFinite(value)),
             profileBaseUrl: "{{ url('/perfil') }}",
             showUrlTemplate: "{{ route('recipes.show', '__ID__') }}",
             isGuest: false,

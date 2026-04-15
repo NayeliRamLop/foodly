@@ -13,6 +13,8 @@
     --radius-md: 6px;
     --navbar-y-pad: 0.35rem;
     --navbar-x-pad: 1rem;
+    --navbar-height: 68.19px;
+    --navbar-control-height: 38px;
 }
 
 html {
@@ -79,11 +81,33 @@ body {
 .public-navbar {
     background-color: var(--bg-light) !important;
     border-bottom: 1px solid #f1c29c !important;
-    padding-top: var(--navbar-y-pad) !important;
-    padding-bottom: var(--navbar-y-pad) !important;
+    min-height: var(--navbar-height) !important;
+    height: var(--navbar-height) !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    padding-left: var(--navbar-x-pad) !important;
+    padding-right: var(--navbar-x-pad) !important;
     display: flex !important;
     align-items: center !important;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
+}
+
+.public-navbar .navbar-brand,
+.public-navbar .nav-actions,
+.public-navbar .search-form,
+.public-navbar .search-form .form-control,
+.public-navbar .btn-search,
+.public-navbar .register-link,
+.public-navbar .btn-primary,
+.public-navbar .btn-outline-secondary {
+    display: inline-flex;
+    align-items: center;
+}
+
+.public-navbar .navbar-brand,
+.public-navbar .nav-actions,
+.public-navbar .search-form {
+    height: 100%;
 }
 
 .public-navbar .navbar-brand img {
@@ -99,7 +123,7 @@ body {
 .public-navbar .search-form .form-control {
     border-radius: var(--radius-pill);
     border: 1px solid #e7b28a;
-    height: 35px;
+    height: var(--navbar-control-height);
     padding-left: 1rem;
 }
 
@@ -107,16 +131,20 @@ body {
     background-color: var(--secondary);
     color: var(--text-dark);
     border-radius: var(--radius-pill);
-    padding: var(--navbar-y-pad) 1.6rem;
+    height: var(--navbar-control-height);
+    padding: 0 1.6rem;
     border: none;
 }
 
 .public-navbar .register-link,
-.public-navbar .btn-primary {
+.public-navbar .btn-primary,
+.public-navbar .btn-outline-secondary {
     border-radius: var(--radius-md);
     font-size: 1rem !important;
-    padding: var(--navbar-y-pad) 0.95rem !important;
+    min-height: var(--navbar-control-height);
+    padding: 0 0.95rem !important;
     line-height: 1.2;
+    justify-content: center;
 }
 
 .public-navbar .register-link {

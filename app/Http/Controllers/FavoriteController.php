@@ -162,7 +162,7 @@ class FavoriteController extends Controller
         if (!$wasFavorite && $isFavorite && $recipe->user && $recipe->user->id !== $user->id) {
             $recipe->user->notify(new RecipeLikedNotification($user, $recipe));
         }
-        
+
         return response()->json([
             'success' => true,
             'is_favorite' => $isFavorite

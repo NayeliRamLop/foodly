@@ -16,7 +16,7 @@
 
     <style>
         main {
-            padding-top: 60px;
+            padding-top: var(--navbar-height, 68.19px);
         }
     </style>
 
@@ -25,7 +25,7 @@
 <body>
 
 <!-- ================= NAVBAR PÚBLICO ================= -->
-<nav class="navbar navbar-expand-lg px-4 py-3 public-navbar fixed-top">
+<nav class="navbar navbar-expand-lg px-4 public-navbar fixed-top">
     <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="{{ auth()->check() ? route('home') : url('/') }}">
         <img src="{{ asset('images/logo.png') }}" alt="Foodly" height="34">
     </a>

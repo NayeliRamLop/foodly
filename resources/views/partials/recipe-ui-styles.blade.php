@@ -200,6 +200,7 @@
     }
 
     .recipe-modal-media {
+        position: relative;
         background: linear-gradient(180deg, #fff4e7 0%, #fffdfb 100%);
         border: 1px solid #f4decd;
         border-radius: 20px;
@@ -210,10 +211,55 @@
         justify-content: center;
     }
 
+    .recipe-modal-media-content {
+        width: 100%;
+        text-align: center;
+    }
+
     .recipe-modal-media img {
         width: 100%;
         max-height: 380px;
         object-fit: contain;
+    }
+
+    .recipe-preview-modal .modal-nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 42px;
+        height: 42px;
+        border: 1px solid #efd0b4;
+        border-radius: 999px;
+        background: rgba(255, 252, 248, 0.96);
+        color: #a85d2d;
+        box-shadow: 0 14px 28px rgba(177, 93, 47, 0.12);
+        z-index: 2;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .recipe-preview-modal .modal-nav-btn.left {
+        left: 1rem;
+    }
+
+    .recipe-preview-modal .modal-nav-btn.right {
+        right: 1rem;
+    }
+
+    .recipe-preview-modal .modal-nav-btn:hover:not(:disabled) {
+        transform: translateY(-50%) scale(1.05);
+        background: linear-gradient(135deg, #f28241 0%, #dd6f37 100%);
+        color: #fff;
+        box-shadow: 0 18px 30px rgba(214, 111, 56, 0.22);
+    }
+
+    .recipe-preview-modal .modal-nav-btn:disabled {
+        opacity: 0.38;
+        cursor: not-allowed;
+        box-shadow: none;
     }
 
     .recipe-preview-modal .recipe-modal-title {
@@ -503,6 +549,19 @@
 
         .recipe-preview-modal .recipe-modal-title {
             font-size: 1.7rem;
+        }
+
+        .recipe-preview-modal .modal-nav-btn {
+            width: 38px;
+            height: 38px;
+        }
+
+        .recipe-preview-modal .modal-nav-btn.left {
+            left: 0.7rem;
+        }
+
+        .recipe-preview-modal .modal-nav-btn.right {
+            right: 0.7rem;
         }
 
         .recipe-login-actions .invite-action,

@@ -32,6 +32,14 @@ Route::get('/', function () {
 
 Route::get('/recipes/search', [RecipeController::class, 'search'])->name('recipes.search');
 Route::get('/recipes/suggest', [RecipeController::class, 'suggest'])->name('recipes.suggest');
+Route::get('/recipes/{recipe}', [RecipeController::class, 'show'])->whereNumber('recipe')->name('recipes.show');
+Route::get('/juego/descargar', function () {
+    $zipPath = public_path('downloads/Level01.zip');
+
+    abort_unless(file_exists($zipPath), 404);
+
+    return response()->download($zipPath, 'TUT-Suika-Game-Level01.zip');
+})->name('game.download');
 Route::post('/recipes/{recipe}/rate', [RecipeController::class, 'rate'])->middleware('auth')->name('recipes.rate');
 Route::post('/recipes/{recipe}/comments', [RecipeController::class, 'addComment'])->middleware('auth')->name('recipes.comments');
 Route::get('/perfil/{user}', [ProfileController::class, 'showPublic'])->name('profile.public');
@@ -132,7 +140,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [RecipeController::class, 'index'])->name('index');
         Route::get('/create', [RecipeController::class, 'create'])->name('create');
         Route::post('/', [RecipeController::class, 'store'])->name('store');
-        Route::get('/{recipe}', [RecipeController::class, 'show'])->name('show');
         Route::get('/{recipe}/edit', [RecipeController::class, 'edit'])->name('edit');
         Route::put('/{recipe}', [RecipeController::class, 'update'])->name('update');
         Route::delete('/{recipe}', [RecipeController::class, 'destroy'])->name('destroy');

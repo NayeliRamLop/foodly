@@ -148,9 +148,8 @@
           window.location.href = `{{ route('recipes.index') }}?open_recipe=${recipeId}`;
           return;
         }
-        if (window.openGuestRecipeAuthModal) {
-          window.openGuestRecipeAuthModal(`{{ route('home') }}?open_recipe=${recipeId}`);
-        }
+        const recipeTitle = target.getAttribute('data-value') || '';
+        window.location.href = `{{ route('recipes.search') }}?q=${encodeURIComponent(recipeTitle)}`;
       });
     });
   })();

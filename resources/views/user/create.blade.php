@@ -344,8 +344,14 @@
     </div>
   </section>
 
-  <div class="form-box">
+  <div class="form-box" id="crear-cuenta">
     <h2>Crear cuenta</h2>
+
+    @if(request('intent') === 'profile')
+      <div class="alert alert-warning border-0 mb-4" style="background: #fff4e8; color: #7c4a1c; border-radius: 10px;">
+        Crea una cuenta o inicia sesion para ver el perfil del usuario y acceder a mas informacion de la comunidad.
+      </div>
+    @endif
     
     @if ($errors->any())
       <div class="invalid-feedback" style="display:block;">

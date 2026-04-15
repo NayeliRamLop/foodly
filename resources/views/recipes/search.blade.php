@@ -2,6 +2,10 @@
 
 @section('title', 'Buscar recetas')
 
+@section('css')
+    @include('partials.recipe-ui-styles')
+@endsection
+
 @section('content')
 <div class="container py-5">
     <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
@@ -18,22 +22,8 @@
     @else
         <div class="row g-4">
             @foreach($recipes as $recipe)
-                <div class="col-md-4">
-                    <div class="card h-100">
-                        <div class="image-wrapper" style="height: 200px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center;">
-                            @if($recipe->image)
-                                <img src="{{ asset('storage/'.$recipe->image) }}" class="img-fluid" alt="{{ $recipe->recipe_title }}" style="max-height: 100%; max-width: 100%; object-fit: scale-down;">
-                            @else
-                                <div class="text-center text-muted">
-                                    <div style="font-size: 2rem;">Sin imagen</div>
-                                </div>
-                            @endif
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $recipe->recipe_title }}</h5>
-                            <p class="card-text text-muted">{{ \Illuminate\Support\Str::limit($recipe->recipe_description, 120) }}</p>
-                        </div>
-                    </div>
+                <div class="col-md-6 col-lg-4">
+                    @include('partials.recipe-card', ['recipe' => $recipe])
                 </div>
             @endforeach
         </div>
@@ -43,4 +33,40 @@
         </div>
     @endif
 </div>
+
+@include('partials.recipe-preview-modal', [
+    'modalId' => 'guestSearchRecipeModal',
+    'titleId' => 'guestSearchRecipeModalLabel',
+    'bodyId' => 'guestSearchRecipeModalBody',
+])
+@endsection
+
+@section('js')
+@include('partials.recipe-preview-modal-script')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const recipePreview = window.createRecipePreviewModalController({
+            modalId: 'guestSearchRecipeModal',
+            bodyId: 'guestSearchRecipeModalBody',
+            titleId: 'guestSearchRecipeModalLabel',
+            profileBaseUrl: "{{ url('/perfil') }}",
+            showUrlTemplate: "{{ route('recipes.show', '__ID__') }}",
+            isGuest: @json(!auth()->check()),
+            loginUrl: "{{ route('login') }}",
+            registerUrl: "{{ route('user.create') }}",
+            profilePromptUrl: "{{ route('user.create') }}?intent=profile#crear-cuenta",
+            logoUrl: "{{ asset('images/logo.png') }}",
+        });
+
+        document.querySelectorAll('.view-recipe-btn[data-recipe-id]').forEach((button) => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                if (recipePreview) {
+                    recipePreview.open(this.getAttribute('data-recipe-id'));
+                }
+            });
+        });
+    });
+</script>
 @endsection

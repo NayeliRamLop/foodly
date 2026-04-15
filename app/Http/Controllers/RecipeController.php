@@ -144,6 +144,8 @@ public function index()
         $query = trim((string) $request->get('q', ''));
 
         $recipesQuery = Recipe::with(['category', 'subcategory', 'user'])
+            ->withCount(['favoritedBy', 'comments', 'ratings'])
+            ->withAvg('ratings', 'rating')
             ->where('status', 1);
 
         if ($query !== '') {
@@ -155,6 +157,11 @@ public function index()
         }
 
         $recipes = $recipesQuery->latest()->paginate(12)->appends(['q' => $query]);
+        $recipes->through(function ($recipe) {
+            $recipe->avg_rating = round((float) ($recipe->ratings_avg_rating ?? 0), 1);
+
+            return $recipe;
+        });
 
         return view('recipes.search', [
             'recipes' => $recipes,
@@ -191,10 +198,10 @@ public function index()
         $recipes = Recipe::with(['category', 'subcategory', 'user'])
                         ->latest()
                         ->get();
-        
+
         // Preparar datos para DataTables
         $recipesData = $this->prepareRecipesDataTable($recipes);
-        
+
         return view('admin.recipes.index', [
             'recipes' => $recipesData,
             'categories' => Categories::with('subcategories')->get()
@@ -230,29 +237,29 @@ private function getAdminActionButtons($recipe)
 {
     $deleteUrl = route('admin.recipes.delete', $recipe->id);
     $toggleStatusUrl = route('recipes.toggle-status', $recipe->id);
-    
+
     // Obtener todas las categorías con sus subcategorías
     $categories = Categories::with('subcategories')->get();
-    
+
     // Determinar el color y el icono del botón de estado
     $statusColor = $recipe->status ? 'success' : 'danger';
     $statusIcon = $recipe->status ? 'fa-toggle-on' : 'fa-toggle-off';
     $statusTitle = $recipe->status ? 'Desactivar receta' : 'Activar receta';
-    
+
     $return = '
     <div class="btn-group">
         <!-- Botón para abrir modal de edición -->
         <button type="button" class="btn btn-warning btn-sm" title="Editar receta" data-toggle="modal" data-target="#editRecipeModal'.$recipe->id.'">
             <i class="fas fa-edit"></i>
         </button>
-        
+
         <!-- Botón de estado (toggle) -->
         <a href="'.$toggleStatusUrl.'" class="btn btn-'.$statusColor.' btn-sm" title="'.$statusTitle.'">
             <i class="fas '.$statusIcon.'"></i>
         </a>
-        
+
     </div>
-    
+
     <!-- Modal de edición -->
     <div class="modal fade" id="editRecipeModal'.$recipe->id.'" tabindex="-1" role="dialog" aria-labelledby="editRecipeModalLabel'.$recipe->id.'">
         <div class="modal-dialog modal-lg" role="document">
@@ -273,35 +280,35 @@ private function getAdminActionButtons($recipe)
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="edit_title'.$recipe->id.'" style="font-size: 1.1rem;">Título de la receta *</label>
-                                    <input type="text" class="form-control" id="edit_title'.$recipe->id.'" name="title" 
+                                    <input type="text" class="form-control" id="edit_title'.$recipe->id.'" name="title"
                                            value="'.e($recipe->recipe_title).'" required style="font-size: 1.1rem;">
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label for="edit_description'.$recipe->id.'" style="font-size: 1.1rem;">Descripción *</label>
                                     <textarea class="form-control" id="edit_description'.$recipe->id.'" name="description" rows="3" required style="font-size: 1.1rem;">'.e($recipe->recipe_description).'</textarea>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label for="edit_ingredients'.$recipe->id.'" style="font-size: 1.1rem;">Ingredientes *</label>
                                     <textarea class="form-control" id="edit_ingredients'.$recipe->id.'" name="ingredients" rows="5" required style="font-size: 1.1rem;">'.e($recipe->ingredients).'</textarea>
                                     <small class="form-text text-muted">Separar cada ingrediente con una nueva línea</small>
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="edit_instructions'.$recipe->id.'" style="font-size: 1.1rem;">Pasos de preparación *</label>
                                     <textarea class="form-control" id="edit_instructions'.$recipe->id.'" name="instructions" rows="5" required style="font-size: 1.1rem;">'.e($recipe->instructions).'</textarea>
                                     <small class="form-text text-muted">Separar cada paso con una nueva línea</small>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label for="edit_preparation_time'.$recipe->id.'" style="font-size: 1.1rem;">Tiempo de preparación (minutos) *</label>
-                                    <input type="number" class="form-control" id="edit_preparation_time'.$recipe->id.'" name="preparation_time" 
+                                    <input type="number" class="form-control" id="edit_preparation_time'.$recipe->id.'" name="preparation_time"
                                            value="'.$recipe->preparation_time.'" min="1" required style="font-size: 1.1rem;">
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label for="edit_difficulty'.$recipe->id.'" style="font-size: 1.1rem;">Dificultad *</label>
                                     <select class="form-control" id="edit_difficulty'.$recipe->id.'" name="difficulty" required style="font-size: 1.1rem;">
@@ -316,14 +323,14 @@ private function getAdminActionButtons($recipe)
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="edit_category_id'.$recipe->id.'" style="font-size: 1.1rem;">Categoría *</label>
                                     <select class="form-control" id="edit_category_id'.$recipe->id.'" name="category_id" required style="font-size: 1.1rem;">
                                         <option value="">Seleccione una categoría</option>';
-    
+
     // Generar opciones de categorías
     foreach($categories as $category) {
         $selected = ($recipe->category_id == $category->id) ? 'selected' : '';
@@ -331,48 +338,48 @@ private function getAdminActionButtons($recipe)
                         '.e($category->name).'
                     </option>';
     }
-    
+
     $return .= '
                                     </select>
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="edit_subcategory_id'.$recipe->id.'" style="font-size: 1.1rem;">Subcategoría (opcional)</label>
                                     <select class="form-control" id="edit_subcategory_id'.$recipe->id.'" name="subcategory_id" style="font-size: 1.1rem;">
                                         <option value="">Seleccione una subcategoría</option>';
-    
+
     // Generar opciones de subcategorías
     foreach($categories as $category) {
         foreach($category->subcategories as $subcategory) {
             $selected = ($recipe->subcategory_id == $subcategory->id) ? 'selected' : '';
-            $return .= '<option value="'.$subcategory->id.'" 
-                            data-category="'.$category->id.'" 
-                            class="edit-subcategory-option" 
+            $return .= '<option value="'.$subcategory->id.'"
+                            data-category="'.$category->id.'"
+                            class="edit-subcategory-option"
                             '.$selected.'>
                         '.e($subcategory->name).'
                     </option>';
         }
     }
-    
+
     $return .= '
                                     </select>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label style="font-size: 1.1rem;">Imagen actual</label>';
-    
+
     if($recipe->image) {
         $return .= '<div class="mb-2" style="height: 150px; display: flex; align-items: center; justify-content: center; background-color: #f8f9fa; border-radius: 8px;">
                         <img src="'.asset('storage/'.$recipe->image).'" class="img-fluid" style="max-height: 100%; max-width: 100%; object-fit: contain;">
                     </div>';
     }
-    
+
     $return .= '
                                     <label for="edit_image'.$recipe->id.'" style="font-size: 1.1rem;">Nueva imagen (opcional)</label>
                                     <div class="custom-file">
@@ -381,11 +388,11 @@ private function getAdminActionButtons($recipe)
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label style="font-size: 1.1rem;">Video actual</label>';
-    
+
     if($recipe->video) {
         $return .= '<div class="mb-2">
                         <video controls class="w-full rounded" style="max-height: 150px;">
@@ -407,7 +414,7 @@ private function getAdminActionButtons($recipe)
                                 referrerpolicy="strict-origin-when-cross-origin"></iframe>
                     </div>';
     }
-    
+
     $return .= '
                                     <label for="edit_video'.$recipe->id.'" style="font-size: 1.1rem;">Nuevo video (opcional)</label>
                                     <div class="custom-file">
@@ -432,13 +439,13 @@ private function getAdminActionButtons($recipe)
             </div>
         </div>
     </div>
-    
+
     <!-- Formulario oculto para eliminar -->
     <form id="delete-form-'.$recipe->id.'" action="'.$deleteUrl.'" method="POST" style="display:none;">
         '.csrf_field().'
         '.method_field('DELETE').'
     </form>';
-    
+
     return $return;
 }
     public function adminDelete($recipeId)
@@ -547,6 +554,10 @@ private function getAdminActionButtons($recipe)
      */
     public function show(Recipe $recipe)
     {
+        if (!$recipe->status && !Auth::check()) {
+            abort(404);
+        }
+
         $recipe->load('user', 'category', 'subcategory');
 
         $comments = $recipe->comments()
@@ -576,7 +587,7 @@ private function getAdminActionButtons($recipe)
         $videoEmbedUrl = $recipe->video_embed_url;
         $videoDirectUrl = $recipe->video_direct_url;
         $videoLinkType = $recipe->video_link_type;
-    
+
         return response()->json([
             'id' => $recipe->id,
             'recipe_title' => $recipe->recipe_title,
@@ -734,7 +745,7 @@ private function getAdminActionButtons($recipe)
  public function paraTi()
 {
     $user = auth()->user();
-    
+
     $categories = Categories::with('subcategories')->get();
     $favoriteIds = $user ? $user->favorites()->pluck('recipes.id')->toArray() : [];
     $followingIds = $user ? $user->following()->pluck('users.id')->toArray() : [];
@@ -755,7 +766,7 @@ private function getAdminActionButtons($recipe)
         $recipe->is_owner = $user && $recipe->user && $recipe->user->id === $user->id;
         return $recipe;
     });
-    
+
     return view('recipes.para-ti', compact('recipes', 'categories'));
 }
 
@@ -802,7 +813,7 @@ private function getAdminActionButtons($recipe)
                 ->where('status', 1) // Solo recetas activas del usuario
                 ->latest()
                 ->paginate(10);
-    
+
     $categories = Categories::with('subcategories')->get();
     $brands = $this->getAvailableBrands();
     $filterOptions = $this->getRecipeFilterOptions();
@@ -818,15 +829,15 @@ private function getAdminActionButtons($recipe)
         try {
             $recipe = Recipe::findOrFail($id);
             $recipe->load(['category', 'subcategory', 'user']);
-            
+
             // Procesar imagen para compatibilidad con PDF
             if ($recipe->image) {
                 $recipe->image = $this->processImageForPDF($recipe->image);
             }
-            
+
             $pdf = PDF::loadView('recipes.pdf', compact('recipe'));
             return $pdf->download('receta-'.$recipe->recipe_title.'.pdf');
-            
+
         } catch (\Exception $e) {
             return redirect()->back()
                             ->with('error', 'Error al generar el PDF: ' . $e->getMessage());
@@ -840,33 +851,33 @@ private function getAdminActionButtons($recipe)
     {
         try {
             $fullPath = storage_path('app/public/' . $imagePath);
-            
+
             // Verificar si el archivo existe
             if (!file_exists($fullPath)) {
                 return null;
             }
-            
+
             // Obtener información del archivo
             $imageInfo = getimagesize($fullPath);
             if (!$imageInfo) {
                 return null;
             }
-            
+
             $mimeType = $imageInfo['mime'];
-            
+
             // Si es WebP, convertir a JPEG
             if ($mimeType === 'image/webp') {
                 return $this->convertWebPToJpeg($imagePath);
             }
-            
+
             // Si es PNG con transparencia, convertir a JPEG
             if ($mimeType === 'image/png') {
                 return $this->convertPNGToJpeg($imagePath);
             }
-            
+
             // Para JPEG, GIF y otros formatos compatibles, devolver tal como está
             return $imagePath;
-            
+
         } catch (\Exception $e) {
             // Si hay error procesando la imagen, devolver null para omitirla del PDF
             return null;
@@ -880,23 +891,23 @@ private function getAdminActionButtons($recipe)
     {
         try {
             $fullPath = storage_path('app/public/' . $webpPath);
-            
+
             if (file_exists($fullPath) && function_exists('imagecreatefromwebp')) {
                 $im = imagecreatefromwebp($fullPath);
-                
+
                 if ($im !== false) {
                     $jpegPath = $this->generateConvertedImagePath($fullPath, 'jpg');
                     $success = imagejpeg($im, $jpegPath, 90);
                     imagedestroy($im);
-                    
+
                     if ($success) {
                         return $this->getRelativePathFromFull($jpegPath);
                     }
                 }
             }
-            
+
             return null; // Si no se puede convertir, omitir imagen
-            
+
         } catch (\Exception $e) {
             return null;
         }
@@ -909,38 +920,38 @@ private function getAdminActionButtons($recipe)
     {
         try {
             $fullPath = storage_path('app/public/' . $pngPath);
-            
+
             if (file_exists($fullPath) && function_exists('imagecreatefrompng')) {
                 $im = imagecreatefrompng($fullPath);
-                
+
                 if ($im !== false) {
                     // Crear una imagen con fondo blanco para reemplazar transparencia
                     $width = imagesx($im);
                     $height = imagesy($im);
                     $newIm = imagecreatetruecolor($width, $height);
-                    
+
                     // Llenar con blanco
                     $white = imagecolorallocate($newIm, 255, 255, 255);
                     imagefill($newIm, 0, 0, $white);
-                    
+
                     // Copiar la imagen PNG encima
                     imagecopy($newIm, $im, 0, 0, 0, 0, $width, $height);
-                    
+
                     $jpegPath = $this->generateConvertedImagePath($fullPath, 'jpg');
                     $success = imagejpeg($newIm, $jpegPath, 90);
-                    
+
                     imagedestroy($im);
                     imagedestroy($newIm);
-                    
+
                     if ($success) {
                         return $this->getRelativePathFromFull($jpegPath);
                     }
                 }
             }
-            
+
             // Si no se puede convertir, devolver el PNG original
             return $pngPath;
-            
+
         } catch (\Exception $e) {
             return $pngPath;
         }
@@ -973,7 +984,7 @@ public function toggleStatus($id)
 
         $action = $recipe->status ? 'activada' : 'desactivada';
         return redirect()->back()->with('success', "Receta $action correctamente");
-        
+
     } catch (\Exception $e) {
         return redirect()->back()->with('error', 'Error al cambiar el estado: ' . $e->getMessage());
     }

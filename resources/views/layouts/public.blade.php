@@ -100,7 +100,7 @@
         }
 
         box.innerHTML = items.map((item) => {
-          const imageUrl = item.image ? `/storage/${item.image}` : '';
+          const imageUrl = item.image ? `/${item.image}` : '';
           const imageHtml = imageUrl
             ? `<img src="${imageUrl}" alt="" class="suggest-thumb">`
             : `<div class="suggest-thumb placeholder"></div>`;

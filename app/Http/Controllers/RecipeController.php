@@ -376,7 +376,7 @@ private function getAdminActionButtons($recipe)
 
     if($recipe->image) {
         $return .= '<div class="mb-2" style="height: 150px; display: flex; align-items: center; justify-content: center; background-color: #f8f9fa; border-radius: 8px;">
-                        <img src="'.asset('storage/'.$recipe->image).'" class="img-fluid" style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                        <img src="'.asset($recipe->image).'" class="img-fluid" style="max-height: 100%; max-width: 100%; object-fit: contain;">
                     </div>';
     }
 
@@ -396,7 +396,7 @@ private function getAdminActionButtons($recipe)
     if($recipe->video) {
         $return .= '<div class="mb-2">
                         <video controls class="w-full rounded" style="max-height: 150px;">
-                            <source src="'.asset('storage/'.$recipe->video).'" type="video/mp4">
+                            <source src="'.asset($recipe->video).'" type="video/mp4">
                         </video>
                     </div>';
     } elseif($recipe->video_direct_url) {
@@ -525,12 +525,16 @@ private function getAdminActionButtons($recipe)
 
             // Procesar imagen
             if ($request->hasFile('image')) {
-                $recipeData['image'] = $request->file('image')->store('recipes', 'public');
+                $recipeData['image'] = Recipe::normalizePublicMediaPath(
+                    $request->file('image')->store('recipes', 'public')
+                );
             }
 
             // Procesar video
             if ($request->hasFile('video')) {
-                $recipeData['video'] = $request->file('video')->store('recipes/videos', 'public');
+                $recipeData['video'] = Recipe::normalizePublicMediaPath(
+                    $request->file('video')->store('recipes/videos', 'public')
+                );
                 $recipeData['video_link'] = null;
             } elseif (!empty($validated['video_link'])) {
                 $recipeData['video_link'] = trim($validated['video_link']);
@@ -681,22 +685,26 @@ private function getAdminActionButtons($recipe)
 
             // Procesar imagen si existe
             if ($request->hasFile('image')) {
-                if ($recipe->image) {
-                    Storage::disk('public')->delete($recipe->image);
+                if ($recipe->image_storage_path) {
+                    Storage::disk('public')->delete($recipe->image_storage_path);
                 }
-                $recipeData['image'] = $request->file('image')->store('recipes', 'public');
+                $recipeData['image'] = Recipe::normalizePublicMediaPath(
+                    $request->file('image')->store('recipes', 'public')
+                );
             }
 
             // Procesar video si existe
             if ($request->hasFile('video')) {
-                if ($recipe->video) {
-                    Storage::disk('public')->delete($recipe->video);
+                if ($recipe->video_storage_path) {
+                    Storage::disk('public')->delete($recipe->video_storage_path);
                 }
-                $recipeData['video'] = $request->file('video')->store('recipes/videos', 'public');
+                $recipeData['video'] = Recipe::normalizePublicMediaPath(
+                    $request->file('video')->store('recipes/videos', 'public')
+                );
                 $recipeData['video_link'] = null;
             } elseif (array_key_exists('video_link', $validated) && !empty($validated['video_link'])) {
-                if ($recipe->video) {
-                    Storage::disk('public')->delete($recipe->video);
+                if ($recipe->video_storage_path) {
+                    Storage::disk('public')->delete($recipe->video_storage_path);
                 }
                 $recipeData['video'] = null;
                 $recipeData['video_link'] = trim($validated['video_link']);
@@ -850,7 +858,7 @@ private function getAdminActionButtons($recipe)
     private function processImageForPDF($imagePath)
     {
         try {
-            $fullPath = storage_path('app/public/' . $imagePath);
+            $fullPath = storage_path('app/public/' . Recipe::stripStoragePrefix($imagePath));
 
             // Verificar si el archivo existe
             if (!file_exists($fullPath)) {
@@ -890,7 +898,7 @@ private function getAdminActionButtons($recipe)
     private function convertWebPToJpeg($webpPath)
     {
         try {
-            $fullPath = storage_path('app/public/' . $webpPath);
+            $fullPath = storage_path('app/public/' . Recipe::stripStoragePrefix($webpPath));
 
             if (file_exists($fullPath) && function_exists('imagecreatefromwebp')) {
                 $im = imagecreatefromwebp($fullPath);
@@ -919,7 +927,7 @@ private function getAdminActionButtons($recipe)
     private function convertPNGToJpeg($pngPath)
     {
         try {
-            $fullPath = storage_path('app/public/' . $pngPath);
+            $fullPath = storage_path('app/public/' . Recipe::stripStoragePrefix($pngPath));
 
             if (file_exists($fullPath) && function_exists('imagecreatefrompng')) {
                 $im = imagecreatefrompng($fullPath);
@@ -972,7 +980,7 @@ private function getAdminActionButtons($recipe)
     private function getRelativePathFromFull($fullPath)
     {
         $publicPath = storage_path('app/public/');
-        return str_replace($publicPath, '', $fullPath);
+        return Recipe::normalizePublicMediaPath(str_replace($publicPath, '', $fullPath));
     }
 
 public function toggleStatus($id)

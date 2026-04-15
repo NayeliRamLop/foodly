@@ -173,7 +173,7 @@
             <!-- Contenedor flexible para la imagen -->
             <div class="image-wrapper" style="height: 340px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; border-top-left-radius: 12px; border-top-right-radius: 12px; position: relative; overflow: hidden;">
                 @if($recipe->image)
-                <img src="{{ asset('storage/'.$recipe->image) }}" class="img-fluid" alt="{{ $recipe->recipe_title }}" style="max-height: 100%; max-width: 100%; object-fit: scale-down;">
+                <img src="{{ asset($recipe->image) }}" class="img-fluid" alt="{{ $recipe->recipe_title }}" style="max-height: 100%; max-width: 100%; object-fit: scale-down;">
                 @else
                 <div class="text-center">
                     <i class="fas fa-image fa-3x" style="color: #F28241;"></i>
@@ -182,7 +182,7 @@
                 @endif
                 @if($recipe->video)
                 <video class="recipe-video-preview" muted playsinline preload="metadata">
-                    <source src="{{ asset('storage/'.$recipe->video) }}" type="video/mp4">
+                    <source src="{{ asset($recipe->video) }}" type="video/mp4">
                 </video>
                 @elseif($hoverDirectVideoUrl)
                 <video class="recipe-video-preview" muted playsinline preload="metadata">
@@ -701,7 +701,7 @@
                             </button>
                             <div class="recipe-modal-media-content">
                                 ${response.image ? 
-                                    `<img src="/storage/${response.image}" class="recipe-modal-img img-fluid" alt="${response.recipe_title}">` : 
+                                    `<img src="/${response.image}" class="recipe-modal-img img-fluid" alt="${response.recipe_title}">` : 
                                     `<div class="text-center py-4" style="background-color: #f8f9fa; border-radius: 8px;">
                                         <i class="fas fa-image fa-5x" style="color: #F28241;"></i>
                                         <p class="mt-2">Sin imagen</p>
@@ -784,7 +784,7 @@
                             <h5 class="recipe-section-title"><i class="fas fa-video mr-1"></i> Video:</h5>
                             <div class="recipe-video-wrap">
                                 <video id="recipeVideo" controls class="recipe-video-player">
-                                    <source src="/storage/${response.video}" type="video/mp4">
+                                    <source src="/${response.video}" type="video/mp4">
                                     Tu navegador no soporta el elemento de video.
                                 </video>
                             </div>

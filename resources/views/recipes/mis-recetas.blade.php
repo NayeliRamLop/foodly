@@ -39,7 +39,7 @@
             <!-- Contenedor de imagen mejorado -->
             <div class="image-wrapper" style="height: 200px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; border-top-left-radius: 15px; border-top-right-radius: 15px; overflow: hidden; position: relative;">
                 @if($recipe->image)
-                <img src="{{ asset('storage/'.$recipe->image) }}" class="img-fluid" alt="{{ $recipe->title }}"
+                <img src="{{ asset($recipe->image) }}" class="img-fluid" alt="{{ $recipe->title }}"
                      style="max-height: 100%; max-width: 100%; width: auto; height: auto; object-fit: contain; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                 @else
                 <div class="text-center">
@@ -82,7 +82,7 @@
                             <div class="multimedia-section mb-4" style="border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
                                 @if($recipe->image)
                                     <div style="height: 250px; display: flex; align-items: center; justify-content: center; background-color: #f8f9fa;">
-                                        <img src="{{ asset('storage/' . $recipe->image) }}" class="img-fluid" alt="{{ $recipe->title }}" style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                                        <img src="{{ asset($recipe->image) }}" class="img-fluid" alt="{{ $recipe->title }}" style="max-height: 100%; max-width: 100%; object-fit: contain;">
                                     </div>
                                 @else
                                     <div class="text-center py-5" style="background-color: #f8f9fa; height: 250px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
@@ -93,7 +93,7 @@
                                 @if($recipe->video)
                                     <div class="video-container p-3" style="background-color: #f8f9fa; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;">
                                         <video id="recipeVideo{{ $recipe->id }}" controls class="w-full rounded-lg" style="max-height: 200px;">
-                                            <source src="{{ asset('storage/' . $recipe->video) }}" type="video/mp4">
+                                            <source src="{{ asset($recipe->video) }}" type="video/mp4">
                                             Tu navegador no soporta el elemento de video.
                                         </video>
                                     </div>
@@ -345,7 +345,7 @@
                                     <label style="font-size: 1.1rem;">Imagen actual</label>
                                     @if($recipe->image)
                                         <div class="mb-2" style="height: 150px; display: flex; align-items: center; justify-content: center; background-color: #f8f9fa; border-radius: 8px;">
-                                            <img src="{{ asset('storage/' . $recipe->image) }}" class="img-fluid" style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                                            <img src="{{ asset($recipe->image) }}" class="img-fluid" style="max-height: 100%; max-width: 100%; object-fit: contain;">
                                         </div>
                                     @endif
 
@@ -363,7 +363,7 @@
                                     @if($recipe->video)
                                         <div class="mb-2">
                                             <video controls class="w-full rounded" style="max-height: 150px;">
-                                                <source src="{{ asset('storage/' . $recipe->video) }}" type="video/mp4">
+                                                <source src="{{ asset($recipe->video) }}" type="video/mp4">
                                             </video>
                                         </div>
                                     @elseif($recipe->video_direct_url)

@@ -26,7 +26,7 @@
                         <div class="card h-100 search-card">
                             <div class="search-card-media">
                                 @if($recipe->image)
-                                    <img src="{{ asset('storage/'.$recipe->image) }}" alt="{{ $recipe->recipe_title }}" class="search-card-image">
+                                    <img src="{{ asset($recipe->image) }}" alt="{{ $recipe->recipe_title }}" class="search-card-image">
                                 @else
                                     <i class="fas fa-image search-card-icon"></i>
                                 @endif
@@ -255,7 +255,7 @@
                         <div class="recipe-modal-media mb-4">
                             <div class="recipe-modal-media-content">
                                 ${response.image ?
-                                    `<img src="/storage/${response.image}" class="recipe-modal-img img-fluid" alt="${response.recipe_title}">` :
+                                    `<img src="/${response.image}" class="recipe-modal-img img-fluid" alt="${response.recipe_title}">` :
                                     `<div class="text-center py-4" style="background-color: #f8f9fa; border-radius: 8px;">
                                         <i class="fas fa-image fa-5x" style="color: #F28241;"></i>
                                         <p class="mt-2">Sin imagen</p>
@@ -335,7 +335,7 @@
                             <h5 class="recipe-section-title"><i class="fas fa-video mr-1"></i> Video:</h5>
                             <div class="recipe-video-wrap">
                                 <video id="searchRecipeVideo" controls class="recipe-video-player">
-                                    <source src="/storage/${response.video}" type="video/mp4">
+                                    <source src="/${response.video}" type="video/mp4">
                                 </video>
                             </div>
                         </div>`;

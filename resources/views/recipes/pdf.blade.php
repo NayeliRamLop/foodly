@@ -111,7 +111,7 @@
     <div class="compact-container">
         @if($recipe->image)
             <div class="recipe-image">
-                <img src="{{ storage_path('app/public/' . $recipe->image) }}" 
+                <img src="{{ storage_path('app/public/' . \App\Models\Recipe::stripStoragePrefix($recipe->image)) }}" 
                      alt="{{ $recipe->recipe_title }}"
                      onerror="this.style.display='none'">
             </div>

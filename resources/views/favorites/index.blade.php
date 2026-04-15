@@ -146,7 +146,7 @@
             <!-- Contenedor flexible para la imagen -->
             <div class="image-wrapper" style="height: 200px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; border-top-left-radius: 12px; border-top-right-radius: 12px; position: relative;">
                 @if($recipe->image)
-                <img src="{{ asset('storage/'.$recipe->image) }}" class="img-fluid" alt="{{ $recipe->recipe_title }}" style="max-height: 100%; max-width: 100%; object-fit: scale-down;">
+                <img src="{{ asset($recipe->image) }}" class="img-fluid" alt="{{ $recipe->recipe_title }}" style="max-height: 100%; max-width: 100%; object-fit: scale-down;">
                 @else
                 <div class="text-center">
                     <i class="fas fa-image fa-3x" style="color: #F28241;"></i>
@@ -458,7 +458,7 @@
                     let modalContent = `
                         <div class="text-center mb-4">
                             ${response.image ? 
-                                `<img src="/storage/${response.image}" class="recipe-modal-img img-fluid" alt="${response.recipe_title}">` : 
+                                `<img src="/${response.image}" class="recipe-modal-img img-fluid" alt="${response.recipe_title}">` : 
                                 `<div class="text-center py-4" style="background-color: #f8f9fa; border-radius: 8px;">
                                     <i class="fas fa-image fa-5x" style="color: #F28241;"></i>
                                     <p class="mt-2">Sin imagen</p>
@@ -532,7 +532,7 @@
                             <h5 class="recipe-section-title"><i class="fas fa-video mr-1"></i> Video:</h5>
                             <div class="embed-responsive embed-responsive-16by9">
                                 <video id="recipeVideo" controls class="w-100 rounded" style="background-color: #f8f9fa;">
-                                    <source src="/storage/${response.video}" type="video/mp4">
+                                    <source src="/${response.video}" type="video/mp4">
                                     Tu navegador no soporta el elemento de video.
                                 </video>
                             </div>

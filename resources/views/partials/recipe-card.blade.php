@@ -1,7 +1,7 @@
 <div class="card h-100 recipe-card">
     <div class="image-wrapper">
         @if($recipe->image)
-            <img src="{{ asset('storage/'.$recipe->image) }}" class="img-fluid" alt="{{ $recipe->recipe_title }}">
+            <img src="{{ asset($recipe->image) }}" class="img-fluid" alt="{{ $recipe->recipe_title }}">
         @else
             <div class="text-center">
                 <i class="fas fa-image fa-3x" style="color: #F28241;"></i>

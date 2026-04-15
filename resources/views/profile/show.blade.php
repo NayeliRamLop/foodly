@@ -186,7 +186,7 @@
                             <div class="recipe-item">
                                 <div class="recipe-thumb">
                                     @if($recipe->image)
-                                        <img src="{{ asset('storage/'.$recipe->image) }}" alt="{{ $recipe->recipe_title }}">
+                                        <img src="{{ asset($recipe->image) }}" alt="{{ $recipe->recipe_title }}">
                                     @else
                                         <i class="fas fa-image" style="font-size: 2rem; color: #c2c2c2;"></i>
                                     @endif

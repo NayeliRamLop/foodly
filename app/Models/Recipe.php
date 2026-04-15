@@ -68,7 +68,7 @@ class Recipe extends Model
      */
     public function getImageUrlAttribute()
     {
-        return $this->image ? asset('storage/'.$this->image) : null;
+        return $this->image ? asset(ltrim($this->image, '/')) : null;
     }
 
     /**
@@ -76,7 +76,27 @@ class Recipe extends Model
      */
     public function getVideoUrlAttribute()
     {
-        return $this->video ? asset('storage/'.$this->video) : null;
+        return $this->video ? asset(ltrim($this->video, '/')) : null;
+    }
+
+    public function setImageAttribute($value): void
+    {
+        $this->attributes['image'] = self::normalizePublicMediaPath($value);
+    }
+
+    public function setVideoAttribute($value): void
+    {
+        $this->attributes['video'] = self::normalizePublicMediaPath($value);
+    }
+
+    public function getImageStoragePathAttribute(): ?string
+    {
+        return self::stripStoragePrefix($this->getRawOriginal('image'));
+    }
+
+    public function getVideoStoragePathAttribute(): ?string
+    {
+        return self::stripStoragePrefix($this->getRawOriginal('video'));
     }
 
     public function getVideoEmbedUrlAttribute(): ?string
@@ -166,6 +186,41 @@ class Recipe extends Model
             'url' => $url,
             'parts' => $parts,
         ];
+    }
+
+    public static function normalizePublicMediaPath(?string $path): ?string
+    {
+        if (!$path) {
+            return null;
+        }
+
+        $normalized = ltrim(trim($path), '/');
+        if ($normalized === '') {
+            return null;
+        }
+
+        if (preg_match('#^(https?:)?//#i', $normalized)) {
+            return $normalized;
+        }
+
+        return str_starts_with($normalized, 'storage/')
+            ? $normalized
+            : 'storage/'.$normalized;
+    }
+
+    public static function stripStoragePrefix(?string $path): ?string
+    {
+        if (!$path) {
+            return null;
+        }
+
+        $normalized = ltrim(trim($path), '/');
+
+        if (str_starts_with($normalized, 'storage/')) {
+            return substr($normalized, 8);
+        }
+
+        return $normalized;
     }
     // Agrega este método al modelo Recipe
 public function favoritedBy()

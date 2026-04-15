@@ -43,9 +43,19 @@ class User extends Authenticatable
     // Accesor para obtener la URL completa del avatar
     public function getAvatarUrlAttribute()
     {
-        return $this->avatar 
-            ? Storage::disk('public')->url($this->avatar)
+        return $this->avatar
+            ? asset(ltrim($this->avatar, '/'))
             : asset('images/default-avatar.png');
+    }
+
+    public function setAvatarAttribute($value): void
+    {
+        $this->attributes['avatar'] = self::normalizePublicAvatarPath($value);
+    }
+
+    public function getAvatarStoragePathAttribute(): ?string
+    {
+        return self::stripStoragePrefix($this->getRawOriginal('avatar'));
     }
 
     /**
@@ -94,8 +104,43 @@ public function isUser()
     {
         return strtolower(trim($this->role)) === 'user';
     }
-    public function isActive()
+public function isActive()
 {
     return $this->status == 1;
+}
+
+public static function normalizePublicAvatarPath(?string $path): ?string
+{
+    if (!$path) {
+        return null;
+    }
+
+    $normalized = ltrim(trim($path), '/');
+    if ($normalized === '') {
+        return null;
+    }
+
+    if (preg_match('#^(https?:)?//#i', $normalized)) {
+        return $normalized;
+    }
+
+    return str_starts_with($normalized, 'storage/')
+        ? $normalized
+        : 'storage/'.$normalized;
+}
+
+public static function stripStoragePrefix(?string $path): ?string
+{
+    if (!$path) {
+        return null;
+    }
+
+    $normalized = ltrim(trim($path), '/');
+
+    if (str_starts_with($normalized, 'storage/')) {
+        return substr($normalized, 8);
+    }
+
+    return $normalized;
 }
 }

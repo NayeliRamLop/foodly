@@ -213,7 +213,7 @@
             <div class="for-you-video-box">
                 @if($recipe->video)
                     <video class="for-you-video" controls playsinline preload="metadata">
-                        <source src="{{ asset('storage/'.$recipe->video) }}" type="video/mp4">
+                        <source src="{{ asset($recipe->video) }}" type="video/mp4">
                     </video>
                 @elseif($directVideoUrl)
                     <video class="for-you-video" controls playsinline preload="metadata">
@@ -251,7 +251,7 @@
                     <a href="{{ route('profile.public', $recipe->user->id) }}" class="for-you-btn" title="Ver perfil">
                         <span class="for-you-profile-wrap">
                             @if(!empty($recipe->user->avatar))
-                                <img class="for-you-profile" src="{{ asset('storage/'.$recipe->user->avatar) }}" alt="{{ $recipe->user->name }}">
+                                <img class="for-you-profile" src="{{ $recipe->user->avatar_url }}" alt="{{ $recipe->user->name }}">
                             @else
                                 <span class="for-you-bubble">
                                     <i class="fas fa-user"></i>

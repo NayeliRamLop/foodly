@@ -246,7 +246,7 @@
             modalBody.innerHTML = `
                 <div class="recipe-modal-media">
                     ${response.image
-                        ? `<img src="/storage/${escapeHtml(response.image)}" alt="${escapeHtml(response.recipe_title)}">`
+                        ? `<img src="${escapeHtml(response.image)}" alt="${escapeHtml(response.recipe_title)}">`
                         : `<div class="text-center py-4">
                                 <i class="fas fa-image fa-5x" style="color: #F28241;"></i>
                                 <p class="mt-2 mb-0">Sin imagen</p>

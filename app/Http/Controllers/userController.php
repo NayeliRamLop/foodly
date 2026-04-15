@@ -88,7 +88,9 @@ class UserController extends Controller
 
         $avatarPath = null;
         if ($request->hasFile('avatar')) {
-            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+            $avatarPath = User::normalizePublicAvatarPath(
+                $request->file('avatar')->store('avatars', 'public')
+            );
         }
 
         $user = User::create([
@@ -168,18 +170,20 @@ class UserController extends Controller
 
         try {
             // Eliminar avatar anterior si existe
-            if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
-                Storage::disk('public')->delete($user->avatar);
+            if ($user->avatar_storage_path && Storage::disk('public')->exists($user->avatar_storage_path)) {
+                Storage::disk('public')->delete($user->avatar_storage_path);
             }
 
             // Guardar nuevo avatar
-            $path = $request->file('avatar')->store('avatars', 'public');
+            $path = User::normalizePublicAvatarPath(
+                $request->file('avatar')->store('avatars', 'public')
+            );
             $user->avatar = $path;
             $user->save();
 
             return back()->with([
                 'success' => 'Avatar actualizado correctamente',
-                'avatar_url' => Storage::disk('public')->url($path)
+                'avatar_url' => asset($path)
             ]);
 
         } catch (\Exception $e) {
@@ -192,8 +196,8 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         try {
-            if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
-                Storage::disk('public')->delete($user->avatar);
+            if ($user->avatar_storage_path && Storage::disk('public')->exists($user->avatar_storage_path)) {
+                Storage::disk('public')->delete($user->avatar_storage_path);
             }
 
             $user->avatar = null;

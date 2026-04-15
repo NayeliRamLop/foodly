@@ -496,21 +496,33 @@
     })();
   </script>
   <script>
-    const typewriterEl = document.getElementById('typewriter');
-    const fullText = typewriterEl.textContent.trim();
-    typewriterEl.style.minHeight = `${typewriterEl.offsetHeight}px`;
-    typewriterEl.textContent = '';
-    
-    let index = 0;
-    function typeWriter() {
-      if (index < fullText.length) {
-        typewriterEl.textContent += fullText[index];
-        index++;
-        setTimeout(typeWriter, 50); // 50ms entre cada letra
-      }
-    }
-    
-    typeWriter();
+    (function () {
+      const typewriterEl = document.getElementById('typewriter');
+      if (!typewriterEl) return;
+
+      const fullText = typewriterEl.textContent.trim();
+      typewriterEl.style.minHeight = `${typewriterEl.offsetHeight}px`;
+
+      const startTypewriterLoop = () => {
+        typewriterEl.textContent = '';
+        let index = 0;
+
+        const typeNextCharacter = () => {
+          if (index < fullText.length) {
+            typewriterEl.textContent += fullText[index];
+            index++;
+            setTimeout(typeNextCharacter, 50);
+            return;
+          }
+
+          setTimeout(startTypewriterLoop, 1400);
+        };
+
+        typeNextCharacter();
+      };
+
+      startTypewriterLoop();
+    })();
   </script>
   <script>
     (function () {

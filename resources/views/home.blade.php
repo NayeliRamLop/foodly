@@ -1,4 +1,4 @@
-﻿﻿@extends(auth()->check() ? 'adminlte::page' : 'layouts.public')
+﻿﻿﻿@extends(auth()->check() ? 'adminlte::page' : 'layouts.public')
 
 
 @section('title', 'Inicio - Cocina con Gusto')
@@ -78,7 +78,7 @@
 
         .hero-section {
             background: transparent;
-            padding: 10px 40px 40px !important;
+            padding: 10px 40px 16px !important;
             min-height: auto;
           display: flex;
           align-items: center;
@@ -95,22 +95,24 @@
         @endauth
 
         .carousel-fullwidth {
-            margin-top: 2rem;
-            width: min(1300px, 96vw);
+            margin-top: 0.2rem;
+            width: min(1460px, 98vw);
             margin-left: auto;
             margin-right: auto;
         }
 
         #homeCarousel .carousel-inner {
-          max-height: 487px;
+          max-height: 560px;
+          border-radius: 26px;
+          overflow: hidden;
         }
 
         #homeCarousel .carousel-item {
-          height: 487px;
+          height: 560px;
         }
 
         #homeCarousel .carousel-item img {
-          height: 487px;
+          height: 560px;
           object-fit: cover;
           object-position: center;
         }
@@ -128,13 +130,13 @@
           left: 2rem;
           bottom: 2rem;
           z-index: 2;
-          max-width: 460px;
-          padding: 1.1rem 1.25rem;
-          border-radius: 20px;
-          background: rgba(255, 250, 245, 0.46);
+          max-width: 560px;
+          padding: 1.35rem 1.5rem;
+          border-radius: 24px;
+          background: rgba(255, 251, 247, 0.56);
           backdrop-filter: blur(10px);
-          box-shadow: 0 16px 26px rgba(63, 38, 12, 0.10);
-          border: 1px solid rgba(255, 255, 255, 0.18);
+          box-shadow: 0 18px 34px rgba(63, 38, 12, 0.10);
+          border: 1px solid rgba(255, 255, 255, 0.38);
         }
 
         .carousel-caption-box.caption-right {
@@ -177,8 +179,8 @@
         .carousel-caption-title {
           margin: 0 0 0.35rem;
           color: #7c4a1c;
-          font-size: clamp(1.5rem, 2.1vw, 2.2rem);
-          line-height: 1.05;
+          font-size: clamp(1.7rem, 2.4vw, 2.55rem);
+          line-height: 1.08;
           font-weight: 800;
           text-wrap: balance;
         }
@@ -186,7 +188,7 @@
         .carousel-caption-text {
           margin: 0;
           color: #67584c;
-          font-size: 0.95rem;
+          font-size: 1rem;
           line-height: 1.65;
         }
 
@@ -251,7 +253,7 @@
         .game-slide-title {
           margin: 0 0 0.9rem;
           color: #7c4a1c;
-          font-size: clamp(2rem, 3vw, 3rem);
+          font-size: clamp(2.1rem, 3vw, 3.1rem);
           line-height: 1.06;
           font-weight: 800;
           text-wrap: balance;
@@ -259,7 +261,7 @@
 
         .game-slide-text {
           margin: 0 0 1.4rem;
-          font-size: 1.02rem;
+          font-size: 1.04rem;
           line-height: 1.75;
           color: #6d5b4d;
           max-width: 50ch;
@@ -490,17 +492,17 @@
         @media (max-width: 768px) {
           .hero-section {
             min-height: auto;
-            padding: 100px 15px 20px;
+            padding: 96px 15px 12px;
           }
 
           .carousel-fullwidth {
-            margin-top: 1rem;
-            width: min(1300px, 97vw);
+            margin-top: 0.1rem;
+            width: min(1460px, 97vw);
           }
 
           #homeCarousel .carousel-item img {
-            height: calc(97vw * 487 / 1300);
-            max-height: 487px;
+            height: calc(97vw * 560 / 1460);
+            max-height: 560px;
           }
 
           .carousel-caption-box {
@@ -508,7 +510,7 @@
             right: 1rem;
             bottom: 1rem;
             max-width: none;
-            padding: 0.9rem 1rem;
+            padding: 1rem;
             transform: none;
             text-align: left;
           }
@@ -552,8 +554,8 @@
 
           #homeCarousel .carousel-inner,
           #homeCarousel .carousel-item {
-            max-height: calc(97vw * 487 / 1300);
-            height: calc(97vw * 487 / 1300);
+            max-height: calc(97vw * 560 / 1460);
+            height: calc(97vw * 560 / 1460);
           }
 
           .top-recetas,
@@ -568,7 +570,7 @@
           }
 
           .hero-section {
-            padding: 80px 10px 15px;
+            padding: 78px 10px 10px;
           }
 
           .logo-container img {
@@ -582,7 +584,7 @@
           }
 
           .carousel-fullwidth {
-            margin-top: 1rem;
+            margin-top: 0;
           }
 
           .top-recetas .container,

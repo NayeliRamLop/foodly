@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bienvenido a cocina con gusto</title>
-  <!-- Incluir Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" />
   <link rel="stylesheet" href="{{ asset('css/app-theme.css') }}">
@@ -26,7 +25,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start; 
+      justify-content: flex-start;
       padding-top: 110px;
       gap: 2rem;
       min-height: 100vh;
@@ -42,7 +41,6 @@
       margin-top: 0.4rem;
     }
 
-    /*Titulo Maquina Escribir*/
     .typewriter-container {
       position: static;
       width: min(860px, 92vw);
@@ -86,7 +84,6 @@
       box-shadow: none !important;
     }
 
-    /* Logo */
     .logo-container {
       position: static;
       flex: 0 0 auto;
@@ -98,8 +95,6 @@
       width: auto;
     }
 
-
-    /* Cuadro login centrado */
     .login-box {
       background: rgba(255, 255, 255, 0.95);
       padding: 2rem 2rem;
@@ -109,7 +104,7 @@
       max-width: none;
       color: #333;
       font-weight: normal;
-      font-size: 1.0rem;
+      font-size: 1rem;
       box-sizing: border-box;
     }
 
@@ -117,7 +112,7 @@
       margin-top: 0;
       color: #F28241;
       text-align: center;
-      margin-bottom: 1.0rem;
+      margin-bottom: 1rem;
       font-weight: bold;
       font-size: clamp(1rem, 1.5vw, 1.6rem) !important;
     }
@@ -263,7 +258,6 @@
   <nav class="navbar navbar-expand-lg px-4 py-3 public-navbar fixed-top">
     <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="{{ url('/') }}">
       <img src="{{ asset('images/logo.png') }}" alt="Foodly" height="34">
-   
     </a>
     <form class="search-form d-none d-lg-flex mx-auto position-relative" action="{{ route('recipes.search') }}" method="GET" autocomplete="off">
       <input type="text" name="q" class="form-control" placeholder="Buscar recetas..." value="{{ request('q') }}">
@@ -291,16 +285,13 @@ Descubre, comparte y cocina con gusto.
     </div>
   </section>
 
-
   <div class="login-box">
-    <!-- Mensaje de éxito después del registro -->
     @if (session('success'))
       <div class="alert alert-success">
         {{ session('success') }}
       </div>
     @endif
 
-    <!-- Mensaje de error general -->
     @if ($errors->any())
       <div class="alert alert-danger">
         @foreach ($errors->all() as $error)
@@ -309,14 +300,13 @@ Descubre, comparte y cocina con gusto.
       </div>
     @endif
 
-    <!-- Mensaje específico para cuenta desactivada -->
     @if (session('status') == 'account-disabled')
       <div class="alert alert-warning">
         Tu cuenta ha sido desactivada. Por favor contacta al administrador.
       </div>
     @endif
 
-    <h2>Iniciar sesión</h2>
+    <h2>Iniciar sesion</h2>
     <form action="{{ route('login') }}" method="POST">
       @csrf
 
@@ -330,41 +320,51 @@ Descubre, comparte y cocina con gusto.
       </div>
 
       <div class="form-group mb-3">
-        <input type="password" name="password" placeholder="Contraseña"
+        <input type="password" name="password" placeholder="Contrasena"
                class="form-control @error('password') is-invalid @enderror" required>
         @error('password')
           <div class="invalid-feedback">{{ $message }}</div>
         @enderror
       </div>
 
-      
       <div class="form-group">
         <button type="submit">Ingresar</button>
       </div>
     </form>
 
     <div class="links">
-      <a href="{{ route('password.request') }}">¿Olvidaste tu contraseña?</a>
       <a href="{{ route('user.create') }}">Registrarme</a>
     </div>
   </div>
 
   <script>
-    const typewriterEl = document.getElementById('typewriter');
-    const fullText = typewriterEl.textContent.trim();
-    typewriterEl.style.minHeight = `${typewriterEl.offsetHeight}px`;
-    typewriterEl.textContent = '';
-    
-    let index = 0;
-    function typeWriter() {
-      if (index < fullText.length) {
-        typewriterEl.textContent += fullText[index];
-        index++;
-        setTimeout(typeWriter, 50); // 50ms entre cada letra
-      }
-    }
-    
-    typeWriter();
+    (function () {
+      const typewriterEl = document.getElementById('typewriter');
+      if (!typewriterEl) return;
+
+      const fullText = typewriterEl.textContent.trim();
+      typewriterEl.style.minHeight = `${typewriterEl.offsetHeight}px`;
+
+      const startTypewriterLoop = () => {
+        typewriterEl.textContent = '';
+        let index = 0;
+
+        const typeNextCharacter = () => {
+          if (index < fullText.length) {
+            typewriterEl.textContent += fullText[index];
+            index++;
+            setTimeout(typeNextCharacter, 50);
+            return;
+          }
+
+          setTimeout(startTypewriterLoop, 1400);
+        };
+
+        typeNextCharacter();
+      };
+
+      startTypewriterLoop();
+    })();
   </script>
   <script>
     (function () {
@@ -439,7 +439,6 @@ Descubre, comparte y cocina con gusto.
     })();
   </script>
 
-  <!-- Incluir Bootstrap JS (opcional, solo si necesitas funcionalidades JS de Bootstrap) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

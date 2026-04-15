@@ -474,6 +474,39 @@
           text-align: center;
         }
 
+        .recipe-card .image-wrapper img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .recipe-video-preview,
+        .recipe-embed-preview {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          opacity: 0;
+          transition: opacity 0.2s ease;
+          pointer-events: none;
+          background: #000;
+        }
+
+        .recipe-video-preview {
+          object-fit: cover;
+        }
+
+        .recipe-embed-preview iframe {
+          width: 100%;
+          height: 100%;
+          border: 0;
+        }
+
+        .recipe-card:hover .recipe-video-preview,
+        .recipe-card:hover .recipe-embed-preview {
+          opacity: 1;
+        }
+
         .popular {
             background: rgba(255, 255, 255, 0.95);
             margin-top: 2rem;

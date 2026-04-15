@@ -6,7 +6,7 @@ use App\Models\Categories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class categoriesController extends Controller
+class CategoriesController extends Controller
 {
     public function index()
     {

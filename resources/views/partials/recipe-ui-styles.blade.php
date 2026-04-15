@@ -36,7 +36,34 @@
     .recipe-card .image-wrapper img {
         width: 100%;
         height: 100%;
-        object-fit: contain !important;
+        object-fit: cover;
+    }
+
+    .recipe-video-preview,
+    .recipe-embed-preview {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        pointer-events: none;
+        background: #000;
+    }
+
+    .recipe-video-preview {
+        object-fit: cover;
+    }
+
+    .recipe-embed-preview iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+
+    .recipe-card:hover .recipe-video-preview,
+    .recipe-card:hover .recipe-embed-preview {
+        opacity: 1;
     }
 
     .recipe-card .card-body {
@@ -572,5 +599,36 @@
         .recipe-preview-modal .recipe-modal-tags {
             gap: 0.65rem 0.6rem;
         }
+    }
+
+    .modal-star-row {
+        display: flex;
+        gap: 0.2rem;
+    }
+
+    .modal-star {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: #ddd;
+        cursor: pointer;
+        padding: 0 0.1rem;
+        line-height: 1;
+        transition: color 0.12s;
+    }
+
+    .modal-star.active {
+        color: #F28241;
+    }
+
+    .modal-star:hover {
+        color: #F28241;
+        opacity: 0.8;
+    }
+
+    .modal-rating-section {
+        padding-top: 1rem;
+        margin-top: 0.5rem;
+        border-top: 1px solid #f1e3d7;
     }
 </style>

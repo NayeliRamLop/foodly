@@ -184,11 +184,11 @@ return [
     'menu' => [
         // Navbar items:
         [
-            'key' => 'topnav_profile',
-            'text' => 'Mi perfil',
-            'route' => 'user.perfil',
-            'icon' => 'fas fa-fw fa-user',
-            'topnav_right' => true,
+            'key'         => 'topnav_profile',
+            'text'        => 'Mi perfil',
+            'route'       => 'user.perfil',
+            'icon'        => 'fas fa-fw fa-user',
+            'topnav_right'=> true,
         ],
 
         // Sidebar items:

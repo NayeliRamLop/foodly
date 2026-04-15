@@ -9,6 +9,7 @@ use App\Models\Subcategory;
 use App\Models\RecipeRating;
 use App\Models\RecipeComment;
 use App\Notifications\RecipeCommentedNotification;
+use App\Rules\NoOffensiveContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -570,9 +571,11 @@ private function getAdminActionButtons($recipe)
             ->get()
             ->map(function ($comment) {
                 return [
-                    'user' => $comment->user ? $comment->user->name : 'Usuario',
-                    'rating' => $comment->rating,
-                    'comment' => $comment->comment,
+                    'id'         => $comment->id,
+                    'user_id'    => $comment->user_id,
+                    'user'       => $comment->user ? $comment->user->name : 'Usuario',
+                    'rating'     => $comment->rating,
+                    'comment'    => $comment->comment,
                     'created_at' => $comment->created_at->format('d/m/Y H:i'),
                 ];
             });
@@ -758,15 +761,16 @@ private function getAdminActionButtons($recipe)
     $favoriteIds = $user ? $user->favorites()->pluck('recipes.id')->toArray() : [];
     $followingIds = $user ? $user->following()->pluck('users.id')->toArray() : [];
 
-    $recipes = Recipe::where('status', 1) // Solo recetas activas
+    $recipes = Recipe::where('status', 1)
                ->where(function ($query) {
                    $query->whereNotNull('video')
                          ->orWhereNotNull('video_link');
                })
                ->with(['category', 'subcategory', 'user'])
                ->withCount(['favoritedBy', 'comments'])
-               ->latest()
-               ->get();
+               ->get()
+               ->shuffle()
+               ->values();
 
     $recipes = $recipes->transform(function ($recipe) use ($favoriteIds, $followingIds, $user) {
         $recipe->is_favorite = in_array($recipe->id, $favoriteIds, true);
@@ -1023,8 +1027,8 @@ public function toggleStatus($id)
     public function addComment(Request $request, Recipe $recipe)
     {
         $validated = $request->validate([
-            'rating' => 'required|integer|min:1|max:5',
-            'comment' => 'required|string|max:500',
+            'rating'  => 'required|integer|min:1|max:5',
+            'comment' => ['required', 'string', 'max:500', new NoOffensiveContent()],
         ]);
 
         $comment = RecipeComment::create([
@@ -1052,11 +1056,22 @@ public function toggleStatus($id)
         return response()->json([
             'success' => true,
             'comment' => [
-                'user' => $comment->user ? $comment->user->name : 'Usuario',
-                'rating' => $comment->rating,
-                'comment' => $comment->comment,
+                'id'         => $comment->id,
+                'user_id'    => $comment->user_id,
+                'user'       => $comment->user ? $comment->user->name : 'Usuario',
+                'rating'     => $comment->rating,
+                'comment'    => $comment->comment,
                 'created_at' => $comment->created_at->format('d/m/Y H:i'),
             ],
         ]);
+    }
+
+    public function deleteComment(Request $request, \App\Models\RecipeComment $comment)
+    {
+        if ($comment->user_id !== Auth::id()) {
+            abort(403);
+        }
+        $comment->delete();
+        return response()->json(['success' => true]);
     }
 }

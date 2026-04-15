@@ -10,8 +10,10 @@ class NotificationController extends Controller
 {
     public function index(Request $request): View
     {
-        $notifications = $request->user()
-            ->notifications()
+        $user = $request->user();
+        $user->unreadNotifications->markAsRead();
+
+        $notifications = $user->notifications()
             ->latest()
             ->paginate(15);
 

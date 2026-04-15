@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Notifications\UserFollowedNotification;
+use App\Notifications\ProfileVisitedNotification;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -35,6 +36,19 @@ class ProfileController extends Controller
         $data['isFollowing'] = $viewer
             ? $viewer->following()->where('user_id', $user->id)->exists()
             : false;
+
+        // Notify profile owner when an authenticated non-owner visits (once per day per visitor)
+        if ($viewer && $viewer->id !== $user->id) {
+            $alreadyNotifiedToday = $user->notifications()
+                ->where('type', ProfileVisitedNotification::class)
+                ->whereDate('created_at', today())
+                ->whereJsonContains('data->actor_id', $viewer->id)
+                ->exists();
+
+            if (!$alreadyNotifiedToday) {
+                $user->notify(new ProfileVisitedNotification($viewer));
+            }
+        }
 
         return view('profile.show', $data);
     }

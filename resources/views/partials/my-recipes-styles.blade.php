@@ -428,4 +428,27 @@
             margin-bottom: 0.375rem;
         }
     }
+
+    /* Barra de búsqueda unificada en /recipes, /favorites y /mis-recetas */
+    .navbar-search-always .search-form {
+        width: 588px;
+        max-width: 100%;
+    }
+
+    .navbar-search-always .form-control-navbar {
+        height: 40px;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        padding: 0.375rem 0.75rem;
+        border-radius: 0.375rem 0 0 0.375rem;
+        width: 100%;
+    }
+
+    .navbar-search-always .btn-navbar {
+        height: 40px;
+        font-size: 0.95rem;
+        border-radius: 0 0.375rem 0.375rem 0;
+        padding: 0.375rem 0.9rem;
+        white-space: nowrap;
+    }
 </style>

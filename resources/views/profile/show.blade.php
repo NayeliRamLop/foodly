@@ -101,11 +101,6 @@
                         </div>
                     </button>
                 </div>
-                @if(!$isOwner)
-                    <div class="profile-follow">
-                        <button type="button" class="btn btn-primary">Solicitar información de contacto</button>
-                    </div>
-                @endif
             </div>
         </div>
         </div>

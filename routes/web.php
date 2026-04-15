@@ -42,6 +42,7 @@ Route::get('/juego/descargar', function () {
 })->name('game.download');
 Route::post('/recipes/{recipe}/rate', [RecipeController::class, 'rate'])->middleware('auth')->name('recipes.rate');
 Route::post('/recipes/{recipe}/comments', [RecipeController::class, 'addComment'])->middleware('auth')->name('recipes.comments');
+Route::delete('/recipes/comments/{comment}', [RecipeController::class, 'deleteComment'])->middleware('auth')->name('recipes.comments.delete');
 Route::get('/perfil/{user}', [ProfileController::class, 'showPublic'])->name('profile.public');
 Route::post('/perfil/{user}/follow', [ProfileController::class, 'toggleFollow'])->middleware('auth')->name('profile.follow');
 

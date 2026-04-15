@@ -40,13 +40,38 @@ class AdminLteServiceProvider extends ServiceProvider
                         $message = mb_substr($message, 0, 42) . '...';
                     }
 
+                    $type = data_get($notification->data, 'type', '');
+                    $icon = match($type) {
+                        'recipe_like'    => 'fas fa-heart',
+                        'recipe_comment' => 'fas fa-comment',
+                        'follow'         => 'fas fa-user-plus',
+                        'profile_visit'  => 'fas fa-eye',
+                        default          => 'fas fa-bell',
+                    };
+                    $iconColor = match($type) {
+                        'recipe_like'    => 'danger',
+                        'recipe_comment' => 'warning',
+                        'follow'         => 'success',
+                        'profile_visit'  => 'info',
+                        default          => $notification->read_at ? 'secondary' : 'primary',
+                    };
+
                     $submenu[] = [
-                        'text' => $message,
-                        'icon' => 'fas fa-circle',
-                        'icon_color' => $notification->read_at ? 'secondary' : 'danger',
-                        'url' => route('notifications.open', $notification->id),
+                        'text'       => $message,
+                        'icon'       => $icon,
+                        'icon_color' => $notification->read_at ? 'secondary' : $iconColor,
+                        'url'        => route('notifications.open', $notification->id),
                     ];
                 }
+            }
+
+            if (!$recentNotifications->isEmpty()) {
+                $submenu[] = [
+                    'text'       => 'Ver todas las notificaciones',
+                    'icon'       => 'fas fa-list',
+                    'icon_color' => 'secondary',
+                    'url'        => route('notifications.index'),
+                ];
             }
 
             $event->menu->addBefore('topnav_profile', [

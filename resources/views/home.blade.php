@@ -87,6 +87,12 @@
           margin: 0 auto;
         }
 
+        @auth
+        .hero-section {
+          padding-top: 88px !important;
+        }
+        @endauth
+
         .carousel-fullwidth {
             margin-top: 2rem;
             width: min(1300px, 96vw);
@@ -114,12 +120,19 @@
         }
 
         .top-recetas .container {
-          max-width: 1240px;
+          max-width: 1560px;
           margin: 0 auto;
         }
 
         .top-recetas h5 {
           text-align: center;
+        }
+
+        @media (min-width: 1200px) {
+          .col-xl-1-5 {
+            flex: 0 0 20%;
+            max-width: 20%;
+          }
         }
 
         .recipe-card {
@@ -135,14 +148,16 @@
         }
 
         .top-recetas .recipe-card {
+          min-width: 0;
           width: 100%;
-          max-width: 320px;
+          max-width: 100%;
           padding: 0;
           margin-left: auto;
           margin-right: auto;
           flex-shrink: 1;
           border-radius: 16px;
           background: var(--bg-soft, #fff6e9);
+          height: 100%;
         }
 
         .popular .recipe-card {
@@ -237,15 +252,30 @@
           transform: translateY(-2px);
         }
 
-        .view-recipe-btn {
+        .view-recipe-btn,
+        a.view-recipe-btn,
+        .recipe-card a.view-recipe-btn {
           background-color: var(--primary);
-          color: #fff;
+          color: #fff !important;
           border: none;
+          text-decoration: none !important;
         }
 
-        .view-recipe-btn:hover {
+        .view-recipe-btn:hover,
+        .view-recipe-btn:focus,
+        .view-recipe-btn:active,
+        .view-recipe-btn:visited,
+        a.view-recipe-btn:hover,
+        a.view-recipe-btn:focus,
+        a.view-recipe-btn:active,
+        a.view-recipe-btn:visited,
+        .recipe-card a.view-recipe-btn:hover,
+        .recipe-card a.view-recipe-btn:focus,
+        .recipe-card a.view-recipe-btn:active,
+        .recipe-card a.view-recipe-btn:visited {
           background-color: color-mix(in srgb, var(--primary) 85%, black);
-          color: #fff;
+          color: #fff !important;
+          text-decoration: none !important;
         }
 
         .recipe-card .card-footer {
@@ -261,6 +291,15 @@
         .popular {
             background: rgba(255, 255, 255, 0.95);
             margin-top: 2rem;
+        }
+
+        .home-legal {
+          color: #6f6f6f;
+          font-size: 0.95rem;
+          font-weight: 400;
+          line-height: 1.45;
+          letter-spacing: 0.01em;
+          margin: 0;
         }
 
         @media (max-width: 1600px) {
@@ -282,6 +321,12 @@
         }
 
         @media (max-width: 992px) {
+          @auth
+          .hero-section {
+            padding: 120px 20px 20px !important;
+          }
+          @endauth
+
           .hero-section {
             min-height: auto;
             padding: 120px 20px 20px;
@@ -416,9 +461,9 @@ Cocina con gusto con ingredientes simples, comparte experiencias culinarias úni
   <div class="container">
     <h5 class="mb-4 fw-bold">TOP 5 Recetas</h5>
 
-    <div class="row recipes-page">
+    <div class="row g-4">
       @forelse($topRecipes as $recipe)
-        <div class="col-md-6 col-lg-4 mb-4">
+        <div class="col-md-6 col-lg-4 col-xl-1-5">
           <div class="card h-100 recipe-card">
             <div class="image-wrapper">
               @if($recipe->image)
@@ -431,21 +476,16 @@ Cocina con gusto con ingredientes simples, comparte experiencias culinarias úni
               @endif
             </div>
             <div class="card-body">
-              <h5 class="card-title mb-2">{{ $recipe->recipe_title }}</h5>
-              <p class="card-text text-muted">{{ \Illuminate\Support\Str::limit($recipe->recipe_description, 90) }}</p>
-              <p class="card-text text-muted mb-0">
-                <small>{{ $recipe->favorited_by_count }} favoritos • {{ $recipe->comments_count }} comentarios • {{ number_format($recipe->avg_rating, 1) }}★</small>
-              </p>
+              <h6 class="card-title mb-2">{{ \Illuminate\Support\Str::limit($recipe->recipe_title, 40) }}</h6>
+              <p class="card-text text-muted mb-0">{{ number_format($recipe->avg_rating, 1) }}★ • {{ $recipe->favorited_by_count }} favoritos</p>
             </div>
-            <div class="card-footer bg-white border-top-0">
-              <div class="d-flex justify-content-center">
-                <a class="btn btn-sm view-recipe-btn {{ auth()->check() ? '' : 'js-recipe-auth-trigger' }}"
-                   href="#"
-                   @auth data-recipe-id="{{ $recipe->id }}" @endauth
-                   @guest data-redirect-url="{{ route('home', ['open_recipe' => $recipe->id]) }}" @endguest>
-                  <i class="fas fa-eye mr-1"></i> Ver
-                </a>
-              </div>
+            <div class="card-footer bg-white border-top-0 text-center">
+              <a class="btn btn-sm view-recipe-btn {{ auth()->check() ? '' : 'js-recipe-auth-trigger' }}"
+                 href="#"
+                 @auth data-recipe-id="{{ $recipe->id }}" @endauth
+                 @guest data-redirect-url="{{ route('home', ['open_recipe' => $recipe->id]) }}" @endguest>
+                Ver
+              </a>
             </div>
           </div>
         </div>
@@ -518,15 +558,8 @@ Cocina con gusto con ingredientes simples, comparte experiencias culinarias úni
 
     <div class="container mt-5">
         <div class="cooking-section text-center mb-5">
-            <h3 class="mb-4">Cocina con Gusto es para...</h3>
-            <div class="dropping-texts-container">
-                <div class="dropping-texts">
-                    <div>Principiantes</div>
-                    <div>Chefs expertos</div>
-                    <div>Amantes de la cocina</div>
-                    <div>TODOS!</div>
-                </div>
-            </div>
+      <p class="home-legal mb-1">{{ date('Y') }} Foodly® Derechos reservados</p>
+        <p class="home-legal">Desarrollado por Software Solutions</p>
         </div>
     </div>
 

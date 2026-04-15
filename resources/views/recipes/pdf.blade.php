@@ -4,9 +4,13 @@
     <meta charset="utf-8">
     <title>{{ $recipe->recipe_title }}</title>
     <style>
+        @page {
+            margin: 14mm 12mm;
+        }
+
         body {
             font-family: Arial, sans-serif;
-            margin: 10px; 
+            margin: 0;
             color: #333;
             font-size: 13px; 
             line-height: 1.4; 
@@ -38,7 +42,7 @@
         }
         .section {
             margin: 10px 0; 
-            page-break-inside: avoid;
+            page-break-inside: auto;
         }
         .section-title {
             font-size: 16px; 
@@ -82,7 +86,7 @@
         .difficulty-media { background-color: #fff3cd; color: #856404; }
         .difficulty-dificil { background-color: #f8d7da; color: #721c24; }
         .compact-container {
-            page-break-inside: avoid;
+            page-break-inside: auto;
         }
     </style>
 </head>

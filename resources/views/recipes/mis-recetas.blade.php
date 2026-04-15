@@ -3,7 +3,7 @@
 @section('title', 'MIS RECETAS')
 
 @section('content_header')
-    <h1 class="m-0" style="font-size: 4rem; font-weight: 700; color: #F28241; text-shadow: 2px 2px 4px rgba(200, 200, 200, 0.6); letter-spacing: 0.05em; margin-bottom: 1.5rem;">
+    <h1 class="m-0 page-title-my-recipes" style="font-weight: 700; color: #F28241; text-shadow: 2px 2px 4px rgba(200, 200, 200, 0.6); letter-spacing: 0.05em; margin-bottom: 1.5rem;">
         MIS RECETAS
     </h1>
     <div class="mt-3">

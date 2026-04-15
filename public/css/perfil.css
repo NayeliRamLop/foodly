@@ -304,6 +304,21 @@
     width: 100%;
     max-width: 280px;
     height: 320px;
+    margin: 0 auto;
     border-radius: 20px;
     object-fit: cover;
+}
+
+.avatar-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(160deg, #f7f7f7 0%, #ececec 100%);
+    border: 1px solid #e6d6c5;
+    color: #2f2f2f;
+}
+
+.avatar-placeholder i {
+    font-size: 5rem;
+    line-height: 1;
 }

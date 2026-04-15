@@ -435,7 +435,7 @@
       </div>
 
       <div class="form-group">
-        <label for="registration_date">Fecha de Registro</label>
+        <label for="registration_date">Fecha de nacimiento</label>
         <input type="date" id="registration_date" name="registration_date" value="{{ old('registration_date') }}" required />
       </div>
 

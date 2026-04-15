@@ -3,12 +3,14 @@
 @section('title', 'RECETAS - COCINA CON GUSTO')
 
 @section('content_header')
-    <h1 class="m-0" style="font-size: 4rem; font-weight: 700; color: #F28241; text-shadow: 2px 2px 4px rgba(200, 200, 200, 0.6); letter-spacing: 0.05em; margin-bottom: 1.5rem;">
-        RECETAS
-        <a href="{{ route('favorites.index') }}" class="btn btn-outline-danger float-right" style="font-size: 1rem;">
+    <div class="d-flex align-items-center justify-content-between flex-wrap" style="margin-bottom: 0.2rem;">
+        <h1 class="m-0 page-title-recipes" style="font-weight: 700; color: #F28241; text-shadow: 2px 2px 4px rgba(200, 200, 200, 0.6); letter-spacing: 0.05em;">
+            RECETAS
+        </h1>
+        <a href="{{ route('favorites.index') }}" class="btn btn-outline-danger" style="font-size: 3rem;">
             <i class="fas fa-heart mr-1"></i> Mis Favoritos
         </a>
-    </h1>
+    </div>
 @stop
 
 @section('content')
@@ -269,9 +271,9 @@
         gap: 0.8rem;
     }
     .filter-tab {
-        border: 1.5px solid #c2185b;
+        border: 1.5px solid #FF8F43;
         background: #fff;
-        color: #6e1739;
+        color: #A74F1F;
         border-radius: 999px;
         padding: 0.75rem 1.3rem;
         font-size: 0.95rem;
@@ -281,12 +283,12 @@
     }
     .filter-tab:hover,
     .filter-tab.active {
-        background: #c2185b;
+        background: #FF8F43;
         color: #fff;
         box-shadow: 0 8px 18px rgba(194, 24, 91, 0.18);
     }
     .filter-section {
-        margin-bottom: 0.25rem;
+       
         display: none;
     }
     .filter-section.is-visible {
@@ -305,9 +307,9 @@
         gap: 0.8rem;
     }
     .filter-chip {
-        border: 1.5px solid #c2185b;
+        border: 1.5px solid #FF8F43;
         background: #fff;
-        color: #6e1739;
+        color: #A74F1F;
         border-radius: 999px;
         padding: 0.7rem 1.35rem;
         font-size: 0.95rem;
@@ -317,7 +319,7 @@
     }
     .filter-chip:hover,
     .filter-chip.active {
-        background: #c2185b;
+        background: #FF8F43;
         color: #fff;
         box-shadow: 0 8px 18px rgba(194, 24, 91, 0.18);
     }

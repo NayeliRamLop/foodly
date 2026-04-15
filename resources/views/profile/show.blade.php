@@ -2,13 +2,6 @@
 
 @section('title', 'mi perfil - cocina con gusto')
 
-@section('content_header')
-<h1 class="profile-title">
-    <i class="fas fa-user-circle"></i>
-   Mi perfil
-</h1>
-@stop
-
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/perfil.css') }}">
 @stop
@@ -65,11 +58,6 @@
                     @endif
                 </div>
 
-                <p class="member-date">
-                    <i class="fas fa-calendar-alt"></i>
-                    Miembro desde {{ $user->created_at->format('d/m/Y') }}
-                </p>
-
             </div>
         </div>
     </div>
@@ -80,9 +68,6 @@
             <div class="card-body d-flex flex-wrap align-items-center justify-content-between gap-3">
                 <div>
                     <div class="profile-name">{{ $user->name }} {{ $user->last_name }}</div>
-                    <div class="profile-meta">
-                        Miembro desde {{ $user->created_at->format('d/m/Y') }}
-                    </div>
                 </div>
                 <div class="profile-right">
                     @if(!$isOwner)
@@ -116,10 +101,16 @@
                         </div>
                     </button>
                 </div>
+                @if(!$isOwner)
+                    <div class="profile-follow">
+                        <button type="button" class="btn btn-primary">Solicitar información de contacto</button>
+                    </div>
+                @endif
             </div>
         </div>
         </div>
 
+        @if($isOwner)
         <div class="card profile-info">
 
             <div class="card-header p-0">
@@ -151,7 +142,7 @@
 
                             <div class="col-md-6">
                                 <h4>Información adicional</h4>
-                                <p><span>Fecha de registro:</span> {{ $user->created_at->format('d/m/Y') }}</p>
+                                <p><span>Fecha de nacimiento:</span> {{ $user->created_at->format('d/m/Y') }}</p>
                                 <p><span>Última actualización:</span> {{ $user->updated_at->format('d/m/Y') }}</p>
                             </div>
                         </div>
@@ -176,6 +167,7 @@
             </div>
 
         </div>
+        @endif
 
         <div class="card profile-recipes mt-4">
             <div class="card-body">

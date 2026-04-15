@@ -50,7 +50,14 @@ public function index()
 
         return [
             'categories' => $categories,
-            'topRecipes' => $popularRecipes->take(5),
+            'topRecipes' => $popularRecipes
+                ->sortByDesc(function ($recipe) {
+                    $fiveStarBonus = $recipe->avg_rating >= 5 ? 100000 : 0;
+
+                    return $fiveStarBonus + ($recipe->avg_rating * 1000) + $recipe->popularity_score;
+                })
+                ->take(5)
+                ->values(),
             'popularSections' => [
                 'Mas guardadas' => $popularRecipes->sortByDesc('favorited_by_count')->take(4)->values(),
                 'Mas comentadas' => $popularRecipes->sortByDesc('comments_count')->take(4)->values(),

@@ -29,6 +29,12 @@ label, input, textarea, button {
     font-size: 1rem !important;
 }
 
+.page-title-recipes,
+.page-title-my-recipes,
+.page-title-favorites {
+    font-size: 2rem !important;
+}
+
 input, select, textarea, button,
 .btn, .form-control, .form-control-navbar, .form-control-sidebar {
     font-size: 1rem !important;
@@ -402,11 +408,11 @@ body.sidebar-open .main-sidebar:focus-within .nav-header {
 
 /* Content Area */
 .content {
-    padding: 40px;
+    padding: 45px;
 }
 
 .content-header {
-    margin-bottom: 1.5rem;
+    margin: 1.5rem;
 }
 
 /* Search Form - Navbar */

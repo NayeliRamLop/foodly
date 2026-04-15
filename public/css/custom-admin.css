@@ -469,6 +469,67 @@ body.sidebar-open .main-sidebar:focus-within .nav-header {
     border: none;
 }
 
+.main-header.navbar .navbar-search-always .search-suggest {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+    padding: 0.4rem;
+    z-index: 1050;
+    border: 1px solid #f1c29c;
+}
+
+.main-header.navbar .navbar-search-always .suggest-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    border: none;
+    background: transparent;
+    text-align: left;
+    padding: 0.45rem 0.6rem;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.main-header.navbar .navbar-search-always .suggest-item:hover {
+    background: #fff2e6;
+}
+
+.main-header.navbar .navbar-search-always .suggest-thumb {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.main-header.navbar .navbar-search-always .suggest-thumb.placeholder {
+    background: #fde7c7;
+    border: 1px solid #f1c29c;
+}
+
+.main-header.navbar .navbar-search-always .suggest-meta {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.main-header.navbar .navbar-search-always .suggest-text {
+    color: var(--text-dark);
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.main-header.navbar .navbar-search-always .suggest-kind {
+    color: #8b7561;
+    font-size: 0.78rem;
+    line-height: 1.2;
+}
+
 /* Centrar horizontalmente la barra como en el navbar de login */
 @media (min-width: 992px) {
     .main-header.navbar .navbar-nav:first-child {

@@ -48,4 +48,48 @@ class SearchController extends Controller
             'users' => $users,
         ]);
     }
+
+    public function suggest(Request $request)
+    {
+        $query = trim((string) $request->get('q', ''));
+
+        if ($query === '') {
+            return response()->json([]);
+        }
+
+        $recipes = Recipe::where('status', 1)
+            ->where('recipe_title', 'like', "%{$query}%")
+            ->orderBy('recipe_title')
+            ->limit(5)
+            ->get(['id', 'recipe_title', 'image'])
+            ->map(function ($recipe) {
+                return [
+                    'type' => 'recipe',
+                    'id' => $recipe->id,
+                    'label' => $recipe->recipe_title,
+                    'image' => $recipe->image,
+                ];
+            });
+
+        $users = User::where('status', 1)
+            ->where(function ($builder) use ($query) {
+                $builder->where('name', 'like', "%{$query}%")
+                    ->orWhere('last_name', 'like', "%{$query}%");
+            })
+            ->orderBy('name')
+            ->limit(5)
+            ->get(['id', 'name', 'last_name', 'avatar'])
+            ->map(function ($user) {
+                return [
+                    'type' => 'user',
+                    'id' => $user->id,
+                    'label' => trim($user->name.' '.($user->last_name ?? '')),
+                    'image' => $user->avatar_url,
+                ];
+            });
+
+        return response()->json(
+            $recipes->concat($users)->take(8)->values()
+        );
+    }
 }

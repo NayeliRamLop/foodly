@@ -116,4 +116,107 @@
             }
         });
     </script>
+    <script>
+        (function () {
+            const forms = document.querySelectorAll('.search-form');
+            if (!forms.length) return;
+
+            const debounce = (fn, wait) => {
+                let timer;
+                return (...args) => {
+                    clearTimeout(timer);
+                    timer = setTimeout(() => fn(...args), wait);
+                };
+            };
+
+            const resolveMediaUrl = (value) => {
+                const source = String(value ?? '').trim();
+                if (!source) {
+                    return '';
+                }
+
+                if (/^(https?:)?\/\//i.test(source) || source.startsWith('data:') || source.startsWith('blob:')) {
+                    return source;
+                }
+
+                return `/${source.replace(/^\/+/, '')}`;
+            };
+
+            forms.forEach((form) => {
+                const input = form.querySelector('input[name="q"]');
+                const box = form.querySelector('.search-suggest');
+                if (!input || !box) return;
+
+                const render = (items) => {
+                    if (!items.length) {
+                        box.classList.add('d-none');
+                        box.innerHTML = '';
+                        return;
+                    }
+
+                    box.innerHTML = items.map((item) => {
+                        const imageUrl = item.image ? resolveMediaUrl(item.image) : '';
+                        const imageHtml = imageUrl
+                            ? `<img src="${imageUrl}" alt="" class="suggest-thumb">`
+                            : `<div class="suggest-thumb placeholder"></div>`;
+                        const kind = item.type === 'user' ? 'Persona' : 'Receta';
+
+                        return `
+                            <button type="button" class="suggest-item" data-type="${item.type}" data-id="${item.id}" data-value="${item.label}">
+                                ${imageHtml}
+                                <span class="suggest-meta">
+                                    <span class="suggest-text">${item.label}</span>
+                                    <span class="suggest-kind">${kind}</span>
+                                </span>
+                            </button>
+                        `;
+                    }).join('');
+
+                    box.classList.remove('d-none');
+                };
+
+                const fetchSuggestions = debounce(async () => {
+                    const value = input.value.trim();
+                    if (value.length < 1) {
+                        render([]);
+                        return;
+                    }
+
+                    try {
+                        const resp = await fetch(`{{ route('search.global.suggest') }}?q=${encodeURIComponent(value)}`);
+                        if (!resp.ok) return;
+                        const data = await resp.json();
+                        render(data);
+                    } catch (error) {
+                        render([]);
+                    }
+                }, 200);
+
+                input.addEventListener('input', fetchSuggestions);
+                document.addEventListener('click', (event) => {
+                    if (!form.contains(event.target)) {
+                        render([]);
+                    }
+                });
+
+                box.addEventListener('click', (event) => {
+                    const target = event.target.closest('.suggest-item');
+                    if (!target) return;
+
+                    render([]);
+
+                    const type = target.getAttribute('data-type');
+                    const id = target.getAttribute('data-id');
+                    const value = target.getAttribute('data-value') || '';
+
+                    if (type === 'user' && id) {
+                        window.location.href = `{{ url('/perfil') }}/${id}`;
+                        return;
+                    }
+
+                    window.location.href = `{{ route('search.global') }}?q=${encodeURIComponent(value)}`;
+                });
+            });
+        })();
+    </script>
 @stop

@@ -817,7 +817,8 @@ private function getAdminActionButtons($recipe)
      */
   public function misRecetas()
 {
-    $recipes = Recipe::where('user_id', Auth::id())
+    $recipes = Recipe::with(['category', 'subcategory'])
+                ->where('user_id', Auth::id())
                 ->where('status', 1) // Solo recetas activas del usuario
                 ->latest()
                 ->paginate(10);

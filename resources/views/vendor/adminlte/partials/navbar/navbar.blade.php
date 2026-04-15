@@ -26,9 +26,11 @@
                 <form class="search-form d-none d-lg-flex mx-auto position-relative" action="{{ route('search.global') }}" method="GET" autocomplete="off">
                     <input class="form-control form-control-navbar" type="search"
                            name="q"
-                           placeholder="Buscar recetas..."
-                           aria-label="Buscar recetas...">
+                           placeholder="Buscar recetas o personas..."
+                           aria-label="Buscar recetas o personas..."
+                           value="{{ request('q') }}">
                     <button class="btn btn-search btn-navbar" type="submit">Buscar</button>
+                    <div class="search-suggest d-none"></div>
                 </form>
             </li>
             @if(request()->is('home'))

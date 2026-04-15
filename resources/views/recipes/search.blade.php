@@ -3,6 +3,7 @@
 @section('title', 'Buscar recetas')
 
 @section('css')
+    <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}">
     @include('partials.recipe-ui-styles')
 @endsection
 

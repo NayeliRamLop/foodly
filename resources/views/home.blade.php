@@ -4,6 +4,7 @@
 @section('title', 'Inicio - Cocina con Gusto')
 
 @section('css')
+  <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}">
   <link rel="stylesheet" href="{{ asset('css/custom-public.css') }}">
     @include('partials.recipe-ui-styles')
     <style>
@@ -94,11 +95,21 @@
         }
         @endauth
 
+        .carousel-shell {
+            width: 100vw;
+            margin-left: calc(50% - 50vw);
+            margin-right: calc(50% - 50vw);
+            display: flex;
+            justify-content: center;
+        }
+
         .carousel-fullwidth {
+            position: relative;
             margin-top: 0.2rem;
             width: min(1460px, 98vw);
-            margin-left: auto;
-            margin-right: auto;
+            margin-left: 0;
+            margin-right: 0;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
 
         #homeCarousel .carousel-inner {
@@ -115,6 +126,39 @@
           height: 560px;
           object-fit: cover;
           object-position: center;
+        }
+
+        #homeCarousel .carousel-control-prev,
+        #homeCarousel .carousel-control-next {
+          width: 78px;
+          opacity: 1;
+        }
+
+        #homeCarousel .carousel-control-prev-icon,
+        #homeCarousel .carousel-control-next-icon {
+          width: 54px;
+          height: 54px;
+          border-radius: 999px;
+          background-size: 18px 18px;
+          background-position: center;
+          background-color: rgba(255, 251, 247, 0.88);
+          border: 1px solid rgba(241, 194, 156, 0.92);
+          box-shadow: 0 14px 28px rgba(63, 38, 12, 0.14);
+        }
+
+        #homeCarousel .carousel-control-prev-icon {
+          background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3e%3cpath d='M9.5 3.5 5 8l4.5 4.5' stroke='%23b15d2f' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3e%3c/svg%3e");
+        }
+
+        #homeCarousel .carousel-control-next-icon {
+          background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3e%3cpath d='M6.5 3.5 11 8l-4.5 4.5' stroke='%23b15d2f' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3e%3c/svg%3e");
+        }
+
+        #homeCarousel .carousel-control-prev:hover .carousel-control-prev-icon,
+        #homeCarousel .carousel-control-next:hover .carousel-control-next-icon {
+          background-color: #fff7f1;
+          border-color: #efc29f;
+          box-shadow: 0 18px 30px rgba(63, 38, 12, 0.18);
         }
 
         .carousel-photo-slide::after {
@@ -137,6 +181,7 @@
           backdrop-filter: blur(10px);
           box-shadow: 0 18px 34px rgba(63, 38, 12, 0.10);
           border: 1px solid rgba(255, 255, 255, 0.38);
+          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
 
         .carousel-caption-box.caption-right {
@@ -234,6 +279,7 @@
           backdrop-filter: blur(10px);
           border: 1px solid rgba(255, 255, 255, 0.38);
           box-shadow: 0 18px 34px rgba(63, 38, 12, 0.10);
+          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
 
         .game-slide-kicker {
@@ -500,6 +546,18 @@
             width: min(1460px, 97vw);
           }
 
+          #homeCarousel .carousel-control-prev,
+          #homeCarousel .carousel-control-next {
+            width: 62px;
+          }
+
+          #homeCarousel .carousel-control-prev-icon,
+          #homeCarousel .carousel-control-next-icon {
+            width: 46px;
+            height: 46px;
+            background-size: 16px 16px;
+          }
+
           #homeCarousel .carousel-item img {
             height: calc(97vw * 560 / 1460);
             max-height: 560px;
@@ -614,6 +672,7 @@ Cocina con gusto con ingredientes simples, comparte experiencias culinarias úni
 </div>
 
     <!-- Carrusel de recetas (full width) -->
+    <div class="carousel-shell">
     <div class="carousel-fullwidth">
         <div id="homeCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
             <div class="carousel-indicators">
@@ -684,6 +743,7 @@ Cocina con gusto con ingredientes simples, comparte experiencias culinarias úni
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
             </button>
         </div>
+    </div>
     </div>
 
 

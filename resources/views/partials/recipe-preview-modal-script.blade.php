@@ -3,6 +3,9 @@
         const modalElement = document.getElementById(config.modalId);
         const modalBody = document.getElementById(config.bodyId);
         const modalTitle = document.getElementById(config.titleId);
+        const footerActionsContainer = modalElement
+            ? modalElement.querySelector('.recipe-preview-footer-actions')
+            : null;
 
         if (!modalElement || !modalBody || !modalTitle) {
             return null;
@@ -23,12 +26,37 @@
             }
         };
 
+        const hideModal = () => {
+            if (bootstrapModal) {
+                bootstrapModal.hide();
+                return;
+            }
+
+            if (window.jQuery && typeof window.jQuery(modalElement).modal === 'function') {
+                window.jQuery(modalElement).modal('hide');
+            }
+        };
+
         const escapeHtml = (value) => String(value ?? '')
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;')
             .replace(/'/g, '&#039;');
+
+        const resolveMediaUrl = (value) => {
+            const source = String(value ?? '').trim();
+
+            if (!source) {
+                return '';
+            }
+
+            if (/^(https?:)?\/\//i.test(source) || source.startsWith('data:') || source.startsWith('blob:')) {
+                return source;
+            }
+
+            return `/${source.replace(/^\/+/, '')}`;
+        };
 
         const renderListItems = (value, tagName) => String(value || '')
             .split(/\r?\n/)
@@ -94,7 +122,7 @@
                         <h5 class="recipe-section-title"><i class="fas fa-video mr-1"></i> Video</h5>
                         <div class="recipe-video-wrap">
                             <video controls class="w-100 rounded" style="max-height: 420px;">
-                                <source src="/storage/${escapeHtml(response.video)}" type="video/mp4">
+                                <source src="${escapeHtml(resolveMediaUrl(response.video))}" type="video/mp4">
                             </video>
                         </div>
                     </div>
@@ -246,7 +274,7 @@
             modalBody.innerHTML = `
                 <div class="recipe-modal-media">
                     ${response.image
-                        ? `<img src="${escapeHtml(response.image)}" alt="${escapeHtml(response.recipe_title)}">`
+                        ? `<img src="${escapeHtml(resolveMediaUrl(response.image))}" alt="${escapeHtml(response.recipe_title)}">`
                         : `<div class="text-center py-4">
                                 <i class="fas fa-image fa-5x" style="color: #F28241;"></i>
                                 <p class="mt-2 mb-0">Sin imagen</p>
@@ -259,10 +287,12 @@
                     <div class="recipe-modal-author">
                         <i class="fas fa-user-circle mr-1"></i> Creado por: ${authorHtml}
                     </div>
-                    ${renderMetrics(response)}
-                </div>
-                <div class="recipe-modal-tags">
-                    ${renderTags(response)}
+                    <div class="recipe-modal-meta-stats">
+                        ${renderMetrics(response)}
+                    </div>
+                    <div class="recipe-modal-tags">
+                        ${renderTags(response)}
+                    </div>
                 </div>
                 ${isGuest
                     ? renderGuestLockedPreview(response)
@@ -285,6 +315,20 @@
                 }
                 ${renderGuestInvite()}
             `;
+
+            if (footerActionsContainer) {
+                footerActionsContainer.innerHTML = typeof config.renderFooterActions === 'function'
+                    ? (config.renderFooterActions(response) || '')
+                    : '';
+
+                if (typeof config.bindFooterActions === 'function') {
+                    config.bindFooterActions(footerActionsContainer, response, {
+                        modalElement,
+                        showModal,
+                        hideModal,
+                    });
+                }
+            }
         };
 
         const renderLoading = () => {
@@ -296,6 +340,10 @@
                     </div>
                 </div>
             `;
+
+            if (footerActionsContainer) {
+                footerActionsContainer.innerHTML = '';
+            }
         };
 
         const open = async (recipeId) => {
@@ -317,6 +365,10 @@
 
                 renderRecipe(await response.json());
             } catch (error) {
+                if (footerActionsContainer) {
+                    footerActionsContainer.innerHTML = '';
+                }
+
                 modalBody.innerHTML = `
                     <div class="alert alert-danger mb-0">
                         No se pudo cargar la receta.
@@ -336,6 +388,6 @@
             renderLoading();
         });
 
-        return { open };
+        return { open, hide: hideModal, modalElement };
     };
 </script>

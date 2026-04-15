@@ -80,6 +80,7 @@ Route::middleware('auth')->group(function () {
     // Dashboard
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/search', [SearchController::class, 'index'])->name('search.global');
+    Route::get('/search/suggest', [SearchController::class, 'suggest'])->name('search.global.suggest');
     Route::middleware('can:user')->group(function () {
         Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
         Route::get('/notifications/{notification}/open', [NotificationController::class, 'open'])->name('notifications.open');

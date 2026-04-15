@@ -45,7 +45,7 @@ class FavoriteController extends Controller
     public function index(Request $request)
     {
         $filterOptions = $this->getRecipeFilterOptions();
-        $selectedCategory = $request->query('category_id');
+        $selectedCategory = trim((string) $request->query('category_id', ''));
         $availableColumns = [
             'brand' => Schema::hasColumn('recipes', 'brand'),
             'dish_type' => Schema::hasColumn('recipes', 'dish_type'),
@@ -61,34 +61,60 @@ class FavoriteController extends Controller
             $selectedFilters[$column] = $exists ? trim((string) $request->query($column, '')) : '';
         }
 
+        $activeFilterKey = 'all';
+        if ($selectedCategory !== '') {
+            $activeFilterKey = 'category_id';
+        }
+
+        foreach (array_keys($availableColumns) as $column) {
+            if (($selectedFilters[$column] ?? '') !== '') {
+                $activeFilterKey = $column;
+                $selectedCategory = '';
+                break;
+            }
+        }
+
+        if ($activeFilterKey !== 'category_id') {
+            $selectedCategory = '';
+        }
+
+        foreach (array_keys($availableColumns) as $column) {
+            if ($column !== $activeFilterKey) {
+                $selectedFilters[$column] = '';
+            }
+        }
+
         $favoritesQuery = Auth::user()->favorites()
+            ->select('recipes.*')
             ->with(['category', 'subcategory', 'user'])
-            ->where('status', 1)
+            ->where('recipes.status', 1)
             ->when($selectedCategory, function ($query) use ($selectedCategory) {
-                $query->where('category_id', $selectedCategory);
+                $query->where('recipes.category_id', $selectedCategory);
             })
-            ->when($selectedFilters['brand'] !== '', fn ($query) => $query->where('brand', $selectedFilters['brand']))
-            ->when($selectedFilters['dish_type'] !== '', fn ($query) => $query->where('dish_type', $selectedFilters['dish_type']))
-            ->when($selectedFilters['daily_category'] !== '', fn ($query) => $query->where('daily_category', $selectedFilters['daily_category']))
-            ->when($selectedFilters['special_occasion'] !== '', fn ($query) => $query->where('special_occasion', $selectedFilters['special_occasion']))
-            ->when($selectedFilters['baking_category'] !== '', fn ($query) => $query->where('baking_category', $selectedFilters['baking_category']))
-            ->when($selectedFilters['seasonality'] !== '', fn ($query) => $query->where('seasonality', $selectedFilters['seasonality']))
-            ->when($selectedFilters['preparation_method'] !== '', fn ($query) => $query->where('preparation_method', $selectedFilters['preparation_method']));
+            ->when($selectedFilters['brand'] !== '', fn ($query) => $query->where('recipes.brand', $selectedFilters['brand']))
+            ->when($selectedFilters['dish_type'] !== '', fn ($query) => $query->where('recipes.dish_type', $selectedFilters['dish_type']))
+            ->when($selectedFilters['daily_category'] !== '', fn ($query) => $query->where('recipes.daily_category', $selectedFilters['daily_category']))
+            ->when($selectedFilters['special_occasion'] !== '', fn ($query) => $query->where('recipes.special_occasion', $selectedFilters['special_occasion']))
+            ->when($selectedFilters['baking_category'] !== '', fn ($query) => $query->where('recipes.baking_category', $selectedFilters['baking_category']))
+            ->when($selectedFilters['seasonality'] !== '', fn ($query) => $query->where('recipes.seasonality', $selectedFilters['seasonality']))
+            ->when($selectedFilters['preparation_method'] !== '', fn ($query) => $query->where('recipes.preparation_method', $selectedFilters['preparation_method']));
 
         $favorites = $favoritesQuery
-            ->latest()
-            ->paginate(12)
+            ->distinct()
+            ->latest('recipes.created_at')
+            ->paginate(10)
             ->appends(array_merge(['category_id' => $selectedCategory], $selectedFilters));
 
         $categories = Categories::with('subcategories')->get();
         $brands = $availableColumns['brand']
             ? Auth::user()->favorites()
-                ->where('status', 1)
-                ->whereNotNull('brand')
-                ->where('brand', '!=', '')
+                ->select('recipes.brand')
+                ->where('recipes.status', 1)
+                ->whereNotNull('recipes.brand')
+                ->where('recipes.brand', '!=', '')
                 ->distinct()
-                ->orderBy('brand')
-                ->pluck('brand')
+                ->orderBy('recipes.brand')
+                ->pluck('recipes.brand')
             : collect();
 
         $brands = $this->getAvailableBrands()
@@ -106,6 +132,7 @@ class FavoriteController extends Controller
             'selectedBrand' => $selectedFilters['brand'],
             'selectedFilters' => $selectedFilters,
             'filterOptions' => $filterOptions,
+            'activeFilterKey' => $activeFilterKey,
         ]);
     }
 

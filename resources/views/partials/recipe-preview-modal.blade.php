@@ -17,6 +17,7 @@
                 </div>
             </div>
             <div class="modal-footer">
+                <div class="recipe-preview-footer-actions"></div>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>

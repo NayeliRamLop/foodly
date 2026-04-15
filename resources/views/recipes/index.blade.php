@@ -198,13 +198,13 @@
                         referrerpolicy="strict-origin-when-cross-origin"></iframe>
                 </div>
                 @endif
-                
+
                 <!-- Corazón de favoritos -->
                 <button class="btn-favorite" data-recipe-id="{{ $recipe->id }}" style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.7); border: none; border-radius: 50%; width: 36px; height: 36px; padding: 0; z-index: 10;">
                     <i class="fas fa-heart {{ auth()->check() && auth()->user()->favorites->contains($recipe->id) ? 'text-danger' : 'text-secondary' }}" style="font-size: 1.2rem;"></i>
                 </button>
             </div>
-            
+
             <div class="card-body">
                 <h5 class="card-title">{{ Str::limit($recipe->recipe_title, 40) }}</h5>
                 @if($recipe->brand)
@@ -212,7 +212,7 @@
                 @endif
                 <p class="card-text text-muted">{{ Str::limit($recipe->recipe_description, 70) }}</p>
             </div>
-            
+
             <!-- Botones de acción simplificados -->
             <div class="card-footer bg-white border-top-0">
                 <div class="d-flex justify-content-center">
@@ -288,7 +288,7 @@
         box-shadow: 0 8px 18px rgba(194, 24, 91, 0.18);
     }
     .filter-section {
-       
+
         display: none;
     }
     .filter-section.is-visible {
@@ -348,7 +348,7 @@
             font-size: 0.9rem;
         }
     }
-    
+
     .recipe-card {
         transition: all 0.25s ease;
         border-radius: 16px;
@@ -675,7 +675,7 @@
             }
 
             const url = "{{ route('recipes.show', ':id') }}".replace(':id', recipeId);
-            
+
             $('#recipeModalBody').html(`
                 <div class="text-center py-5">
                     <div class="spinner-border text-primary" role="status">
@@ -684,7 +684,7 @@
                     <p class="mt-2">Cargando receta...</p>
                 </div>
             `);
-            
+
             $.ajax({
                 url: url,
                 method: 'GET',
@@ -700,8 +700,8 @@
                                 <i class="fas fa-chevron-left"></i>
                             </button>
                             <div class="recipe-modal-media-content">
-                                ${response.image ? 
-                                    `<img src="/${response.image}" class="recipe-modal-img img-fluid" alt="${response.recipe_title}">` : 
+                                ${response.image ?
+                                    `<img src="/${response.image}" class="recipe-modal-img img-fluid" alt="${response.recipe_title}">` :
                                     `<div class="text-center py-4" style="background-color: #f8f9fa; border-radius: 8px;">
                                         <i class="fas fa-image fa-5x" style="color: #F28241;"></i>
                                         <p class="mt-2">Sin imagen</p>
@@ -712,9 +712,9 @@
                                 <i class="fas fa-chevron-right"></i>
                             </button>
                         </div>
-                        
+
                         <h3 class="recipe-modal-title">${response.recipe_title}</h3>
-                        
+
                         <div class="recipe-section">
                             <p>${response.recipe_description}</p>
                             <div class="d-flex justify-content-between align-items-center">
@@ -736,48 +736,48 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="d-flex mb-4">
                             <span class="badge badge-pill mr-2" style="background-color: #F28241;">
                                 <i class="fas fa-tag"></i> ${response.category.name}
                             </span>
-                            ${response.subcategory ? 
+                            ${response.subcategory ?
                                 `<span class="badge badge-pill badge-light">
                                     <i class="fas fa-tags"></i> ${response.subcategory.name}
                                 </span>` : ''
                             }
                         </div>`;
-                    
+
                     if (response.ingredients) {
                         modalContent += `
                         <div class="recipe-section">
                             <h5 class="recipe-section-title"><i class="fas fa-list-ul mr-1"></i> Ingredientes:</h5>
                             <ul class="pl-3">`;
-                        
+
                         response.ingredients.split('\n').forEach(ingredient => {
                             if (ingredient.trim() !== '') {
                                 modalContent += `<li>${ingredient}</li>`;
                             }
                         });
-                        
+
                         modalContent += `</ul></div>`;
                     }
-                    
+
                     if (response.instructions) {
                         modalContent += `
                         <div class="recipe-section">
                             <h5 class="recipe-section-title"><i class="fas fa-list-ol mr-1"></i> Preparación:</h5>
                             <ol class="pl-3">`;
-                        
+
                         response.instructions.split('\n').forEach(step => {
                             if (step.trim() !== '') {
                                 modalContent += `<li>${step}</li>`;
                             }
                         });
-                        
+
                         modalContent += `</ol></div>`;
                     }
-                    
+
                     if (response.video) {
                         modalContent += `
                         <div class="recipe-section">
@@ -881,10 +881,10 @@
                             </div>
                         </div>`;
                     }
-                    
+
                     $('#recipeModalBody').html(modalContent);
                     $('#recipeModalLabel').html(`<i class="fas fa-utensils mr-2"></i> ${response.recipe_title}`);
-                    
+
                     if (response.video || response.video_link_type === 'direct') {
                         currentVideoElement = document.getElementById('recipeVideo');
                     }
@@ -893,7 +893,7 @@
                     console.error(xhr);
                     $('#recipeModalBody').html(`
                         <div class="alert alert-danger">
-                            <i class="fas fa-exclamation-triangle mr-2"></i> 
+                            <i class="fas fa-exclamation-triangle mr-2"></i>
                             No se pudo cargar la receta. Error: ${xhr.status} - ${xhr.statusText}
                         </div>
                     `);
@@ -919,7 +919,7 @@
                 loadRecipeById(recipeIds[currentRecipeIndex]);
             }
         });
-        
+
         $('.recipe-card').on('mouseenter', function() {
             const card = $(this);
             const embed = card.find('.recipe-embed-preview iframe').get(0);
@@ -1080,7 +1080,7 @@
 
             list.html(html);
         });
-        
+
         // Ocultar alerta de éxito
         if ($('#successAlert').length) {
             setTimeout(function() {
@@ -1090,14 +1090,14 @@
                 }, 2000);
             }, 2000);
         }
-        
+
         // Toggle de favoritos
         $(document).on('click', '.btn-favorite', function(e) {
             e.preventDefault();
             const button = $(this);
             const recipeId = button.data('recipe-id');
             const heartIcon = button.find('i');
-            
+
             $.ajax({
                 url: "{{ url('favorites/toggle') }}/" + recipeId,
                 method: 'POST',
@@ -1108,7 +1108,7 @@
                 success: function(response) {
                     if (response.success) {
                         heartIcon.toggleClass('text-danger text-secondary');
-                        
+
                         // Si estamos en la vista de favoritos y se quitó de favoritos
                         if (window.location.pathname.includes('favorites') && !response.is_favorite) {
                             button.closest('.col-md-4').fadeOut(300, function() {

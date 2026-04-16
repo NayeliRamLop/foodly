@@ -49,7 +49,6 @@ class UserController extends Controller
 
         $usuarios[$key] = array(
             $acciones,
-            $value['id'],
             $value['name'],
             $value['last_name'],
             $value['gender'],
@@ -57,7 +56,7 @@ class UserController extends Controller
             $value['phone'],
             $value['country'],
             $value['registration_date'],
-            $value['status'] == 1 ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-danger">Inactivo</span>'
+            $value['status'] == 1 ? '<span class="badge badge-success">Activo</span>' : '<span class="badge badge-danger">Inactivo</span>'
         );
     }
     return $usuarios;

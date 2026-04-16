@@ -35,6 +35,7 @@ label, input, textarea, button {
 .page-title-my-recipes,
 .page-title-favorites {
     font-size: 2rem !important;
+    color: var(--primary) !important;
 }
 
 input, select, textarea, button,

@@ -243,16 +243,9 @@ class AdminAnalyticsController extends Controller
     private function getUsersRegistrationMoments(): Collection
     {
         return DB::table('users')
-            ->get(['registration_date', 'created_at'])
-            ->map(function ($user) {
-                if (!empty($user->registration_date)) {
-                    return Carbon::parse($user->registration_date)->startOfDay();
-                }
-
-                return !empty($user->created_at)
-                    ? Carbon::parse($user->created_at)
-                    : null;
-            })
+            ->whereNotNull('created_at')
+            ->pluck('created_at')
+            ->map(fn ($date) => Carbon::parse($date))
             ->filter();
     }
 }

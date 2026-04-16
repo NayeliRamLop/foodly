@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Notifications\UserFollowedNotification;
 use App\Notifications\ProfileVisitedNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
@@ -29,6 +30,14 @@ class ProfileController extends Controller
 
     public function showPublic(User $user)
     {
+        // El perfil del admin no es visible para usuarios no-admin
+        if ($user->isAdmin()) {
+            $viewer = auth()->user();
+            if (!$viewer || !$viewer->isAdmin()) {
+                abort(404);
+            }
+        }
+
         $data = $this->buildProfileData($user, false);
         $viewer = auth()->user();
 
@@ -69,6 +78,74 @@ class ProfileController extends Controller
         }
 
         return back();
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $user = auth()->user();
+
+        $rules = [
+            'name'      => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'gender'    => 'nullable|string|max:50',
+            'email'     => 'required|email|unique:users,email,' . $user->id,
+            'phone'     => 'nullable|string|max:20',
+            'country'   => 'nullable|string|max:100',
+        ];
+
+        if ($request->filled('new_password')) {
+            $rules['current_password'] = 'required';
+            $rules['new_password']     = 'required|min:6|confirmed';
+        }
+
+        $request->validate($rules);
+
+        if ($request->filled('new_password')) {
+            if (!Hash::check($request->current_password, $user->password)) {
+                return back()
+                    ->withErrors(['current_password' => 'La contraseña actual no es correcta.'])
+                    ->withInput()
+                    ->with('open_edit_modal', true);
+            }
+            $user->password = bcrypt($request->new_password);
+        }
+
+        $user->name      = $request->name;
+        $user->last_name = $request->last_name;
+        $user->gender    = $request->gender;
+        $user->email     = $request->email;
+        $user->phone     = $request->phone;
+        $user->country   = $request->country;
+        $user->save();
+
+        return redirect()->route('user.perfil')->with('success', 'Perfil actualizado correctamente.');
+    }
+
+    public function updatePrivacy(Request $request)
+    {
+        $user = auth()->user();
+        $field = $request->input('field');
+        $visible = (bool) $request->input('visible');
+
+        $allowed = ['gender', 'registration_date', 'updated_at', 'email', 'phone', 'country'];
+        if (!in_array($field, $allowed)) {
+            return response()->json(['error' => 'Campo no permitido'], 422);
+        }
+
+        $fields = $user->public_fields ?? [];
+
+        if ($visible) {
+            if (!in_array($field, $fields)) {
+                $fields[] = $field;
+            }
+        } else {
+            $fields = array_values(array_filter($fields, fn($f) => $f !== $field));
+        }
+
+        $user->public_fields = $fields;
+        $user->save();
+
+        return response()->json(['ok' => true, 'public_fields' => $fields]);
     }
 
     private function buildProfileData(User $user, bool $includeInactive): array
@@ -127,6 +204,7 @@ class ProfileController extends Controller
             });
 
         $recipesQuery = $user->recipes()
+            ->with('category')
             ->withCount('favoritedBy')
             ->withAvg('ratings', 'rating')
             ->latest();
@@ -136,6 +214,18 @@ class ProfileController extends Controller
         }
 
         $recipes = $recipesQuery->get();
+
+        $viewer = auth()->user();
+        if ($viewer) {
+            $favoriteIds = $viewer->favorites()->pluck('recipes.id')->flip();
+            foreach ($recipes as $recipe) {
+                $recipe->is_favorite = $favoriteIds->has($recipe->id);
+            }
+        } else {
+            foreach ($recipes as $recipe) {
+                $recipe->is_favorite = false;
+            }
+        }
 
         return [
             'user' => $user,

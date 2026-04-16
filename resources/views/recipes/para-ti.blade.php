@@ -3,41 +3,22 @@
 @section('title', 'Para Ti - Cocina con Gusto')
 
 @section('content_header')
+    <h1 class="m-0 page-title-my-recipes">VIDEOS PARA TI</h1>
 @stop
 
 @section('css')
 <style>
-    body {
-        background-image: url('/images/fondo-04.jpg');
-        background-size: cover;
-        background-attachment: fixed;
-        background-position: center;
-    }
-    .wrapper,
-    .content-wrapper {
-        background: transparent !important;
-    }
-
-    .content-wrapper > .content {
-        background: transparent !important;
-    }
-
-    .content {
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-    }
-
     .for-you-wrap {
         display: flex;
         flex-direction: column;
-        min-height: calc(100vh - 68.19px);
+        min-height: calc(100vh - 130px);
         padding: 0.35rem 0 0.75rem;
     }
 
-    .for-you-header {
-        flex-shrink: 0;
-        padding: 0.3rem 1rem 0.2rem;
-        text-align: center;
+    .page-title-my-recipes {
+        font-weight: 800;
+        color: #f28241;
+        letter-spacing: 0.04em;
     }
 
     .for-you-header h2 {
@@ -357,13 +338,6 @@
 @endphp
 
 <div class="for-you-wrap">
-    <div class="for-you-header">
-        <h2>
-            <i class="fas fa-play-circle"></i>
-            Videos para ti
-        </h2>
-    </div>
-
     @if(count($recipesData) === 0)
         <div class="d-flex align-items-center justify-content-center flex-grow-1">
             <div class="alert alert-info text-center">

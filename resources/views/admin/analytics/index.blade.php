@@ -5,9 +5,7 @@
 @section('content_header')
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
         <div>
-            <h1 class="m-0 text-dark" style="font-size: 2.4rem;">
-                <i class="fas fa-chart-line mr-2" style="color: #F28241;"></i>ANALÍTICA GENERAL
-            </h1>
+            <h1 class="m-0 page-title-my-recipes">ANALÍTICA GENERAL</h1>
             <p class="text-muted mb-0 mt-2">{{ $periodLabel }}</p>
         </div>
 

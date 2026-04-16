@@ -108,6 +108,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/user/perfil', [ProfileController::class, 'show'])
         ->name('user.perfil');
 
+    Route::post('/user/privacy', [ProfileController::class, 'updatePrivacy'])
+        ->name('user.privacy.update');
+
+    Route::put('/user/perfil', [ProfileController::class, 'updateProfile'])
+        ->name('user.perfil.update');
+
         // Otras rutas de recursos
         Route::resource('categories', CategoriesController::class);
         //cambio de contraseña

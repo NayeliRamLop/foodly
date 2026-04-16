@@ -28,7 +28,8 @@ class User extends Authenticatable
         'password',
         'avatar',
         'status',
-         'role'
+        'role',
+        'public_fields',
     ];
 
     protected $hidden = [
@@ -38,7 +39,22 @@ class User extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'public_fields'     => 'array',
     ];
+
+    // Default fields that are public when null (name/last_name always visible)
+    public const DEFAULT_PUBLIC_FIELDS = ['name', 'last_name'];
+
+    public function isFieldPublic(string $field): bool
+    {
+        // name and last_name are always public
+        if (in_array($field, self::DEFAULT_PUBLIC_FIELDS)) {
+            return true;
+        }
+
+        $fields = $this->public_fields ?? [];
+        return in_array($field, $fields);
+    }
 
     // Accesor para obtener la URL completa del avatar
     public function getAvatarUrlAttribute()

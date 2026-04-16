@@ -91,7 +91,7 @@ return [
     'layout_topnav' => null,
     'layout_boxed' => null,
     'layout_fixed_sidebar' => null,
-    'layout_fixed_navbar' => null,
+    'layout_fixed_navbar' => true,
     'layout_fixed_footer' => null,
     'layout_dark_mode' => null,
 
@@ -195,22 +195,26 @@ return [
         [
             'text' => 'Mis recetas',
             'route' => 'recipes.mis-recetas',
-            'icon' => 'fas fa-fw fa-tags'
+            'icon' => 'fas fa-fw fa-tags',
+            'can' => 'user',
         ],
         [
             'text' => 'Tus favoritos',
             'route' => 'favorites.index',
-            'icon' => 'fas fa-fw fa-star'
+            'icon' => 'fas fa-fw fa-star',
+            'can' => 'user',
         ],
         [
             'text' => 'Todas las recetas',
             'route' => 'recipes.index',
-            'icon' => 'fas fa-fw fa-list'
+            'icon' => 'fas fa-fw fa-list',
+            'can' => 'user',
         ],
         [
             'text' => 'Descubrir',
             'route' => 'recipes.para-ti',
-            'icon' => 'fas fa-fw fa-video'
+            'icon' => 'fas fa-fw fa-video',
+            'can' => 'user',
         ],
 
         // Menús de administración (solo para admin)
